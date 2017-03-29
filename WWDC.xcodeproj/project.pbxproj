@@ -12,6 +12,8 @@
 		B519F69D1E8BEDB000DC9871 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B519F69B1E8BEDB000DC9871 /* Main.storyboard */; };
 		B519F69F1E8BEDB000DC9871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B519F69E1E8BEDB000DC9871 /* Assets.xcassets */; };
 		B519F6A21E8BEDB000DC9871 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */; };
+		B519F6AB1E8BEDC500DC9871 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B519F6AA1E8BEDC500DC9871 /* Lexer.swift */; };
+		B519F6AD1E8BF9F400DC9871 /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = B519F6AC1E8BF9F400DC9871 /* test.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		B519F69E1E8BEDB000DC9871 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B519F6A11E8BEDB000DC9871 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B519F6A31E8BEDB000DC9871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B519F6AA1E8BEDC500DC9871 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
+		B519F6AC1E8BF9F400DC9871 /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,12 +60,22 @@
 			children = (
 				B519F6971E8BEDB000DC9871 /* AppDelegate.swift */,
 				B519F6991E8BEDB000DC9871 /* ViewController.swift */,
+				B519F6AC1E8BF9F400DC9871 /* test.txt */,
 				B519F69B1E8BEDB000DC9871 /* Main.storyboard */,
 				B519F69E1E8BEDB000DC9871 /* Assets.xcassets */,
 				B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */,
 				B519F6A31E8BEDB000DC9871 /* Info.plist */,
+				B519F6A91E8BEDB700DC9871 /* Transpiler */,
 			);
 			path = WWDC;
+			sourceTree = "<group>";
+		};
+		B519F6A91E8BEDB700DC9871 /* Transpiler */ = {
+			isa = PBXGroup;
+			children = (
+				B519F6AA1E8BEDC500DC9871 /* Lexer.swift */,
+			);
+			name = Transpiler;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +140,7 @@
 			files = (
 				B519F6A21E8BEDB000DC9871 /* LaunchScreen.storyboard in Resources */,
 				B519F69F1E8BEDB000DC9871 /* Assets.xcassets in Resources */,
+				B519F6AD1E8BF9F400DC9871 /* test.txt in Resources */,
 				B519F69D1E8BEDB000DC9871 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B519F69A1E8BEDB000DC9871 /* ViewController.swift in Sources */,
+				B519F6AB1E8BEDC500DC9871 /* Lexer.swift in Sources */,
 				B519F6981E8BEDB000DC9871 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

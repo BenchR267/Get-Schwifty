@@ -9,17 +9,20 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        guard let path = Bundle.main.path(forResource: "test", ofType: "txt") else {
+            fatalError("Could not find test.txt in Bundle!")
+        }
+        
+        let input = (try? String(contentsOfFile: path)) ?? ""
+        
+        let lexer = Lexer(input: input)
+        let tokens = lexer.start()
+        dump(tokens)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 
