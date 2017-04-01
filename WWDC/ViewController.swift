@@ -10,26 +10,24 @@ import UIKit
 
 public class ViewController: UIViewController {
     
-    lazy var input: String = {
-        guard let path = Bundle.main.path(forResource: "test", ofType: "txt") else {
-            fatalError("Could not find test.txt in Bundle!")
-        }
-        
-        return (try? String(contentsOfFile: path)) ?? ""
-    }()
+    lazy var input: String = "let a = \"Hello \"\nlet b = \"world\"\nalert(a + b)"
     
     var textView: UITextView!
     private let generator = Generator()
+    
+    public var outStream: (String) -> Void = { print($0) }
+    public var clear: () -> Void = {}
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
-      
-        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
         
+        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
+        let clear = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearHandler))
         self.navigationItem.rightBarButtonItem = run
+        self.navigationItem.leftBarButtonItem = clear
         self.title = "WWDC - Benjamin Herzog"
         
         let insets = UIEdgeInsets(top: 20, left: 8, bottom: 0, right: 8)
@@ -49,6 +47,10 @@ public class ViewController: UIViewController {
         self.updateText(text: self.textView.text)
     }
     
+    func clearHandler() {
+        self.clear()
+    }
+    
     func evaluateHandler() {
         self.evaluate()
     }
@@ -61,7 +63,7 @@ public class ViewController: UIViewController {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
             let js = self.generator.generate(program: program)
-            JSEvaluator.run(controller: self, full: full, script: js)
+            JSEvaluator.run(controller: self, outStream: self.outStream, full: full, script: js)
         } catch {
             if !full { return }
             let c = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
@@ -69,7 +71,7 @@ public class ViewController: UIViewController {
             self.present(c, animated: true)
         }
     }
-
+    
 }
 
 extension ViewController: UITextViewDelegate {
@@ -90,7 +92,7 @@ extension ViewController: UITextViewDelegate {
         textView.isScrollEnabled = true
         textView.selectedRange = range
         
-        evaluate(full: false)
+        //        evaluate(full: false)
     }
     
 }

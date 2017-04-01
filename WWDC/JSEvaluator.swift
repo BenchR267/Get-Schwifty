@@ -17,13 +17,15 @@ public class JSEvaluator {
     
     // needed for alerts - stored weak
     private weak var controller: UIViewController?
-    private init(controller: UIViewController, full: Bool) {
+    private var outStream: (String) -> Void
+    private init(controller: UIViewController, outStream: @escaping (String) -> Void, full: Bool) {
         self.controller = controller
+        self.outStream = outStream
         
         if full {
             let consoleLog: @convention(block) () -> Void = {
                 let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
-                print(args, separator: " ", terminator: "\n")
+                self.outStream(args)
             }
             context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
             
@@ -45,8 +47,8 @@ public class JSEvaluator {
         self.controller?.present(c, animated: true)
     }
     
-    public static func run(controller: UIViewController, full: Bool = true, script: String) {
-        let evaluator = JSEvaluator(controller: controller, full: full)
+    public static func run(controller: UIViewController, outStream: @escaping (String) -> Void, full: Bool = true, script: String) {
+        let evaluator = JSEvaluator(controller: controller, outStream: outStream, full: full)
         evaluator.context.evaluateScript(script)
     }
     
