@@ -73,7 +73,7 @@ struct Condition {
 }
 
 struct For {
-    
+    // TODO
 }
 
 struct While {
@@ -81,10 +81,22 @@ struct While {
     var scope: Scope
 }
 
+struct Call {
+    var name: String
+    var parameters: [Expression]
+}
+
+struct MultipleCalculation {
+    var expressions: [Expression]
+    var operators: [Token]
+}
+
 indirect enum Expression {
     case literal(Token)
     case identifier(Token)
     case condition(Condition)
+    case call(Call)
+    case calculation(MultipleCalculation)
     
     var type: String? {
         switch self {
@@ -99,7 +111,11 @@ indirect enum Expression {
             }
         case .identifier(let token):
             return "" // TODO (ASTContext)
-        case .condition(let condition):
+        case .call(let call):
+            return "" // TODO (ASTContext)
+        case .calculation(let calc):
+            return "Int"
+        case .condition(_):
             return "Bool"
         }
     }

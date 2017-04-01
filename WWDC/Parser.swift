@@ -82,6 +82,7 @@ public class Parser {
     }
     
     private func parseStatement() throws -> Statement {
+        let start = self.iterator
         var errors = [Error]()
         do {
             let decl = try self.parseDeclaration()
@@ -90,11 +91,22 @@ public class Parser {
             errors.append(error)
         }
         
-//        do {
-//            let decl = try self.parseDeclaration()
-//        } catch let error as Parser.Error {
-//            errors.append(error)
-//        }
+        // reset to begin of statement
+        self.iterator = start
+        do {
+            let control = try self.parseControlStructure()
+            return .controlStructure(control)
+        } catch let error as Parser.Error {
+            errors.append(error)
+        }
+        
+        self.iterator = start
+        do {
+            let expr = try self.parseExpression()
+            return .expression(expr)
+        } catch let error as Parser.Error {
+            errors.append(error)
+        }
 
         let error = errors.reduce(Error.eof) { Error.merged($0, $1) }
         throw error
@@ -192,13 +204,15 @@ public class Parser {
         return ParameterDecl(name: identifier, type: type)
     }
     
-    func parseControlStructure() throws -> ControlStructure {
+    private func parseControlStructure() throws -> ControlStructure {
         let keyword = try self.parseKeyword()
         switch keyword {
             case "if":
                 return .ifS(try self.parseIf())
             case "while":
                 return .whileS(try self.parseWhile())
+            case "for":
+                return.forS(try self.parseFor())
         default: throw Error.unimplemented
         }
     }
@@ -262,10 +276,35 @@ public class Parser {
         return MultipleCondition(conditions: expressions, operators: operators)
     }
     
+    private func parseMutlipleCalculation(rec: Bool = true) throws -> MultipleCalculation {
+        var expressions = [Expression]()
+        var operators = [Token]()
+        var go = true
+        while go {
+            let expr = try self.parseExpression(calculation: rec)
+            expressions.append(expr)
+            if let next = self.iteratedElement() {
+                switch next.type {
+                case .plus, .minus, .multiply, .slash:
+                    let op = try self.parseCalculationOperator()
+                    operators.append(op)
+                default:
+                    go = false
+                }
+            } else {
+                go = false
+            }
+        }
+        if operators.count != expressions.count - 1 {
+            throw Error.unexpectedString(expected: "one operator less than conditions", got: "Too much or less operators")
+        }
+        return MultipleCalculation(expressions: expressions, operators: operators)
+    }
+    
     private func parseCondition(rec: Bool = true) throws -> Condition {
-        let expr1 = try self.parseExpression(condition: rec)
+        let expr1 = try self.parseExpression(condition: rec, calculation: false)
         let op = try self.parseBoolOperator()
-        let expr2 = try self.parseExpression(condition: rec)
+        let expr2 = try self.parseExpression(condition: rec, calculation: false)
         return Condition(expr1: expr1, operatorT: op, expr2: expr2)
     }
     
@@ -280,21 +319,72 @@ public class Parser {
         return While(expression: expression, scope: scope)
     }
     
-    private func parseExpression(condition: Bool = true) throws -> Expression {
-        if let this = self.iteratedElement(), let next = self.peekedElement(), condition, this.type == .identifier {
-            switch next.type {
-            case .equal, .notEqual, .greater, .greaterEqual, .less, .lessEqual:
-                return .condition(try self.parseCondition(rec: false))
-            default: break
+    private func parseCall() throws -> Call {
+        let name = try self.parseIdentifier().raw
+        try self.parse(.parenthesisOpen)
+        var exprs = [Expression]()
+        while let next = self.iteratedElement(), next.type != .parenthesisClose {
+            let expr = try self.parseExpression()
+            exprs.append(expr)
+            if let next = self.iteratedElement(), next.type == .comma {
+                try self.parse(.comma)
+            }
+        }
+        try self.parse(.parenthesisClose)
+        return Call(name: name, parameters: exprs)
+    }
+    
+    private func parseFor() throws -> For {
+        // TODO
+        throw Error.unimplemented
+    }
+    
+    private func parseExpression(condition: Bool = true, calculation: Bool = true) throws -> Expression {
+        
+        let start = self.iterator
+        var errors = [Error]()
+        if condition {
+            do {
+                let condition = try self.parseCondition(rec: false)
+                return .condition(condition)
+            } catch let error as Error {
+                errors.append(error)
             }
         }
         
-        if let literal = try? self.parseLiteral() {
-            return .literal(literal)
-        } else if let identifier = try? self.parseIdentifier() {
-            return .identifier(identifier)
+        self.iterator = start
+        if calculation {
+            do {
+                let calc = try self.parseMutlipleCalculation(rec: false)
+                return .calculation(calc)
+            } catch let error as Error {
+                errors.append(error)
+            }
         }
-        throw Error.unimplemented
+        
+        self.iterator = start
+        do {
+            return .call(try self.parseCall())
+        } catch let error as Error {
+            errors.append(error)
+        }
+        
+        self.iterator = start
+        do {
+            return .literal(try self.parseLiteral())
+        } catch let error as Error {
+            errors.append(error)
+        }
+        
+        self.iterator = start
+        do {
+            return .identifier(try self.parseIdentifier())
+        } catch let error as Error {
+            errors.append(error)
+        }
+        
+        let error = errors.reduce(Error.eof) { Error.merged($0, $1) }
+        throw error
     }
     
     private func parseLiteral() throws -> Token {
@@ -318,6 +408,20 @@ public class Parser {
         let raw = self.iteratedElement()?.raw
         try self.parse(.keyword)
         return raw!
+    }
+    
+    private func parseCalculationOperator() throws -> Token {
+        guard let token = self.iteratedElement() else {
+            throw Error.unexpectedEOF
+        }
+        
+        switch token.type {
+        case .plus, .minus, .multiply, .slash:
+            self.nextToken()
+            return token
+        default:
+            throw Error.unexpectedString(expected: "+ - * /", got: token.raw)
+        }
     }
     
     private func parseBoolOperator() throws -> Token {

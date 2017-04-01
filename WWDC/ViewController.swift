@@ -25,19 +25,11 @@ class ViewController: UIViewController {
         
         let parser = Parser(input: self.input)
         do {
-            let programm = try parser.parseControlStructure()
+            let programm = try parser.parseProgram()
             dump(programm)
         } catch {
             print(">>>>>>", error)
         }
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         

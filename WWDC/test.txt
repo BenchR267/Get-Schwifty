@@ -1,3 +1,5 @@
-while a == 5 {
-let b = 6
+func a(b: Int, c: Int) -> Int {
+    return b + c
 }
+
+let c = a(6, 8)
