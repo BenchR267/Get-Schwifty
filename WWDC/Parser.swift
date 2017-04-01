@@ -70,16 +70,16 @@ public class Parser {
     }
     
     func parseProgram() throws -> Program {
-        let scope = try self.parseScope()
+        let scope = try self.parseScope(list: Parser.standardNamelist)
         if let additional = self.iteratedElement() {
             throw Error.unexpectedString(expected: "EOF", got: additional.raw)
         }
         return Program(scope: scope)
     }
     
-    private func parseScope() throws -> Scope {
+    private func parseScope(list: [String: String]) throws -> Scope {
         var statements = [Statement]()
-        var namelist = Parser.standardNamelist
+        var namelist = list
         while let next = iteratedElement(), next.type != .curlyBracketClose {
             let statement = try parseStatement(namelist: &namelist)
             statements.append(statement)
@@ -265,7 +265,7 @@ public class Parser {
         if let next = self.iteratedElement(), next.type == .keyword && next.raw == "else" {
             self.nextToken() // 'else'
             try self.parse(.curlyBracketOpen)
-            elseS = try self.parseScope()
+            elseS = try self.parseScope(list: namelist)
             try self.parse(.curlyBracketClose)
         }
         if conditions.count < 1 {
@@ -277,7 +277,7 @@ public class Parser {
     private func parseSpecificIf(namelist: inout [String: String]) throws -> (MultipleCondition, Scope) {
         let multipleCondition = try self.parseMultipleCondition(namelist: &namelist)
         try self.parse(.curlyBracketOpen)
-        let scope = try self.parseScope()
+        let scope = try self.parseScope(list: namelist)
         try self.parse(.curlyBracketClose)
         return (multipleCondition, scope)
     }
@@ -292,7 +292,7 @@ public class Parser {
             }
             let expression = try parseExpression(namelist: &namelist, condition: rec, calculation: false)
             if expression.type(namelist) != "Bool" {
-                throw Error.unexpectedExpression(expectedType: "Bool", got: expression.type(namelist) ?? "unknown")
+                throw Error.unexpectedExpression(expectedType: "Bool", got: expression.type(namelist))
             }
             expressions.append(expression)
             if let next = self.iteratedElement(), next.type == .logicalAnd || next.type == .logicalOr {
@@ -343,7 +343,7 @@ public class Parser {
     private func parseWhile(namelist: inout [String: String]) throws -> While {
         let expression = try parseMultipleCondition(namelist: &namelist)
         try self.parse(.curlyBracketOpen)
-        let scope = try self.parseScope()
+        let scope = try self.parseScope(list: namelist)
         try self.parse(.curlyBracketClose)
         return While(expression: expression, scope: scope)
     }

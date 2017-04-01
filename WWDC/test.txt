@@ -1,5 +1,29 @@
-var a = 0
-while a < 3 {
-    alert(a)
-    a = a + 1
+// Welcome to the Playground in the Playground!
+// My name is Benjamin Herzog.
+//
+// Since playgrounds are great to create interactive
+// programs I decided to create a playground.
+// You can run the code by pressing 'Run' at the top right
+// corner.
+//
+// This is only a subset of Swift containing functions (no
+// higher ones), variables, constants, while loops, if statements,
+// type inference and a light weight type system.
+
+
+var i = 3
+while i > 0 {
+alert(i)
+i = i - 1
+}
+
+let company = "Apple"
+let location = "San Jose"
+let event = "WWDC"
+let year = 2017
+let awesome = true
+
+let message = "Welcome to " + event + " " + year + " by " + company + " in " + location
+if awesome {
+alert(message)
 }
