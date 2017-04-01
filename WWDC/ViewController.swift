@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+public class ViewController: UIViewController {
     
     lazy var input: String = {
         guard let path = Bundle.main.path(forResource: "test", ofType: "txt") else {
@@ -20,16 +20,19 @@ class ViewController: UIViewController {
     
     var textView: UITextView!
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluate))
         self.navigationItem.rightBarButtonItem = run
+        self.title = "WWDC - Benjamin Herzog"
         
         let insets = UIEdgeInsets(top: 20, left: 8, bottom: 0, right: 8)
         self.textView = UITextView(frame: UIEdgeInsetsInsetRect(self.view.bounds, insets))
         self.textView.autocapitalizationType = .none
         self.textView.autocorrectionType = .no
+        self.textView.alwaysBounceVertical = true
+        self.textView.keyboardDismissMode = .interactive
         self.textView.delegate = self
         self.textView.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
         self.view.backgroundColor = self.textView.backgroundColor
@@ -61,7 +64,7 @@ extension ViewController: UITextViewDelegate {
     
     static let throttle: TimeInterval = 0.05
     
-    func textViewDidChange(_ textView: UITextView) {
+    public func textViewDidChange(_ textView: UITextView) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         self.perform(#selector(updateText), with: textView.text, afterDelay: ViewController.throttle)
     }
