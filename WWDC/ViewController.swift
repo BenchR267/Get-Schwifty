@@ -27,7 +27,7 @@ public class ViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
       
-        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluate))
+        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
         
         self.navigationItem.rightBarButtonItem = run
         self.title = "WWDC - Benjamin Herzog"
@@ -49,17 +49,24 @@ public class ViewController: UIViewController {
         self.updateText(text: self.textView.text)
     }
     
-    func evaluate() {
-        self.textView.resignFirstResponder()
+    func evaluateHandler() {
+        self.evaluate()
+    }
+    
+    func evaluate(full: Bool = true) {
+        if full {
+            self.textView.resignFirstResponder()
+        }
         do {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
             let js = self.generator.generate(program: program)
-            JSEvaluator.run(controller: self, script: js)
+            JSEvaluator.run(controller: self, full: full, script: js)
         } catch {
-            let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(alert, animated: true)
+            if !full { return }
+            let c = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+            c.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(c, animated: true)
         }
     }
 
@@ -82,6 +89,8 @@ extension ViewController: UITextViewDelegate {
         textView.attributedText = attributedString(tokens: tokens)
         textView.isScrollEnabled = true
         textView.selectedRange = range
+        
+        evaluate(full: false)
     }
     
 }

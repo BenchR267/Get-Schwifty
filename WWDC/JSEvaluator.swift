@@ -17,21 +17,23 @@ public class JSEvaluator {
     
     // needed for alerts - stored weak
     private weak var controller: UIViewController?
-    private init(controller: UIViewController) {
+    private init(controller: UIViewController, full: Bool) {
         self.controller = controller
         
-        let consoleLog: @convention(block) () -> Void = {
-            let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
-            print(args, separator: " ", terminator: "\n")
+        if full {
+            let consoleLog: @convention(block) () -> Void = {
+                let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
+                print(args, separator: " ", terminator: "\n")
+            }
+            context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
+            
+            let alert: @convention(block) () -> Void = { [weak self] in
+                let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
+                self?.alerts.append(args)
+                self?.workAlerts()
+            }
+            context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
         }
-        context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
-        
-        let alert: @convention(block) () -> Void = { [weak self] in
-            let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
-            self?.alerts.append(args)
-            self?.workAlerts()
-        }
-        context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
     }
     
     private func workAlerts() {
@@ -43,8 +45,8 @@ public class JSEvaluator {
         self.controller?.present(c, animated: true)
     }
     
-    public static func run(controller: UIViewController, script: String) {
-        let evaluator = JSEvaluator(controller: controller)
+    public static func run(controller: UIViewController, full: Bool = true, script: String) {
+        let evaluator = JSEvaluator(controller: controller, full: full)
         evaluator.context.evaluateScript(script)
     }
     
