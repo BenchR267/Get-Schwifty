@@ -77,7 +77,8 @@ struct For {
 }
 
 struct While {
-    
+    var expression: Expression
+    var scope: Scope
 }
 
 indirect enum Expression {

@@ -197,6 +197,8 @@ public class Parser {
         switch keyword {
             case "if":
                 return .ifS(try self.parseIf())
+            case "while":
+                return .whileS(try self.parseWhile())
         default: throw Error.unimplemented
         }
     }
@@ -247,7 +249,7 @@ public class Parser {
             }
             let expression = try parseExpression()
             if expression.type != "Bool" {
-                throw Error.unexpectedExpression(expectedType: "Bool", got: expression.type ?? "")
+                throw Error.unexpectedExpression(expectedType: "Bool", got: expression.type ?? "unknown")
             }
             expressions.append(expression)
             if let next = self.iteratedElement(), next.type == .logicalAnd || next.type == .logicalOr {
@@ -265,6 +267,17 @@ public class Parser {
         let op = try self.parseBoolOperator()
         let expr2 = try self.parseExpression(condition: rec)
         return Condition(expr1: expr1, operatorT: op, expr2: expr2)
+    }
+    
+    private func parseWhile() throws -> While {
+        let expression = try parseExpression()
+        if expression.type != "Bool" {
+            throw Error.unexpectedExpression(expectedType: "Bool", got: expression.type ?? "unknown")
+        }
+        try self.parse(.curlyBracketOpen)
+        let scope = try self.parseScope()
+        try self.parse(.curlyBracketClose)
+        return While(expression: expression, scope: scope)
     }
     
     private func parseExpression(condition: Bool = true) throws -> Expression {
