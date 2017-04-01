@@ -19,11 +19,20 @@ public class ViewController: UIViewController {
     }()
     
     var textView: UITextView!
+    private lazy var jsEvaluator: JSEvaluator = {
+        return JSEvaluator(controller: self)
+    }()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.jsEvaluator.run(script: "alert(\"Hello world!\", 5, 4)")
+        
+        self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
+        self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
+      
         let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluate))
+        
         self.navigationItem.rightBarButtonItem = run
         self.title = "WWDC - Benjamin Herzog"
         

@@ -122,7 +122,7 @@ public class Parser {
         case "func":
             return .function(try self.parseFunctionDecl())
         default:
-            throw Error.unexpectedString(expected: "var, let, func", got: keyword)
+            throw Error.unimplemented
         }
     }
     

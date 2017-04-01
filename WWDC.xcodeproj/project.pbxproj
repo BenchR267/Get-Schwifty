@@ -16,6 +16,7 @@
 		B5CD4F071E8F879A00011B8C /* SyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */; };
 		B5CD4F091E8F8E2E00011B8C /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F081E8F8E2E00011B8C /* Parser.swift */; };
 		B5CD4F0B1E8FB5C700011B8C /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0A1E8FB5C700011B8C /* AST.swift */; };
+		B5CD4F0E1E900A3400011B8C /* JSEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
 		B5CD4F081E8F8E2E00011B8C /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		B5CD4F0A1E8FB5C700011B8C /* AST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AST.swift; sourceTree = "<group>"; };
+		B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSEvaluator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				B519F69E1E8BEDB000DC9871 /* Assets.xcassets */,
 				B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */,
 				B519F6A31E8BEDB000DC9871 /* Info.plist */,
+				B5CD4F0C1E900A1A00011B8C /* JavascriptEvaluator */,
 				B519F6A91E8BEDB700DC9871 /* Transpiler */,
 			);
 			path = WWDC;
@@ -82,6 +85,14 @@
 				B5CD4F0A1E8FB5C700011B8C /* AST.swift */,
 			);
 			name = Transpiler;
+			sourceTree = "<group>";
+		};
+		B5CD4F0C1E900A1A00011B8C /* JavascriptEvaluator */ = {
+			isa = PBXGroup;
+			children = (
+				B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */,
+			);
+			name = JavascriptEvaluator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,6 +168,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5CD4F0E1E900A3400011B8C /* JSEvaluator.swift in Sources */,
 				B5CD4F0B1E8FB5C700011B8C /* AST.swift in Sources */,
 				B5CD4F071E8F879A00011B8C /* SyntaxHighlighter.swift in Sources */,
 				B519F69A1E8BEDB000DC9871 /* ViewController.swift in Sources */,
