@@ -23,18 +23,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let parser = Parser(input: self.input)
-        do {
-            let programm = try parser.parseProgram()
-            dump(programm)
-        } catch {
-            print(">>>>>>", error)
-        }
+        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluate))
+        self.navigationItem.rightBarButtonItem = run
         
-        
-        
-        
-        return
         let insets = UIEdgeInsets(top: 20, left: 8, bottom: 0, right: 8)
         self.textView = UITextView(frame: UIEdgeInsetsInsetRect(self.view.bounds, insets))
         self.textView.autocapitalizationType = .none
@@ -47,6 +38,21 @@ class ViewController: UIViewController {
         self.textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.addSubview(self.textView)
         self.updateText(text: self.textView.text)
+    }
+    
+    func evaluate() {
+        do {
+            let parser = Parser(input: self.textView.text)
+            let program = try parser.parseProgram()
+            dump(program)
+            let alert = UIAlertController(title: "Yeah", message: "🚀", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        } catch {
+            let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
     }
 
 }
