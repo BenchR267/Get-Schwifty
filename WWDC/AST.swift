@@ -106,6 +106,8 @@ indirect enum Expression {
                 return "String"
             case .literal(.Integer(_)):
                 return "Int"
+            case .literal(.Double(_)):
+                return "Double"
             default:
                 return nil
             }

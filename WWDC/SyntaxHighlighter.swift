@@ -18,6 +18,7 @@ func attributedString(tokens: [Token]) -> NSAttributedString {
         case .comment(_):           color = comments
         case .literal(.String(_)):  color = strings
         case .literal(.Integer(_)): color = numbers
+        case .literal(.Double(_)):  color = numbers
         default:                    color = standard
         }
         var attributes: [String: NSObject] = [

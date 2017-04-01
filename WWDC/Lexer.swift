@@ -8,6 +8,7 @@ private let keywords = Set(["associatedtype", "class", "deinit", "enum", "extens
 public enum LiteralType {
     case Integer(Int)
     case String(String)
+    case Double(Double)
 }
 
 public enum TokenType: Equatable {
@@ -123,6 +124,8 @@ public enum TokenType: Equatable {
         default:
             if let i = Int(rawValue) {
                 self = .literal(.Integer(i))
+            } else if let d = Double(rawValue) {
+                self = .literal(.Double(d))
             } else if consistsOfLettersOrDigits(rawValue) {
                 if keywords.contains(rawValue) {
                     self = .keyword
@@ -344,6 +347,12 @@ class Tokenizer {
             return true
         }
         
+        let string = curr.string
+        
+        if Double(string) != nil {
+            return Double((curr + [next]).string) != nil
+        }
+        
         if curr.count == 1 {
             switch curr[0] {
             case "+":
@@ -366,7 +375,6 @@ class Tokenizer {
                 return letters.contains(curr[0]) && letters.contains(next)
             }
         } else if curr.count == 2 {
-            let string = curr.string
             guard let token = TokenType(rawValue: string) else {
                 return false
             }
