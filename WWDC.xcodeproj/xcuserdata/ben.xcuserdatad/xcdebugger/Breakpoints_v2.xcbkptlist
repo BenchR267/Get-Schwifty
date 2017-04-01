@@ -10,61 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WWDC/Parser.swift"
-            timestampString = "512740272.683355"
+            timestampString = "512748917.004235"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "parseStatement()"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
+            landmarkName = "parseIf()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WWDC/Parser.swift"
-            timestampString = "512740272.683355"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "parseLetDecl()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WWDC.Parser.(parseLetDecl in _4253701E9AAE834F043CCEACC9900C50) () throws -&gt; WWDC.LetDecl"
-                  moduleName = "WWDC"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ben/Desktop/WWDC/WWDC/Parser.swift"
-                  timestampString = "512738877.980017"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "124"
-                  endingLineNumber = "124"
-                  offsetFromSymbolStart = "229">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WWDC.Parser.(parseLetDecl in _4253701E9AAE834F043CCEACC9900C50) () throws -&gt; WWDC.LetDecl"
-                  moduleName = "WWDC"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ben/Desktop/WWDC/WWDC/Parser.swift"
-                  timestampString = "512738877.982014"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "124"
-                  endingLineNumber = "124"
-                  offsetFromSymbolStart = "315">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
