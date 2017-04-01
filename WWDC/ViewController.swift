@@ -24,8 +24,6 @@ public class ViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.jsEvaluator.run(script: "const a = \"hello\"; alert(a)")
-        
         self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
       
@@ -52,6 +50,7 @@ public class ViewController: UIViewController {
     }
     
     func evaluate() {
+        self.textView.resignFirstResponder()
         do {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
