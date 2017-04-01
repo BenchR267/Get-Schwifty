@@ -14,6 +14,10 @@ public struct Program {
 
 public struct Scope {
     public var statements = [Statement]()
+    
+    // name: type
+    // function parameters: _func_NAME_0, _func_NAME_1, ...
+    public var namelist = [String: String]()
 }
 
 public enum Statement {
@@ -110,7 +114,7 @@ public indirect enum Expression {
     case condition(Condition)
     case calculation(MultipleCalculation)
     
-    public var type: String? {
+    public func type(_ namelist: [String: String]) -> String {
         switch self {
         case .literal(let token):
             switch token.type {
@@ -121,13 +125,13 @@ public indirect enum Expression {
             case .literal(.Double(_)):
                 return "Double"
             default:
-                return nil
+                return "Void"
             }
         case .identifier(let token):
-            return "" // TODO (ASTContext)
+            return namelist[token.raw] ?? "Void"
         case .call(let call):
-            return "" // TODO (ASTContext)
-        case .calculation(let calc):
+            return namelist[call.name] ?? "Void"
+        case .calculation(_):
             return "Int"
         case .condition(_):
             return "Bool"

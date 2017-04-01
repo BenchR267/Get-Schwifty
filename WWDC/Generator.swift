@@ -21,20 +21,22 @@ public class Generator {
     }
     
     private func generate(_ a: Statement) -> String {
+        let o: String
         switch a {
         case .declaration(let decl):
-            return generate(decl)
+            o = generate(decl)
         case .controlStructure(let c):
-            return generate(c)
+            o = generate(c)
         case .expression(let e):
-            return generate(e)
+            o = generate(e)
         case .assignment(let a):
-            return generate(a)
+            o = generate(a)
         }
+        return o + ";\n"
     }
     
     private func generate(_ a: Assignment) -> String {
-        return "\(a.identifer.raw) = \(generate(a.expression));\n"
+        return "\(a.identifer.raw) = \(generate(a.expression))"
     }
     
     private func generate(_ a: Declaration) -> String {
@@ -53,7 +55,7 @@ public class Generator {
         if let e = a.expression {
             o.append(" = \(generate(e))")
         }
-        o.append(";\n")
+        o.append("")
         return o
     }
     
@@ -85,14 +87,13 @@ public class Generator {
         if let e = a.expression {
             o.append(" = \(generate(e))")
         }
-        o.append(";\n")
         return o
     }
     
     private func generate(_ a: Call) -> String {
         var o = "\(a.name)("
         o.append(a.parameters.map(generate).joined(separator: ", "))
-        o.append(");")
+        o.append(")")
         return o
     }
     

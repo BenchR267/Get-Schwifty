@@ -63,10 +63,11 @@ public class ViewController: UIViewController {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
             let js = self.generator.generate(program: program)
+            print(js)
             JSEvaluator.run(controller: self, outStream: self.outStream, full: full, script: js)
         } catch {
             if !full { return }
-            let c = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+            let c = UIAlertController(title: "Error", message: "Sorry, there is an error in your sourcecode. Here is a parsing stack trace that could maybe help:\n\n\n\n\(error)", preferredStyle: .alert)
             c.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(c, animated: true)
         }
