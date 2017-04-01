@@ -184,7 +184,7 @@ return self
 
 func consistsOfLettersOrDigits(_ raw: String) -> Bool {
 for c in raw.withoutDollar.unicodeScalars {
-if !letters.contains(c) && digits.contains(c) {
+if !letters.contains(c) && !digits.contains(c) {
 return false
 }
 }
@@ -216,7 +216,7 @@ public class Lexer {
 let input: String
 let tokenizer = Tokenizer()
 var currLoc = Location(row: 1, column: 0, len: 0)
-init(input: String) {
+public init(input: String) {
 self.input = input
 }
 
@@ -357,7 +357,7 @@ return false
 
 
 switch token {
-case .identifier, .illegal, .literal(.String(_)):
+case .identifier, .illegal, .literal(.String(_)), .keyword:
 return letters.contains(next)
 case .literal(.Integer(_)):
 return digits.contains(next)
