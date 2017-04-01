@@ -23,22 +23,59 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.textView = UITextView(frame: self.view.bounds)
-        self.textView.backgroundColor = UIColor(colorLiteralRed: 31.0/255, green: 32.0/255, blue: 41.0/255, alpha: 1)
+        let parser = Parser(input: self.input)
+        do {
+            let programm = try parser.parseProgram()
+            dump(programm)
+        } catch {
+            print(">>>>>>", error)
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        return
+        let insets = UIEdgeInsets(top: 20, left: 8, bottom: 0, right: 8)
+        self.textView = UITextView(frame: UIEdgeInsetsInsetRect(self.view.bounds, insets))
+        self.textView.autocapitalizationType = .none
+        self.textView.autocorrectionType = .no
+        self.textView.delegate = self
+        self.textView.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
+        self.view.backgroundColor = self.textView.backgroundColor
         
         self.textView.text = self.input
         self.textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.addSubview(self.textView)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        let lexer = Lexer(input: self.input)
-        let tokens = lexer.start()
-        dump(tokens)
-        self.textView.attributedText = attributedString(tokens: tokens)
+        self.updateText(text: self.textView.text)
     }
 
 }
 
+extension ViewController: UITextViewDelegate {
+    
+    static let throttle: TimeInterval = 0.05
+    
+    func textViewDidChange(_ textView: UITextView) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        self.perform(#selector(updateText), with: textView.text, afterDelay: ViewController.throttle)
+    }
+    
+    func updateText(text: String) {
+        let lexer = Lexer(input: text)
+        let tokens = lexer.start()
+        let range = textView.selectedRange
+        textView.isScrollEnabled = false
+        textView.attributedText = attributedString(tokens: tokens)
+        textView.isScrollEnabled = true
+        textView.selectedRange = range
+    }
+    
+}

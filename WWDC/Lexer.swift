@@ -45,6 +45,9 @@ public enum TokenType: Equatable {
     case literal(LiteralType)
     case comment(String)
     case illegal
+    case space
+    case tab
+    case newLine
     
     // RawRepresentable needs also the other way around, not needed here
     public init?(rawValue: String) {
@@ -111,15 +114,21 @@ public enum TokenType: Equatable {
             self = .greaterEqual
         case "<=":
             self = .lessEqual
+        case " ":
+            self = .space
+        case "\t":
+            self = .tab
+        case "\n":
+            self = .newLine
         default:
-            if consistsOfLettersOrDigits(rawValue) {
+            if let i = Int(rawValue) {
+                self = .literal(.Integer(i))
+            } else if consistsOfLettersOrDigits(rawValue) {
                 if keywords.contains(rawValue) {
                     self = .keyword
                     return
                 }
                 self = .identifier
-            } else if let i = Int(rawValue) {
-                self = .literal(.Integer(i))
             } else if rawValue.hasPrefix("\"") && rawValue.hasSuffix("\"") {
                 self = .literal(.String(rawValue))
             } else if rawValue.hasPrefix("//") {
@@ -164,6 +173,9 @@ public enum TokenType: Equatable {
         case (.greaterEqual, .greaterEqual): return true
         case (.lessEqual, .lessEqual): return true
         case (.illegal, .illegal): return true
+        case (.space, .space): return true
+        case (.newLine, .newLine): return true
+        case (.tab, .tab): return true
         case (.literal(.Integer(let i)), .literal(.Integer(let j))): return i == j
         case (.literal(.String(let a)), .literal(.String(let b))): return a == b
         case (.comment(let a), .comment(let b)): return a == b
@@ -237,17 +249,21 @@ public class Lexer {
             }
             
             if c == "\n" {
+                tokens.append(Token(loc: self.currLoc, type: .newLine, raw: "\n"))
                 if self.tokenizer.comment {
                     self.tokenizer.comment = false
                     if let t = self.tokenizer.token(loc: self.currLoc) {
                         tokens.append(t)
                     }
                 }
-                self.currLoc.column = 0
+                self.currLoc.column = -1 // will always be incremented
                 self.currLoc.row += 1
-            } else {
-                self.currLoc.column += 1
+            } else if c == " " && !self.tokenizer.needsMore && !self.tokenizer.comment {
+                tokens.append(Token(loc: self.currLoc, type: .space, raw: " "))
+            } else if c == "\t" && !self.tokenizer.needsMore && !self.tokenizer.comment {
+                tokens.append(Token(loc: self.currLoc, type: .tab, raw: "\t"))
             }
+            self.currLoc.column += 1
         }
         
         if let t = self.tokenizer.token(loc: self.currLoc) {

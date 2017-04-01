@@ -20,10 +20,15 @@ func attributedString(tokens: [Token]) -> NSAttributedString {
         case .literal(.Integer(_)): color = numbers
         default:                    color = standard
         }
-        attr.append(NSAttributedString(string: t.raw, attributes: [
+        var attributes: [String: NSObject] = [
             NSFontAttributeName: font,
             NSForegroundColorAttributeName: color
-        ]))
+        ]
+        if t.type == .illegal {
+            attributes[NSStrikethroughStyleAttributeName] = 1 as NSNumber
+            attributes[NSStrikethroughColorAttributeName] = UIColor.red
+        }
+        attr.append(NSAttributedString(string: t.raw, attributes: attributes))
     }
     
     return attr
