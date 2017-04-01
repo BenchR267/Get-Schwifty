@@ -8,97 +8,109 @@
 
 import Foundation
 
-struct Program {
-    var scope: Scope
+public struct Program {
+    public var scope: Scope
 }
 
-struct Scope {
-    var statements = [Statement]()
+public struct Scope {
+    public var statements = [Statement]()
 }
 
-enum Statement {
-    case declaration(Declaration), controlStructure(ControlStructure), expression(Expression)
+public enum Statement {
+    case declaration(Declaration)
+    case controlStructure(ControlStructure)
+    case expression(Expression)
+    case assignment(Assignment)
 }
 
-enum Declaration {
-    case function(FunctionDecl), variable(VariableDecl), constant(LetDecl)
+public struct Assignment {
+    public var identifer: Token
+    public var expression: Expression
 }
 
-struct FunctionDecl {
-    var name: String
-    var parameters: [ParameterDecl]
-    var returnType: String
-    var body: FunctionBody
+public enum Declaration {
+    case function(FunctionDecl)
+    case variable(VariableDecl)
+    case constant(LetDecl)
 }
 
-struct FunctionBody {
-    var statements: [Statement]
-    var returnExpr: Expression?
+public struct FunctionDecl {
+    public var name: String
+    public var parameters: [ParameterDecl]
+    public var returnType: String
+    public var body: FunctionBody
 }
 
-struct VariableDecl {
-    var parameter: ParameterDecl
+public struct FunctionBody {
+    public var statements: [Statement]
+    public var returnExpr: Expression?
+}
+
+public struct VariableDecl {
+    public var parameter: ParameterDecl
+    public var expression: Expression?
+}
+
+public struct LetDecl {
+    public var parameter: ParameterDecl
     var expression: Expression?
 }
 
-struct LetDecl {
-    var parameter: ParameterDecl
-    var expression: Expression?
+public struct ParameterDecl {
+    public var name: String
+    public var type: String
 }
 
-struct ParameterDecl {
-    var name: String
-    var type: String
+public enum ControlStructure {
+    case ifS(If)
+    case forS(For)
+    case whileS(While)
 }
 
-enum ControlStructure {
-    case ifS(If), forS(For), whileS(While)
-}
-
-struct If {
+public struct If {
     // will be evaluated in order (if, else if, ...)
-    var conditions: [(MultipleCondition, Scope)]
-    var elseS: Scope?
+    public var conditions: [(MultipleCondition, Scope)]
+    public var elseS: Scope?
 }
 
-struct MultipleCondition {
-    var conditions: [Expression]
-    var operators: [Token]
+public struct MultipleCondition {
+    public var conditions: [Expression]
+    public var operators: [Token]
 }
 
-struct Condition {
-    var expr1: Expression
-    var operatorT: Token
-    var expr2: Expression
+public struct Condition {
+    public var expr1: Expression
+    public var operatorT: Token
+    public var expr2: Expression
 }
 
-struct For {
+public struct For {
     // TODO
 }
 
-struct While {
-    var expression: Expression
-    var scope: Scope
+public struct While {
+    public var expression: MultipleCondition
+    public var scope: Scope
 }
 
-struct Call {
-    var name: String
-    var parameters: [Expression]
+public struct Call {
+    public var name: String
+    public var parameters: [Expression]
 }
 
-struct MultipleCalculation {
-    var expressions: [Expression]
-    var operators: [Token]
+public struct MultipleCalculation {
+    public var expressions: [Expression]
+    public var operators: [Token]
 }
 
-indirect enum Expression {
+public indirect enum Expression {
     case literal(Token)
     case identifier(Token)
-    case condition(Condition)
     case call(Call)
+    case condition(Condition)
     case calculation(MultipleCalculation)
     
-    var type: String? {
+    public var type: String? {
         switch self {
         case .literal(let token):
             switch token.type {

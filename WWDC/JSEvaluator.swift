@@ -13,9 +13,11 @@ public class JSEvaluator {
     
     private let context = JSContext()!
     
+    private var alerts = [String]()
+    
     // needed for alerts - stored weak
     private weak var controller: UIViewController?
-    init(controller: UIViewController) {
+    private init(controller: UIViewController) {
         self.controller = controller
         
         let consoleLog: @convention(block) () -> Void = {
@@ -26,15 +28,24 @@ public class JSEvaluator {
         
         let alert: @convention(block) () -> Void = { [weak self] in
             let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
-            let c = UIAlertController(title: "Alert", message: args, preferredStyle: .alert)
-            c.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self?.controller?.present(c, animated: true)
+            self?.alerts.append(args)
+            self?.workAlerts()
         }
         context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
     }
     
-    public func run(script: String) {
-        self.context.evaluateScript(script)
+    private func workAlerts() {
+        guard !(self.controller?.presentedViewController is UIAlertController),  !self.alerts.isEmpty else {
+            return
+        }
+        let c = UIAlertController(title: "Alert", message: self.alerts.removeFirst(), preferredStyle: .alert)
+        c.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in self.workAlerts() }))
+        self.controller?.present(c, animated: true)
+    }
+    
+    public static func run(controller: UIViewController, script: String) {
+        let evaluator = JSEvaluator(controller: controller)
+        evaluator.context.evaluateScript(script)
     }
     
 }

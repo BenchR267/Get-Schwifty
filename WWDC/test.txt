@@ -1,5 +1,5 @@
-func a(b: Int, c: Int) -> Int {
-    return b + c
+var a = 0
+while a < 3 {
+    alert(a)
+    a = a + 1
 }
-
-let c = a(6, 8)

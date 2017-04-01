@@ -19,14 +19,12 @@ public class ViewController: UIViewController {
     }()
     
     var textView: UITextView!
-    private lazy var jsEvaluator: JSEvaluator = {
-        return JSEvaluator(controller: self)
-    }()
+    private let generator = Generator()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.jsEvaluator.run(script: "alert(\"Hello world!\", 5, 4)")
+//        self.jsEvaluator.run(script: "const a = \"hello\"; alert(a)")
         
         self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
@@ -42,6 +40,7 @@ public class ViewController: UIViewController {
         self.textView.autocorrectionType = .no
         self.textView.alwaysBounceVertical = true
         self.textView.keyboardDismissMode = .interactive
+        self.textView.keyboardAppearance = .dark
         self.textView.delegate = self
         self.textView.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
         self.view.backgroundColor = self.textView.backgroundColor
@@ -56,10 +55,8 @@ public class ViewController: UIViewController {
         do {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
-            dump(program)
-            let alert = UIAlertController(title: "Yeah", message: "🚀", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(alert, animated: true)
+            let js = self.generator.generate(program: program)
+            JSEvaluator.run(controller: self, script: js)
         } catch {
             let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))

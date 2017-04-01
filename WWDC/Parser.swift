@@ -102,6 +102,14 @@ public class Parser {
         
         self.iterator = start
         do {
+            let ass = try self.parseAssignment()
+            return .assignment(ass)
+        } catch let error as Parser.Error {
+            errors.append(error)
+        }
+        
+        self.iterator = start
+        do {
             let expr = try self.parseExpression()
             return .expression(expr)
         } catch let error as Parser.Error {
@@ -253,7 +261,7 @@ public class Parser {
         return (multipleCondition, scope)
     }
     
-    private func parseMultipleCondition() throws -> MultipleCondition {
+    private func parseMultipleCondition(rec: Bool = true) throws -> MultipleCondition {
         var expressions = [Expression]()
         var operators = [Token]()
         while let next = self.iteratedElement(), next.type != .curlyBracketOpen {
@@ -261,7 +269,7 @@ public class Parser {
             if next.type == .parenthesisOpen || next.type == .parenthesisClose {
                 continue
             }
-            let expression = try parseExpression()
+            let expression = try parseExpression(condition: rec, calculation: false)
             if expression.type != "Bool" {
                 throw Error.unexpectedExpression(expectedType: "Bool", got: expression.type ?? "unknown")
             }
@@ -298,6 +306,9 @@ public class Parser {
         if operators.count != expressions.count - 1 {
             throw Error.unexpectedString(expected: "one operator less than conditions", got: "Too much or less operators")
         }
+        if expressions.count == 1 {
+            throw Error.unexpectedExpression(expectedType: "calculation should be more than one expression", got: "one expression")
+        }
         return MultipleCalculation(expressions: expressions, operators: operators)
     }
     
@@ -309,10 +320,7 @@ public class Parser {
     }
     
     private func parseWhile() throws -> While {
-        let expression = try parseExpression()
-        if expression.type != "Bool" {
-            throw Error.unexpectedExpression(expectedType: "Bool", got: expression.type ?? "unknown")
-        }
+        let expression = try parseMultipleCondition()
         try self.parse(.curlyBracketOpen)
         let scope = try self.parseScope()
         try self.parse(.curlyBracketClose)
@@ -385,6 +393,13 @@ public class Parser {
         
         let error = errors.reduce(Error.eof) { Error.merged($0, $1) }
         throw error
+    }
+    
+    private func parseAssignment() throws -> Assignment {
+        let identifier = try self.parseIdentifier()
+        try self.parse(.assign)
+        let expr = try self.parseExpression()
+        return Assignment(identifer: identifier, expression: expr)
     }
     
     private func parseLiteral() throws -> Token {

@@ -17,6 +17,7 @@
 		B5CD4F091E8F8E2E00011B8C /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F081E8F8E2E00011B8C /* Parser.swift */; };
 		B5CD4F0B1E8FB5C700011B8C /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0A1E8FB5C700011B8C /* AST.swift */; };
 		B5CD4F0E1E900A3400011B8C /* JSEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */; };
+		B5CD4F101E90177700011B8C /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0F1E90177700011B8C /* Generator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		B5CD4F081E8F8E2E00011B8C /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		B5CD4F0A1E8FB5C700011B8C /* AST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AST.swift; sourceTree = "<group>"; };
 		B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSEvaluator.swift; sourceTree = "<group>"; };
+		B5CD4F0F1E90177700011B8C /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				B519F6AA1E8BEDC500DC9871 /* Lexer.swift */,
 				B5CD4F081E8F8E2E00011B8C /* Parser.swift */,
 				B5CD4F0A1E8FB5C700011B8C /* AST.swift */,
+				B5CD4F0F1E90177700011B8C /* Generator.swift */,
 			);
 			name = Transpiler;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5CD4F0E1E900A3400011B8C /* JSEvaluator.swift in Sources */,
+				B5CD4F101E90177700011B8C /* Generator.swift in Sources */,
 				B5CD4F0B1E8FB5C700011B8C /* AST.swift in Sources */,
 				B5CD4F071E8F879A00011B8C /* SyntaxHighlighter.swift in Sources */,
 				B519F69A1E8BEDB000DC9871 /* ViewController.swift in Sources */,

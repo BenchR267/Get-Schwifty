@@ -41,7 +41,7 @@ extension UIColor {
     }
 }
 
-private let font = UIFont.systemFont(ofSize: 14)
+private let font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
 
 private let standard = UIColor(r: 225, g: 226, b: 231, a: 1)
 private let keyword = UIColor(r: 225, g: 44, b: 160, a: 1)
