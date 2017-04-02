@@ -12,12 +12,17 @@ public struct Program {
     public var scope: Scope
 }
 
+public struct IdentifierInformation {
+    let type: String
+    let mutable: Bool
+}
+
 public struct Scope {
     public var statements = [Statement]()
     
     // name: type
     // function parameters: _func_NAME_0, _func_NAME_1, ...
-    public var namelist = [String: String]()
+    public var namelist = [String: IdentifierInformation]()
 }
 
 public enum Statement {
@@ -114,7 +119,7 @@ public indirect enum Expression {
     case condition(Condition)
     case calculation(MultipleCalculation)
     
-    public func type(_ namelist: [String: String]) -> String {
+    public func type(_ namelist: [String: IdentifierInformation]) -> String {
         switch self {
         case .literal(let token):
             switch token.type {
@@ -130,9 +135,9 @@ public indirect enum Expression {
                 return "Void"
             }
         case .identifier(let token):
-            return namelist[token.raw] ?? "Void"
+            return namelist[token.raw]?.type ?? "Void"
         case .call(let call):
-            return namelist[call.name] ?? "Void"
+            return namelist[call.name]?.type ?? "Void"
         case .calculation(let c):
             return c.expressions.first?.type(namelist) ?? "Int"
         case .condition(_):
