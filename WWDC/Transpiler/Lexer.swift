@@ -33,6 +33,8 @@ public enum TokenType: Equatable {
     case point
     case colon
     case assign
+    case plusAssign
+    case minusAssign
     case plus
     case minus
     case slash
@@ -94,6 +96,10 @@ public enum TokenType: Equatable {
             self = .colon
         case "=":
             self = .assign
+        case "+=":
+            self = .plusAssign
+        case "-=":
+            self = .minusAssign
         case "+":
             self = .plus
         case "-":
@@ -173,6 +179,8 @@ public enum TokenType: Equatable {
         case (.point, .point): return true
         case (.colon, .colon): return true
         case (.assign, .assign): return true
+        case (.plusAssign, .plusAssign): return true
+        case (.minusAssign, .minusAssign): return true
         case (.plus, .plus): return true
         case (.minus, .minus): return true
         case (.slash, .slash): return true
@@ -367,7 +375,7 @@ class Tokenizer {
         if curr.count == 1 {
             switch curr[0] {
             case "+":
-                return next == "+"
+                return next == "="
             case "!", "=":
                 return next == "="
             case "<":
@@ -375,7 +383,7 @@ class Tokenizer {
             case ">":
                 return next == "="
             case "-":
-                return next == ">"
+                return next == ">" || next == "="
             case "|":
                 return next == "|"
             case "&":

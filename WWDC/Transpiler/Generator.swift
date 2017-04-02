@@ -107,7 +107,7 @@ public class Generator {
             o.append(generate(e))
             if i < a.operators.count {
                 o.append(" ")
-                o.append(a.operators[i].raw)
+                o.append(a.operators[i])
                 o.append(" ")
             }
         }

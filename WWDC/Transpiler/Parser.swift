@@ -38,6 +38,25 @@ public class Parser {
             case .unimplemented: return "This functionality is unimplemented."
             }
         }
+        
+        var fatal: Bool {
+            switch self {
+                
+            case .unknownIdentifier(_),
+                 .wrongType(_, _),
+                 .mutatingNonMutatingVariable(_),
+                 .unimplemented,
+                 .couldNotInferType(_, _):
+                return true
+                
+            case .unexpectedError,
+                 .unexpectedEOF,
+                 .unexpectedType(_, _),
+                 .unexpectedString(_, _),
+                 .unexpectedExpression(_, _):
+                return false
+            }
+        }
     }
     
     private static let standardNamelist = [
@@ -139,7 +158,7 @@ public class Parser {
             errors.append(error)
         }
 
-        throw errors.first ?? Error.unexpectedError
+        throw errors.filter {$0.fatal}.first ?? errors.first ?? Error.unexpectedError
     }
     
     private func parseDeclaration(namelist: inout [String: IdentifierInformation]) throws -> Declaration {
@@ -323,7 +342,7 @@ public class Parser {
     
     private func parseMutlipleCalculation(namelist: inout [String: IdentifierInformation], rec: Bool = true) throws -> MultipleCalculation {
         var expressions = [Expression]()
-        var operators = [Token]()
+        var operators = [String]()
         var go = true
         while go {
             let expr = try self.parseExpression(namelist: &namelist, calculation: rec)
@@ -332,7 +351,7 @@ public class Parser {
                 switch next.type {
                 case .plus, .minus, .multiply, .slash:
                     let op = try self.parseCalculationOperator()
-                    operators.append(op)
+                    operators.append(op.raw)
                 default:
                     go = false
                 }
@@ -436,12 +455,19 @@ public class Parser {
             errors.append(error)
         }
         
-        throw errors.first ?? Error.unexpectedError
+        throw errors.filter {$0.fatal}.first ?? errors.first ?? Error.unexpectedError
     }
     
     private func parseAssignment(namelist: inout [String: IdentifierInformation]) throws -> Assignment {
         let identifier = try self.parseIdentifier()
-        try self.parse(.assign)
+        var tokenType = TokenType.assign
+        if let next = self.iteratedElement() {
+            tokenType = next.type
+            if ![TokenType.assign, .minusAssign, .plusAssign].contains(tokenType) {
+                throw Error.unexpectedString(expected: "= += -=", got: next.raw)
+            }
+            self.nextToken()
+        }
         let expr = try self.parseExpression(namelist: &namelist)
         try namelist.lookup(identifier.raw)
         guard namelist[identifier.raw]!.mutable else {
@@ -450,7 +476,14 @@ public class Parser {
         if let type = namelist[identifier.raw]?.type, !type.typeMatches(expr.type(namelist)) {
             throw Error.wrongType(expected: type, got: expr.type(namelist))
         }
-        return Assignment(identifer: identifier, expression: expr)
+        var finalExpression = expr
+        if tokenType == .plusAssign {
+            finalExpression = Expression.calculation(MultipleCalculation(expressions: [.identifier(identifier), expr], operators: ["+"]))
+        } else if tokenType == .minusAssign {
+            finalExpression = Expression.calculation(MultipleCalculation(expressions: [.identifier(identifier), expr], operators: ["-"]))
+        }
+        
+        return Assignment(identifer: identifier, expression: finalExpression)
     }
     
     private func parseLiteral() throws -> Token {

@@ -109,7 +109,7 @@ public struct Call {
 
 public struct MultipleCalculation {
     public var expressions: [Expression]
-    public var operators: [Token]
+    public var operators: [String]
 }
 
 public indirect enum Expression {
