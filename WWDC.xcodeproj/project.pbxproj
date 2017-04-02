@@ -98,9 +98,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B519F6931E8BEDB000DC9871 /* WWDC */ = {
+		B519F6931E8BEDB000DC9871 /* Get Schwifty */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B519F6A61E8BEDB000DC9871 /* Build configuration list for PBXNativeTarget "WWDC" */;
+			buildConfigurationList = B519F6A61E8BEDB000DC9871 /* Build configuration list for PBXNativeTarget "Get Schwifty" */;
 			buildPhases = (
 				B519F6901E8BEDB000DC9871 /* Sources */,
 				B519F6911E8BEDB000DC9871 /* Frameworks */,
@@ -110,7 +110,7 @@
 			);
 			dependencies = (
 			);
-			name = WWDC;
+			name = "Get Schwifty";
 			productName = WWDC;
 			productReference = B519F6941E8BEDB000DC9871 /* WWDC.app */;
 			productType = "com.apple.product-type.application";
@@ -145,7 +145,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B519F6931E8BEDB000DC9871 /* WWDC */,
+				B519F6931E8BEDB000DC9871 /* Get Schwifty */,
 			);
 		};
 /* End PBXProject section */
@@ -295,7 +295,7 @@
 				DEVELOPMENT_TEAM = 3E4PGPNR47;
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.WWDC;
+				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -308,7 +308,7 @@
 				DEVELOPMENT_TEAM = 3E4PGPNR47;
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.WWDC;
+				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -326,7 +326,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B519F6A61E8BEDB000DC9871 /* Build configuration list for PBXNativeTarget "WWDC" */ = {
+		B519F6A61E8BEDB000DC9871 /* Build configuration list for PBXNativeTarget "Get Schwifty" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B519F6A71E8BEDB000DC9871 /* Debug */,

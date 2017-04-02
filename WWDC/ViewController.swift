@@ -23,8 +23,12 @@ public class ViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
-        self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
+//        self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
+//        self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
+        
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.barStyle = .blackOpaque
+        self.navigationController?.navigationBar.barTintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
         
         let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
         let clear = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearHandler))
