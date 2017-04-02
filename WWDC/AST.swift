@@ -124,6 +124,8 @@ public indirect enum Expression {
                 return "Int"
             case .literal(.Double(_)):
                 return "Double"
+            case .literal(.Bool(_)):
+                return "Bool"
             default:
                 return "Void"
             }
@@ -131,8 +133,8 @@ public indirect enum Expression {
             return namelist[token.raw] ?? "Void"
         case .call(let call):
             return namelist[call.name] ?? "Void"
-        case .calculation(_):
-            return "Int"
+        case .calculation(let c):
+            return c.expressions.first?.type(namelist) ?? "Int"
         case .condition(_):
             return "Bool"
         }

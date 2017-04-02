@@ -8,7 +8,7 @@
 
 import UIKit
 
-func attributedString(tokens: [Token]) -> NSAttributedString {
+public func attributedString(tokens: [Token]) -> NSAttributedString {
     let attr = NSMutableAttributedString(string: "")
     
     for t in tokens {
@@ -19,6 +19,7 @@ func attributedString(tokens: [Token]) -> NSAttributedString {
         case .literal(.String(_)):  color = strings
         case .literal(.Integer(_)): color = numbers
         case .literal(.Double(_)):  color = numbers
+        case .literal(.Bool(_)):    color = keyword
         default:                    color = standard
         }
         var attributes: [String: NSObject] = [
@@ -35,13 +36,13 @@ func attributedString(tokens: [Token]) -> NSAttributedString {
     return attr
 }
 
-extension UIColor {
+public extension UIColor {
     convenience init(r: Int, g: Int, b: Int, a: Double) {
         self.init(red: CGFloat(r)/255, green: CGFloat(g)/255, blue: CGFloat(b)/255, alpha: CGFloat(a))
     }
 }
 
-private let font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+private let font = UIFont(name: "Menlo-Regular", size: 16) ?? UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
 
 private let standard = UIColor(r: 225, g: 226, b: 231, a: 1)
 private let keyword = UIColor(r: 225, g: 44, b: 160, a: 1)
