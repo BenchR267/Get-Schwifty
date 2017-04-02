@@ -45,6 +45,7 @@ public class ViewController: UIViewController {
         self.textView.keyboardAppearance = .dark
         self.textView.delegate = self
         self.textView.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
+        self.textView.tintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
         self.view.backgroundColor = self.textView.backgroundColor
         
         self.textView.text = self.input
