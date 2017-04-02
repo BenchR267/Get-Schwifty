@@ -22,7 +22,12 @@ public class SourceViewController: UIViewController {
     public var outStream: (String) -> Void = { print($0) }
     public var clear: () -> Void = {}
     
-    var observer: NSObjectProtocol?
+    private var observer: NSObjectProtocol?
+    private let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.timeStyle = .medium
+        return df
+    }()
     
     public weak var delegate: SourceViewControllerDelegate?
     
@@ -52,6 +57,9 @@ public class SourceViewController: UIViewController {
             }
             self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
         }
+    }
+    
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
     }
     
@@ -79,8 +87,14 @@ public class SourceViewController: UIViewController {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
             let js = self.generator.generate(program: program)
-            JSEvaluator.run(controller: self.parent ?? self, outStream: self.outStream, full: full, script: js)
             self.delegate?.sourceViewControllerDidEvaluate()
+            
+            let time = self.dateFormatter.string(from: Date())
+            self.outStream("=========== " + self.dateFormatter.string(from: Date()) + " ===========")
+            let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
+            JSEvaluator.run(controller: self.parent ?? self, outStream: self.outStream, full: full, script: js)
+            self.outStream(bottom)
+            
         } catch let error as Parser.Error {
             if !full { return }
             let c = UIAlertController(title: "Error", message: "Sorry, there is an error in your sourcecode. Maybe this helps you tracking it down:\n\n\(error.string)", preferredStyle: .alert)

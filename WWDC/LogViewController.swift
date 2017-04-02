@@ -58,5 +58,7 @@ public class LogViewController: UIViewController {
     
     public func write(_ text: String) {
         self.textView?.text.append(text + "\n")
+        self.textView?.font = font
+        
     }
 }

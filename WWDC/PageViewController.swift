@@ -10,8 +10,8 @@ import UIKit
 
 class PageViewController: UIPageViewController {
     
-    private let source = SourceViewController()
-    private let log = LogViewController()
+    fileprivate let source = SourceViewController()
+    fileprivate let log = LogViewController()
     
     fileprivate lazy var controllers: [UIViewController] = {
         return [self.source, self.log]
