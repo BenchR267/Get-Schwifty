@@ -250,6 +250,9 @@ public class Parser {
             try self.parse(.assign)
             expr = try self.parseExpression(namelist: &namelist)
         }
+        if let exprType = expr?.type(namelist), !param.type.isEmpty, !exprType.typeMatches(param.type) {
+            throw Error.wrongType(expected: param.type, got: exprType)
+        }
         guard let type = param.type.isEmpty ? expr?.type(namelist) : param.type else {
             throw Error.couldNotInferType(param.name, loc)
         }
