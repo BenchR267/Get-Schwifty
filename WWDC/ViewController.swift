@@ -10,7 +10,7 @@ import UIKit
 
 public class ViewController: UIViewController {
     
-    lazy var input: String = "// Welcome to the Playground in the Playground!\n// My name is Benjamin Herzog.\n//\n// Since playgrounds are great to create interactive\n// programs I decided to create a playground.\n// You can run the code by pressing 'Run' at the top right \n// corner.\n//\n// This is only a subset of Swift containing functions (no\n// higher ones), variables, constants, while loops, if statements,\n// type inference and a light weight type system.\n\nvar i = 3\nwhile i > 0 {\n\talert(i)\n\tprint(\"countdown…\" + i)\n\ti = i - 1\n}\n\nlet company = \"Apple\"\nlet location = \"San Jose\"\nlet event = \"WWDC\"\nlet year = 2017\nlet awesome = true\n\nfunc greeting(company: String, location: String, event: String, year: Int) -> String {\n\treturn \"Welcome to \" + event + \" \" + year + \" by \" + company + \" in \" + location\n}\n\nif awesome {\n\talert(greeting(company, location, event, year) + \"!!! 🚀\")\n}"
+    lazy var input: String = "// Welcome to the Playground in the Playground!\n// My name is Benjamin Herzog.\n//\n// Since playgrounds are great to create interactive\n// programs I decided to create a playground.\n// You can run the code by pressing 'Run' at the top right \n// corner.\n//\n// This is only a subset of Swift containing functions (no\n// higher ones), variables, constants, while loops, if statements,\n// type inference and a light weight type system.\n\nvar i = 3\nwhile i > 0 {\n\talert(\"countdown\", i)\n\tprint(\"countdown…\" + i)\n\ti = i - 1\n}\n\nlet company = \"Apple\"\nlet location = \"San Jose\"\nlet event = \"WWDC\"\nlet year = 2017\nlet awesome = true\n\nfunc greeting(company: String, location: String, event: String, year: Int) -> String {\n\treturn \"Welcome to \" + event + \" \" + year + \" by \" + company + \" in \" + location\n}\n\nif awesome {\n\talert(\"awesome\", greeting(company, location, event, year) + \"!!! 🚀\")\n}"
     
     var textView: UITextView!
     private let generator = Generator()
@@ -79,9 +79,13 @@ public class ViewController: UIViewController {
             let program = try parser.parseProgram()
             let js = self.generator.generate(program: program)
             JSEvaluator.run(controller: self, outStream: self.outStream, full: full, script: js)
-        } catch {
+        } catch let error as Parser.Error {
             if !full { return }
-            let c = UIAlertController(title: "Error", message: "Sorry, there is an error in your sourcecode. Here is a parsing stack trace that could maybe help:\n\n\n\n\(error)", preferredStyle: .alert)
+            let c = UIAlertController(title: "Error", message: "Sorry, there is an error in your sourcecode. Maybe this helps you tracking it down:\n\n\(error.string)", preferredStyle: .alert)
+            c.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(c, animated: true)
+        } catch {
+            let c = UIAlertController(title: "Error", message: "Unexpected error occured.", preferredStyle: .alert)
             c.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(c, animated: true)
         }

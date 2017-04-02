@@ -11,7 +11,7 @@ import Foundation
 public class Parser {
     
     public indirect enum Error: Swift.Error {
-        case eof
+        case unexpectedError
         case unexpectedEOF
         case unexpectedType(expected: TokenType, got: Token)
         case unexpectedString(expected: String, got: String)
@@ -22,9 +22,22 @@ public class Parser {
         case wrongType(expected: String, got: String)
         case mutatingNonMutatingVariable(String)
         
-        case merged(Error, Error)
-        
         case unimplemented
+        
+        var string: String {
+            switch self {
+            case .unexpectedError: return "Unexpected Error :("
+            case .unexpectedEOF: return "File ended unexpected"
+            case .unexpectedType(let expected, let got): return "Expected \(expected) but got \(got.type) instead"
+            case .unexpectedString(let expected, let got): return "Expected \(expected) but got \(got) instead"
+            case .couldNotInferType(let id, _): return "Could not infer type of \(id)."
+            case .unexpectedExpression(let expectedType, let got): return "Expression is unexpected: \(expectedType) - \(got)"
+            case .unknownIdentifier(let id): return "Got unknown identifier '\(id)'"
+            case .wrongType(let expected, let got): return "type mismatch: expected \(expected), got \(got)"
+            case .mutatingNonMutatingVariable(let id): return "\(id) can not be mutated."
+            case .unimplemented: return "This functionality is unimplemented."
+            }
+        }
     }
     
     private static let standardNamelist = [
@@ -126,8 +139,7 @@ public class Parser {
             errors.append(error)
         }
 
-        let error = errors.reduce(Error.eof) { Error.merged($0, $1) }
-        throw error
+        throw errors.first ?? Error.unexpectedError
     }
     
     private func parseDeclaration(namelist: inout [String: IdentifierInformation]) throws -> Declaration {
@@ -424,8 +436,7 @@ public class Parser {
             errors.append(error)
         }
         
-        let error = errors.reduce(Error.eof) { Error.merged($0, $1) }
-        throw error
+        throw errors.first ?? Error.unexpectedError
     }
     
     private func parseAssignment(namelist: inout [String: IdentifierInformation]) throws -> Assignment {
