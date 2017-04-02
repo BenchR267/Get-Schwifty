@@ -398,7 +398,7 @@ public class Parser {
             if let type = namelist["_func_\(name)_\(i)"]?.type, !type.typeMatches(expr.type(namelist)) {
                 throw Error.wrongType(expected: type, got: expr.type(namelist))
             }
-            if let next = self.iteratedElement(), next.type == .comma {
+            if let next = self.iteratedElement(), next.type != .parenthesisClose {
                 try self.parse(.comma)
             }
             i += 1
