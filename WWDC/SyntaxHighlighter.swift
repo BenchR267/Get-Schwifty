@@ -42,7 +42,8 @@ public extension UIColor {
     }
 }
 
-let font = UIFont(name: "Menlo-Regular", size: 16) ?? UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+private let bodySize = UIFont.preferredFont(forTextStyle: .body).pointSize
+let font = UIFont(name: "Menlo-Regular", size: bodySize) ?? UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
 
 private let standard = UIColor(r: 225, g: 226, b: 231, a: 1)
 private let keyword = UIColor(r: 225, g: 44, b: 160, a: 1)

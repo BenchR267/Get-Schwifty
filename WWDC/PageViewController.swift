@@ -10,7 +10,7 @@ import UIKit
 
 class PageViewController: UIPageViewController {
     
-    private let source = ViewController()
+    private let source = SourceViewController()
     private let log = LogViewController()
     
     fileprivate lazy var controllers: [UIViewController] = {
@@ -25,11 +25,16 @@ class PageViewController: UIPageViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.source.outStream = self.log.write(_:)
         self.source.clear = self.log.clear
+        
+        self.source.delegate = self
+        self.log.delegate = self
         
         self.dataSource = self
         self.setViewControllers([self.controllers[0]], direction: .forward, animated: false, completion: nil)
@@ -59,6 +64,29 @@ extension PageViewController: UIPageViewControllerDataSource {
         return self.controllers[safe: newIndex]
     }
     
+}
+
+extension PageViewController {
+    
+    fileprivate func setIndex(_ index: Int, direction: UIPageViewControllerNavigationDirection) {
+        guard let controller = self.controllers[safe: index] else {
+            return
+        }
+        self.setViewControllers([controller], direction: direction, animated: true, completion: nil)
+    }
+    
+}
+
+extension PageViewController: LogViewControllerDelegate {
+    func logViewControllerDidPressBack() {
+        self.setIndex(0, direction: .reverse)
+    }
+}
+
+extension PageViewController: SourceViewControllerDelegate {
+    func sourceViewControllerDidEvaluate() {
+        self.setIndex(1, direction: .forward)
+    }
 }
 
 extension UIViewController {

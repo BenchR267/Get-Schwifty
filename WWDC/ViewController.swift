@@ -8,7 +8,11 @@
 
 import UIKit
 
-public class ViewController: UIViewController {
+public protocol SourceViewControllerDelegate: class {
+    func sourceViewControllerDidEvaluate()
+}
+
+public class SourceViewController: UIViewController {
     
     lazy var input: String = "// Welcome to the Playground in the Playground!\n// My name is Benjamin Herzog.\n//\n// Since playgrounds are great to create interactive\n// programs I decided to create a playground.\n// You can run the code by pressing 'Run' at the top right \n// corner.\n//\n// This is only a subset of Swift containing functions (no\n// higher ones), variables, constants, while loops, if statements,\n// type inference and a light weight type system.\n\nvar i = 3\nwhile i > 0 {\n\talert(\"countdown\", i)\n\tprint(\"countdown…\" + i)\n\ti -= 1\n}\n\nlet company = \"Apple\"\nlet location = \"San Jose\"\nlet event = \"WWDC\"\nlet year = 2017\nlet awesome = true\n\nfunc greeting(company: String, location: String, event: String, year: Int) -> String {\n\treturn \"Welcome to \" + event + \" \" + year + \" by \" + company + \" in \" + location\n}\n\nif awesome {\n\talert(\"awesome\", greeting(company, location, event, year) + \"!!! 🚀\")\n}"
     
@@ -20,12 +24,10 @@ public class ViewController: UIViewController {
     
     var observer: NSObjectProtocol?
     
+    public weak var delegate: SourceViewControllerDelegate?
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.barStyle = .blackOpaque
-        self.navigationController?.navigationBar.barTintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
         
         self.textView = UITextView(frame: self.view.bounds)
         self.textView.autocapitalizationType = .none
@@ -56,9 +58,8 @@ public class ViewController: UIViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
-        let clear = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearHandler))
         (self.parent ?? self).navigationItem.rightBarButtonItem = run
-        (self.parent ?? self).navigationItem.leftBarButtonItem = clear
+        (self.parent ?? self).navigationItem.leftBarButtonItem = nil
         (self.parent ?? self).title = "WWDC - Benjamin Herzog"
     }
     
@@ -78,7 +79,8 @@ public class ViewController: UIViewController {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
             let js = self.generator.generate(program: program)
-            JSEvaluator.run(controller: self, outStream: self.outStream, full: full, script: js)
+            JSEvaluator.run(controller: self.parent ?? self, outStream: self.outStream, full: full, script: js)
+            self.delegate?.sourceViewControllerDidEvaluate()
         } catch let error as Parser.Error {
             if !full { return }
             let c = UIAlertController(title: "Error", message: "Sorry, there is an error in your sourcecode. Maybe this helps you tracking it down:\n\n\(error.string)", preferredStyle: .alert)
@@ -93,13 +95,13 @@ public class ViewController: UIViewController {
     
 }
 
-extension ViewController: UITextViewDelegate {
+extension SourceViewController: UITextViewDelegate {
     
     static let throttle: TimeInterval = 0.05
     
     public func textViewDidChange(_ textView: UITextView) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
-        self.perform(#selector(updateText), with: textView.text, afterDelay: ViewController.throttle)
+        self.perform(#selector(updateText), with: textView.text, afterDelay: SourceViewController.throttle)
     }
     
     func updateText(text: String) {

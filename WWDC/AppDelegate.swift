@@ -22,7 +22,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = window
         
+        self.appearance()
+        
         return true
+    }
+    
+    private func appearance() {
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().barStyle = .blackOpaque
+        UINavigationBar.appearance().barTintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
+        
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
+        UIPageControl.appearance().backgroundColor = .clear
     }
 }
 
