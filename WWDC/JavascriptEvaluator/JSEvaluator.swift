@@ -48,6 +48,15 @@ public class JSEvaluator {
                 self?.workAlerts()
             }
             context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
+            
+            let sleepHandler: @convention(block) () -> Void = {
+                if let args = JSContext.currentArguments().first, let time = args as? UInt32 {
+                    sleep(time)
+                } else {
+                    sleep(1)
+                }
+            }
+            context.setObject(unsafeBitCast(sleepHandler, to: AnyObject.self), forKeyedSubscript: "sleep" as (NSCopying & NSObjectProtocol)!)
         }
     }
     

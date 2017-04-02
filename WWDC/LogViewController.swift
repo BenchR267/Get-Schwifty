@@ -34,18 +34,18 @@ public class LogViewController: UIViewController {
         self.view.addSubview(textView)
         self.textView = textView
         self.view.backgroundColor = textView.backgroundColor
+        
+        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        let clearButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clear))
+        
+        self.navigationItem.leftBarButtonItem = backButton
+        self.navigationItem.rightBarButtonItem = clearButton
+        self.title = "Log Output"
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.textView?.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
-        
-        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
-        let clearButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clear))
-        
-        (self.parent ?? self).navigationItem.leftBarButtonItem = backButton
-        (self.parent ?? self).navigationItem.rightBarButtonItem = clearButton
-        (self.parent ?? self).title = "Log Output"
     }
     
     func back() {

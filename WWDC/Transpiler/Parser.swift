@@ -61,6 +61,7 @@ public class Parser {
     
     private static let standardNamelist = [
         "alert": IdentifierInformation(type: "Void", mutable: false),
+        "sleep": IdentifierInformation(type: "Void", mutable: false),
         "print": IdentifierInformation(type: "Void", mutable: false)
     ]
     

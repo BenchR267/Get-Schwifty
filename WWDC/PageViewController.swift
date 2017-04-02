@@ -8,26 +8,26 @@
 
 import UIKit
 
-class PageViewController: UIPageViewController {
+public class PageViewController: UIPageViewController {
     
     fileprivate let source = SourceViewController()
     fileprivate let log = LogViewController()
     
     fileprivate lazy var controllers: [UIViewController] = {
-        return [self.source, self.log]
+        return [self.source.wrapInNavigationController(), self.log.wrapInNavigationController()]
     }()
     
-    init() {
+    public init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         self.source.outStream = self.log.write(_:)
@@ -40,14 +40,15 @@ class PageViewController: UIPageViewController {
         self.setViewControllers([self.controllers[0]], direction: .forward, animated: false, completion: nil)
         
         // trigger viewDidLoad initially
-        self.controllers.forEach { _ = $0.view }
+        _ = self.source.view
+        _ = self.log.view
     }
 
 }
 
 extension PageViewController: UIPageViewControllerDataSource {
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let index = self.controllers.index(of: viewController) else {
             return nil
         }
@@ -55,7 +56,7 @@ extension PageViewController: UIPageViewControllerDataSource {
         return self.controllers[safe: newIndex]
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = self.controllers.index(of: viewController) else {
             return nil
         }
@@ -68,45 +69,60 @@ extension PageViewController: UIPageViewControllerDataSource {
 
 extension PageViewController {
     
-    fileprivate func setIndex(_ index: Int, direction: UIPageViewControllerNavigationDirection) {
+    fileprivate func setIndex(_ index: Int, direction: UIPageViewControllerNavigationDirection, completion: @escaping (Bool) -> Void = {_ in}) {
         guard let controller = self.controllers[safe: index] else {
             return
         }
-        self.setViewControllers([controller], direction: direction, animated: true, completion: nil)
+        self.setViewControllers([controller], direction: direction, animated: true, completion: completion)
     }
     
 }
 
 extension PageViewController: LogViewControllerDelegate {
-    func logViewControllerDidPressBack() {
+    public func logViewControllerDidPressBack() {
         self.setIndex(0, direction: .reverse)
     }
 }
 
 extension PageViewController: SourceViewControllerDelegate {
-    func sourceViewControllerDidEvaluate() {
-        self.setIndex(1, direction: .forward)
+    
+    public func sourceViewControllerWillEvaluate(start: @escaping () -> Void) {
+        self.setIndex(1, direction: .forward) { _ in
+            start()
+        }
+    }
+    
+    public func sourceViewControllerDidEvaluate() {
+        
     }
 }
 
 extension UIViewController {
     
-    func wrapInNavigationController() -> UINavigationController {
+    public func wrapInNavigationController() -> UINavigationController {
         if let nav = self.navigationController {
             return nav
         }
         return UINavigationController(rootViewController: self)
     }
     
-    var headerHeight: CGFloat {
+    public var headerHeight: CGFloat {
         return (self.navigationController?.navigationBar.bounds.size.height ?? 0) + UIApplication.shared.statusBarFrame.size.height
+    }
+    
+    public var topParent: UIViewController {
+        var top = self
+        while let p = top.parent {
+            top = p
+        }
+        return top
     }
     
 }
 
 extension Array {
     
-    subscript(safe index: Index) -> Element? {
+    public subscript(safe index: Index) -> Element? {
         guard count > index, index >= 0 else {
             return nil
         }

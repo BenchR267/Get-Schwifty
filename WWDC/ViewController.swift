@@ -9,6 +9,7 @@
 import UIKit
 
 public protocol SourceViewControllerDelegate: class {
+    func sourceViewControllerWillEvaluate(start: @escaping () -> Void)
     func sourceViewControllerDidEvaluate()
 }
 
@@ -57,18 +58,14 @@ public class SourceViewController: UIViewController {
             }
             self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
         }
+        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
+        self.navigationItem.rightBarButtonItem = run
+        self.navigationItem.leftBarButtonItem = nil
+        self.title = "WWDC - Benjamin Herzog"
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
-    }
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
-        (self.parent ?? self).navigationItem.rightBarButtonItem = run
-        (self.parent ?? self).navigationItem.leftBarButtonItem = nil
-        (self.parent ?? self).title = "WWDC - Benjamin Herzog"
     }
     
     func clearHandler() {
@@ -87,13 +84,22 @@ public class SourceViewController: UIViewController {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
             let js = self.generator.generate(program: program)
-            self.delegate?.sourceViewControllerDidEvaluate()
             
             let time = self.dateFormatter.string(from: Date())
-            self.outStream("=========== " + self.dateFormatter.string(from: Date()) + " ===========")
-            let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
-            JSEvaluator.run(controller: self.parent ?? self, outStream: self.outStream, full: full, script: js)
-            self.outStream(bottom)
+            
+            let block: () -> Void = {
+                self.outStream("=========== " + self.dateFormatter.string(from: Date()) + " ===========")
+                let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
+                JSEvaluator.run(controller: self.topParent, outStream: self.outStream, full: full, script: js)
+                self.outStream(bottom)
+                self.delegate?.sourceViewControllerDidEvaluate()
+            }
+            
+            if let delegate = self.delegate {
+                delegate.sourceViewControllerWillEvaluate(start: block)
+            } else {
+                block()
+            }
             
         } catch let error as Parser.Error {
             if !full { return }
