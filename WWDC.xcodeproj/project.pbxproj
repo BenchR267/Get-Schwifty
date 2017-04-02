@@ -50,8 +50,8 @@
 		B519F68B1E8BEDB000DC9871 = {
 			isa = PBXGroup;
 			children = (
-				B519F6961E8BEDB000DC9871 /* WWDC */,
 				B519F6951E8BEDB000DC9871 /* Products */,
+				B519F6961E8BEDB000DC9871 /* WWDC */,
 			);
 			sourceTree = "<group>";
 		};
@@ -66,15 +66,15 @@
 		B519F6961E8BEDB000DC9871 /* WWDC */ = {
 			isa = PBXGroup;
 			children = (
-				B519F6971E8BEDB000DC9871 /* AppDelegate.swift */,
-				B519F6991E8BEDB000DC9871 /* ViewController.swift */,
-				B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */,
-				B519F6AC1E8BF9F400DC9871 /* test.txt */,
-				B519F69E1E8BEDB000DC9871 /* Assets.xcassets */,
-				B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */,
-				B519F6A31E8BEDB000DC9871 /* Info.plist */,
 				B5CD4F0C1E900A1A00011B8C /* JavascriptEvaluator */,
 				B519F6A91E8BEDB700DC9871 /* Transpiler */,
+				B519F6971E8BEDB000DC9871 /* AppDelegate.swift */,
+				B519F69E1E8BEDB000DC9871 /* Assets.xcassets */,
+				B519F6A31E8BEDB000DC9871 /* Info.plist */,
+				B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */,
+				B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */,
+				B519F6991E8BEDB000DC9871 /* ViewController.swift */,
+				B519F6AC1E8BF9F400DC9871 /* test.txt */,
 			);
 			path = WWDC;
 			sourceTree = "<group>";
@@ -82,12 +82,13 @@
 		B519F6A91E8BEDB700DC9871 /* Transpiler */ = {
 			isa = PBXGroup;
 			children = (
-				B519F6AA1E8BEDC500DC9871 /* Lexer.swift */,
-				B5CD4F081E8F8E2E00011B8C /* Parser.swift */,
 				B5CD4F0A1E8FB5C700011B8C /* AST.swift */,
 				B5CD4F0F1E90177700011B8C /* Generator.swift */,
+				B519F6AA1E8BEDC500DC9871 /* Lexer.swift */,
+				B5CD4F081E8F8E2E00011B8C /* Parser.swift */,
 			);
 			name = Transpiler;
+			path = Transpiler;
 			sourceTree = "<group>";
 		};
 		B5CD4F0C1E900A1A00011B8C /* JavascriptEvaluator */ = {
@@ -96,6 +97,7 @@
 				B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */,
 			);
 			name = JavascriptEvaluator;
+			path = JavascriptEvaluator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,6 +193,7 @@
 				B519F6A11E8BEDB000DC9871 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
