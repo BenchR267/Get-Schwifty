@@ -23,21 +23,11 @@ public class ViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.navigationController?.navigationBar.tintColor = UIColor(r: 115, g: 115, b: 115, a: 1)
-//        self.navigationController?.navigationBar.barTintColor = UIColor(r: 213, g: 213, b: 213, a: 1)
-        
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barStyle = .blackOpaque
         self.navigationController?.navigationBar.barTintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
         
-        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
-        let clear = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearHandler))
-        self.navigationItem.rightBarButtonItem = run
-        self.navigationItem.leftBarButtonItem = clear
-        self.title = "WWDC - Benjamin Herzog"
-        
         self.textView = UITextView(frame: self.view.bounds)
-        self.textView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
         self.textView.autocapitalizationType = .none
         self.textView.autocorrectionType = .no
         self.textView.alwaysBounceVertical = true
@@ -58,13 +48,18 @@ public class ViewController: UIViewController {
             guard let endFrame = n.userInfo?[UIKeyboardFrameEndUserInfoKey] as? CGRect else {
                 return
             }
-            self.textView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
+            self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
         }
+        self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.textView.becomeFirstResponder()
+        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
+        let clear = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearHandler))
+        (self.parent ?? self).navigationItem.rightBarButtonItem = run
+        (self.parent ?? self).navigationItem.leftBarButtonItem = clear
+        (self.parent ?? self).title = "WWDC - Benjamin Herzog"
     }
     
     func clearHandler() {
@@ -75,7 +70,7 @@ public class ViewController: UIViewController {
         self.evaluate()
     }
     
-    func evaluate(full: Bool = true) {
+    private func evaluate(full: Bool = true) {
         if full {
             self.textView.resignFirstResponder()
         }

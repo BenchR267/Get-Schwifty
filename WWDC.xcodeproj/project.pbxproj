@@ -17,10 +17,12 @@
 		B5CD4F0B1E8FB5C700011B8C /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0A1E8FB5C700011B8C /* AST.swift */; };
 		B5CD4F0E1E900A3400011B8C /* JSEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */; };
 		B5CD4F101E90177700011B8C /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD4F0F1E90177700011B8C /* Generator.swift */; };
+		B5E7E7891E91260C0021025A /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E7E7881E91260C0021025A /* LogViewController.swift */; };
+		B5E7E78B1E9126FB0021025A /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E7E78A1E9126FB0021025A /* PageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B519F6941E8BEDB000DC9871 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B519F6941E8BEDB000DC9871 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = WWDC.app; path = "Get Schwifty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B519F6971E8BEDB000DC9871 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B519F6991E8BEDB000DC9871 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B519F69E1E8BEDB000DC9871 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -32,6 +34,8 @@
 		B5CD4F0A1E8FB5C700011B8C /* AST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AST.swift; sourceTree = "<group>"; };
 		B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSEvaluator.swift; sourceTree = "<group>"; };
 		B5CD4F0F1E90177700011B8C /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
+		B5E7E7881E91260C0021025A /* LogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
+		B5E7E78A1E9126FB0021025A /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,8 @@
 				B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */,
 				B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */,
 				B519F6991E8BEDB000DC9871 /* ViewController.swift */,
+				B5E7E7881E91260C0021025A /* LogViewController.swift */,
+				B5E7E78A1E9126FB0021025A /* PageViewController.swift */,
 			);
 			path = WWDC;
 			sourceTree = "<group>";
@@ -168,8 +174,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5CD4F0E1E900A3400011B8C /* JSEvaluator.swift in Sources */,
+				B5E7E78B1E9126FB0021025A /* PageViewController.swift in Sources */,
 				B5CD4F101E90177700011B8C /* Generator.swift in Sources */,
 				B5CD4F0B1E8FB5C700011B8C /* AST.swift in Sources */,
+				B5E7E7891E91260C0021025A /* LogViewController.swift in Sources */,
 				B5CD4F071E8F879A00011B8C /* SyntaxHighlighter.swift in Sources */,
 				B519F69A1E8BEDB000DC9871 /* ViewController.swift in Sources */,
 				B5CD4F091E8F8E2E00011B8C /* Parser.swift in Sources */,
