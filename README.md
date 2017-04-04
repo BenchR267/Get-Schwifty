@@ -1,9 +1,43 @@
-# WWDC scholarship 2017
+# Get Schwifty
 
-To apply for a scholarship for Apples World Wide Developers Conference 2017 in San Jose we got the task to create a visually interactive Playground. Since building games in Sprite-/SceneKit is not (yet) my biggest strength I decided to do something more creative. Until now I'm not sure if this idea is totally stupid or absolutly genius. Any way, the outcome is awesome and I would love to continue working on the project.
+Get Schwifty is an app to run Swift on your iOS device. I created this project as an application for a scholarship to Apples WWDC 2017. The app is currently not available on the App Store.
 
-I created actually a Playground in the Playground. In this repository is just the Xcode project for an iOS app but the same also runs in a playground. I built a lexer, parser, AST and generator for a subset of Swift to be able to run Swift code right from my device. I also generate attributed strings to get mostly the same coloring as in Xcode.
+It is using a lexer to power syntax highlighting, a parser, abstract syntax tree to get semantic information about the source code.
 
-Here is a gif of the current state:
+If the code does not contain any errors or unimplemented features a generator is used to generate JavaScript code that is eventually evaluated in JavaScriptCore.
+
+The project was created during my application for a scholarship at WWDC 17.
+
+## Demo
 
 ![](img/live.gif)
+
+## What features are implemented?
+
+The project currently supports the following language features:
+
+* var, let, func declarations
+* if, else if and else control structures
+* while loops
+* simple calculation and conditional expressions
+* function calls (currently without external parameters)
+* recursive function calls
+* simple type system
+
+## What features are missing?
+
+The list of missing features is too long for this page, so I will only name one of the most important ones:
+
+* classes, structs and other complex types
+* methods
+* generics
+* higher order functions
+* framework bindings
+
+## How can I get it?
+
+Currently the app is only available through Testflight external testing. If you would like to test the app, send me a message on Twitter ([@benchr](https://twitter.com/benchr)) and I'll add you if there are enough free slots.
+
+## What about the license?
+
+Currently I don't want to decide where the project is heading to, so I didn't add a license file. Feel free to clone the project, run it on your device and send contributions. I will add the license later when I decided about it.
