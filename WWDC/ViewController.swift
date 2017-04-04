@@ -61,7 +61,7 @@ public class SourceViewController: UIViewController {
         let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
         self.navigationItem.rightBarButtonItem = run
         self.navigationItem.leftBarButtonItem = nil
-        self.title = "WWDC - Benjamin Herzog"
+        self.title = "Get Schwifty"
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
