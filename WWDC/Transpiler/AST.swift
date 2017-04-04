@@ -30,6 +30,7 @@ public enum Statement {
     case controlStructure(ControlStructure)
     case expression(Expression)
     case assignment(Assignment)
+    case returnE(Expression?)
 }
 
 public struct Assignment {
@@ -52,7 +53,6 @@ public struct FunctionDecl {
 
 public struct FunctionBody {
     public var statements: [Statement]
-    public var returnExpr: Expression?
 }
 
 public struct VariableDecl {

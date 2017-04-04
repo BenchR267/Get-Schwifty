@@ -31,6 +31,8 @@ public class Generator {
             o = generate(e)
         case .assignment(let a):
             o = generate(a)
+        case .returnE(let e):
+            o = "return " + (e.map(generate) ?? "")
         }
         return o + ";\n"
     }
@@ -73,13 +75,7 @@ public class Generator {
     }
     
     private func generate(_ a: FunctionBody) -> String {
-        var o = a.statements.map(generate).joined(separator: "\n")
-        if let r = a.returnExpr {
-            o.append("return ")
-            o.append(generate(r))
-            o.append(";\n")
-        }
-        return o
+        return a.statements.map(generate).joined(separator: "\n")
     }
     
     private func generate(_ a: VariableDecl) -> String {

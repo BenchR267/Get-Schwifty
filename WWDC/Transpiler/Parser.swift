@@ -96,7 +96,8 @@ public class Parser {
         self.iterator += 1
     }
     
-    private func parse(_ tokenType: TokenType) throws {
+    @discardableResult
+    private func parse(_ tokenType: TokenType) throws -> String {
         guard let current = self.iteratedElement() else {
             throw Error.unexpectedEOF
         }
@@ -104,6 +105,7 @@ public class Parser {
             throw Error.unexpectedType(expected: tokenType, got: current)
         }
         self.nextToken()
+        return current.raw
     }
     
     func parseProgram() throws -> Program {
@@ -114,19 +116,34 @@ public class Parser {
         return Program(scope: scope)
     }
     
-    private func parseScope(list: [String: IdentifierInformation]) throws -> Scope {
+    private func parseScope(list: [String: IdentifierInformation], withReturn: Bool = false) throws -> Scope {
         var statements = [Statement]()
         var namelist = list
         while let next = iteratedElement(), next.type != .curlyBracketClose {
-            let statement = try parseStatement(namelist: &namelist)
+            let statement = try parseStatement(namelist: &namelist, withReturn: withReturn)
             statements.append(statement)
         }
         return Scope(statements: statements, namelist: namelist)
     }
     
-    private func parseStatement(namelist: inout [String: IdentifierInformation]) throws -> Statement {
+    private func parseStatement(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> Statement {
         let start = self.iterator
         var errors = [Error]()
+        
+        if withReturn {
+            do {
+                let raw = try self.parse(.keyword)
+                if raw != "return" {
+                    throw Error.unexpectedString(expected: "return", got: raw)
+                }
+                return .returnE(try? self.parseExpression(namelist: &namelist))
+            } catch let error as Parser.Error {
+                errors.append(error)
+            }
+        }
+        
+        // reset to begin of statement
+        self.iterator = start
         do {
             let decl = try self.parseDeclaration(namelist: &namelist)
             return .declaration(decl)
@@ -134,10 +151,9 @@ public class Parser {
             errors.append(error)
         }
         
-        // reset to begin of statement
         self.iterator = start
         do {
-            let control = try self.parseControlStructure(namelist: &namelist)
+            let control = try self.parseControlStructure(namelist: &namelist, withReturn: withReturn)
             return .controlStructure(control)
         } catch let error as Parser.Error {
             errors.append(error)
@@ -198,14 +214,9 @@ public class Parser {
         for p in parameters {
             stack[p.name] = IdentifierInformation(type: p.type, mutable: false)
         }
-        
-        let body = try self.parseFunctionBody(namelist: &stack)
-        if returnType != "Void" && body.returnExpr == nil {
-            throw Error.unexpectedString(expected: "return \(returnType)", got: "")
-        }
-        if let expr = body.returnExpr, !returnType.typeMatches(expr.type(namelist)) {
-            throw Error.wrongType(expected: returnType, got: expr.type(namelist))
-        }
+        stack[name] = IdentifierInformation(type: returnType, mutable: false)
+        let body = try self.parseFunctionBody(namelist: &stack, returnType: returnType)
+        // TODO: check for return expression if return type is not Void!
         try self.parse(.curlyBracketClose)
         namelist[name] = IdentifierInformation(type: returnType, mutable: false)
         for (i, p) in parameters.enumerated() {
@@ -214,17 +225,37 @@ public class Parser {
         return FunctionDecl(name: name, parameters: parameters, returnType: returnType, body: body)
     }
     
-    private func parseFunctionBody(namelist: inout [String: IdentifierInformation]) throws -> FunctionBody {
-        var statements = [Statement]()
-        while let token = iteratedElement(), token.type != .curlyBracketClose {
-            if let next = self.iteratedElement(), next.type == .keyword, next.raw == "return" {
-                try self.parse(.keyword)
-                return FunctionBody(statements: statements, returnExpr: try self.parseExpression(namelist: &namelist))
+    private func parseFunctionBody(namelist: inout [String: IdentifierInformation], returnType: String) throws -> FunctionBody {
+        let scope = try self.parseScope(list: namelist, withReturn: true)
+        try checkScope(scope: scope, namelist: namelist, returnType: returnType)
+        return FunctionBody(statements: scope.statements)
+    }
+    
+    private func checkScope(scope: Scope, namelist: [String: IdentifierInformation], returnType: String) throws {
+        for s in scope.statements {
+            switch s {
+            case .returnE(let e):
+                if !(e?.type(namelist).typeMatches(returnType) ?? (returnType != "Void")) {
+                    throw Error.wrongType(expected: returnType, got: e?.type(namelist) ?? "Void")
+                }
+            case .controlStructure(let c):
+                switch c {
+                case .forS(_):
+                    throw Error.unimplemented
+                case .ifS(let i):
+                    for condition in i.conditions {
+                        try checkScope(scope: condition.1, namelist: namelist, returnType: returnType)
+                    }
+                    if let elseS = i.elseS {
+                        try checkScope(scope: elseS, namelist: namelist, returnType: returnType)
+                    }
+                case .whileS(let w):
+                    try checkScope(scope: w.scope, namelist: namelist, returnType: returnType)
+                }
+            default:
+                continue
             }
-            let statement = try parseStatement(namelist: &namelist)
-            statements.append(statement)
         }
-        return FunctionBody(statements: statements, returnExpr: nil)
     }
     
     private func parseVariableDecl(namelist: inout [String: IdentifierInformation]) throws -> VariableDecl {
@@ -272,24 +303,24 @@ public class Parser {
         return ParameterDecl(name: identifier, type: type)
     }
     
-    private func parseControlStructure(namelist: inout [String: IdentifierInformation]) throws -> ControlStructure {
+    private func parseControlStructure(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> ControlStructure {
         let keyword = try self.parseKeyword()
         switch keyword {
             case "if":
-                return .ifS(try self.parseIf(namelist: &namelist))
+                return .ifS(try self.parseIf(namelist: &namelist, withReturn: withReturn))
             case "while":
-                return .whileS(try self.parseWhile(namelist: &namelist))
+                return .whileS(try self.parseWhile(namelist: &namelist, withReturn: withReturn))
             case "for":
-                return.forS(try self.parseFor(namelist: &namelist))
+                return.forS(try self.parseFor(namelist: &namelist, withReturn: withReturn))
         default: throw Error.unimplemented
         }
     }
     
-    private func parseIf(namelist: inout [String: IdentifierInformation]) throws -> If {
+    private func parseIf(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> If {
         
         var conditions = [(MultipleCondition, Scope)]()
         
-        let first = try self.parseSpecificIf(namelist: &namelist) // if itself
+        let first = try self.parseSpecificIf(namelist: &namelist, withReturn: withReturn) // if itself
         conditions.append(first)
         
         while let next = self.iteratedElement(),
@@ -297,14 +328,14 @@ public class Parser {
             next.raw == "else", overNext.raw == "if" {
                 self.nextToken() // 'else'
                 self.nextToken() // 'if'
-                conditions.append(try self.parseSpecificIf(namelist: &namelist))
+                conditions.append(try self.parseSpecificIf(namelist: &namelist, withReturn: withReturn))
         }
         
         var elseS: Scope? = nil
         if let next = self.iteratedElement(), next.type == .keyword && next.raw == "else" {
             self.nextToken() // 'else'
             try self.parse(.curlyBracketOpen)
-            elseS = try self.parseScope(list: namelist)
+            elseS = try self.parseScope(list: namelist, withReturn: withReturn)
             try self.parse(.curlyBracketClose)
         }
         if conditions.count < 1 {
@@ -313,10 +344,10 @@ public class Parser {
         return If(conditions: conditions, elseS: elseS)
     }
     
-    private func parseSpecificIf(namelist: inout [String: IdentifierInformation]) throws -> (MultipleCondition, Scope) {
+    private func parseSpecificIf(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> (MultipleCondition, Scope) {
         let multipleCondition = try self.parseMultipleCondition(namelist: &namelist)
         try self.parse(.curlyBracketOpen)
-        let scope = try self.parseScope(list: namelist)
+        let scope = try self.parseScope(list: namelist, withReturn: withReturn)
         try self.parse(.curlyBracketClose)
         return (multipleCondition, scope)
     }
@@ -379,10 +410,10 @@ public class Parser {
         return Condition(expr1: expr1, operatorT: op, expr2: expr2)
     }
     
-    private func parseWhile(namelist: inout [String: IdentifierInformation]) throws -> While {
+    private func parseWhile(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> While {
         let expression = try parseMultipleCondition(namelist: &namelist)
         try self.parse(.curlyBracketOpen)
-        let scope = try self.parseScope(list: namelist)
+        let scope = try self.parseScope(list: namelist, withReturn: withReturn)
         try self.parse(.curlyBracketClose)
         return While(expression: expression, scope: scope)
     }
@@ -408,7 +439,7 @@ public class Parser {
         return Call(name: name, parameters: exprs)
     }
     
-    private func parseFor(namelist: inout [String: IdentifierInformation]) throws -> For {
+    private func parseFor(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> For {
         // TODO
         throw Error.unimplemented
     }
