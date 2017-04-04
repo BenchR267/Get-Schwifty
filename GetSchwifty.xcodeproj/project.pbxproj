@@ -22,7 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B519F6941E8BEDB000DC9871 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = WWDC.app; path = "Get Schwifty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B519F6941E8BEDB000DC9871 /* GetSchwifty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = GetSchwifty.app; path = "Get Schwifty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B519F6971E8BEDB000DC9871 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B519F6991E8BEDB000DC9871 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B519F69E1E8BEDB000DC9871 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -53,19 +53,19 @@
 			isa = PBXGroup;
 			children = (
 				B519F6951E8BEDB000DC9871 /* Products */,
-				B519F6961E8BEDB000DC9871 /* WWDC */,
+				B519F6961E8BEDB000DC9871 /* GetSchwifty */,
 			);
 			sourceTree = "<group>";
 		};
 		B519F6951E8BEDB000DC9871 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B519F6941E8BEDB000DC9871 /* WWDC.app */,
+				B519F6941E8BEDB000DC9871 /* GetSchwifty.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B519F6961E8BEDB000DC9871 /* WWDC */ = {
+		B519F6961E8BEDB000DC9871 /* GetSchwifty */ = {
 			isa = PBXGroup;
 			children = (
 				B5CD4F0C1E900A1A00011B8C /* JavascriptEvaluator */,
@@ -79,7 +79,7 @@
 				B5E7E7881E91260C0021025A /* LogViewController.swift */,
 				B5E7E78A1E9126FB0021025A /* PageViewController.swift */,
 			);
-			path = WWDC;
+			path = GetSchwifty;
 			sourceTree = "<group>";
 		};
 		B519F6A91E8BEDB700DC9871 /* Transpiler */ = {
@@ -117,8 +117,8 @@
 			dependencies = (
 			);
 			name = "Get Schwifty";
-			productName = WWDC;
-			productReference = B519F6941E8BEDB000DC9871 /* WWDC.app */;
+			productName = GetSchwifty;
+			productReference = B519F6941E8BEDB000DC9871 /* GetSchwifty.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -138,7 +138,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B519F68F1E8BEDB000DC9871 /* Build configuration list for PBXProject "WWDC" */;
+			buildConfigurationList = B519F68F1E8BEDB000DC9871 /* Build configuration list for PBXProject "GetSchwifty" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -301,7 +301,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3E4PGPNR47;
-				INFOPLIST_FILE = WWDC/Info.plist;
+				INFOPLIST_FILE = GetSchwifty/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -314,7 +314,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3E4PGPNR47;
-				INFOPLIST_FILE = WWDC/Info.plist;
+				INFOPLIST_FILE = GetSchwifty/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -325,7 +325,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B519F68F1E8BEDB000DC9871 /* Build configuration list for PBXProject "WWDC" */ = {
+		B519F68F1E8BEDB000DC9871 /* Build configuration list for PBXProject "GetSchwifty" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B519F6A41E8BEDB000DC9871 /* Debug */,

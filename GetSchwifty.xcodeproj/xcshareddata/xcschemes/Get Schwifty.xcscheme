@@ -17,7 +17,7 @@
                BlueprintIdentifier = "B519F6931E8BEDB000DC9871"
                BuildableName = "Get Schwifty.app"
                BlueprintName = "Get Schwifty"
-               ReferencedContainer = "container:WWDC.xcodeproj">
+               ReferencedContainer = "container:GetSchwifty.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "B519F6931E8BEDB000DC9871"
             BuildableName = "Get Schwifty.app"
             BlueprintName = "Get Schwifty"
-            ReferencedContainer = "container:WWDC.xcodeproj">
+            ReferencedContainer = "container:GetSchwifty.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "B519F6931E8BEDB000DC9871"
             BuildableName = "Get Schwifty.app"
             BlueprintName = "Get Schwifty"
-            ReferencedContainer = "container:WWDC.xcodeproj">
+            ReferencedContainer = "container:GetSchwifty.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -77,7 +77,7 @@
             BlueprintIdentifier = "B519F6931E8BEDB000DC9871"
             BuildableName = "Get Schwifty.app"
             BlueprintName = "Get Schwifty"
-            ReferencedContainer = "container:WWDC.xcodeproj">
+            ReferencedContainer = "container:GetSchwifty.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
