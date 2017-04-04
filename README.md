@@ -12,6 +12,11 @@ The project was created during my application for a scholarship at WWDC 17.
 
 ![](img/live.gif)
 
+## How does that work?!
+
+It's much less magic as it seems in the first moment. I wrote a lexer which creates tokens out of the given source code. This output is also used to create syntax highlighting within a standard UITextView. The tokens are also used by a parser which creates semantic information via an abstract syntax tree.
+The real magic happens with that semantic information. Since it's not possible to run compiled binaries on iOS within an app context I generate Javascript code out of the syntax tree. JavaScriptCore is a framework which is used to execute the generated code. I created handlers for calls to `print` and `alert` to be able to get some output.
+
 ## What features are implemented?
 
 The project currently supports the following language features:
