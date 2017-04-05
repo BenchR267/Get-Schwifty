@@ -15,7 +15,12 @@ public protocol SourceViewControllerDelegate: class {
 
 public class SourceViewController: UIViewController {
     
-    lazy var input: String = "// Welcome to the Playground in the Playground!\n// Feel free to write and run scripts written in Swift! 🚀\n\nfunc fib(n: Int) -> Int {\n\tif n == 0 || n == 1 {\n\t\treturn n\n\t}\n\treturn fib(n-1) + fib(n-2)\n}\nprint(fib(30))\n"
+    lazy var input: String = {
+        guard let path = Bundle.main.path(forResource: "start_script", ofType: "txt") else {
+            fatalError("Could not open start script!")
+        }
+        return (try? String(contentsOfFile: path)) ?? ""
+    }()
     
     var textView: UITextView!
     private let generator = Generator()
