@@ -24,11 +24,6 @@ public class SourceViewController: UIViewController {
     public var clear: () -> Void = {}
     
     private var observer: NSObjectProtocol?
-    private let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.timeStyle = .medium
-        return df
-    }()
     
     public weak var delegate: SourceViewControllerDelegate?
     
@@ -76,22 +71,14 @@ public class SourceViewController: UIViewController {
         self.evaluate()
     }
     
-    private func evaluate(full: Bool = true) {
-        if full {
-            self.textView.resignFirstResponder()
-        }
+    private func evaluate() {
+        self.textView.resignFirstResponder()
         do {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
-            let js = self.generator.generate(program: program)
-            
-            let time = self.dateFormatter.string(from: Date())
             
             let block: () -> Void = {
-                self.outStream("=========== " + self.dateFormatter.string(from: Date()) + " ===========")
-                let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
-                JSEvaluator.run(controller: self.topParent, outStream: self.outStream, full: full, script: js)
-                self.outStream(bottom)
+                JSEvaluator.run(controller: self.topParent, outStream: self.outStream, script: program)
                 self.delegate?.sourceViewControllerDidEvaluate()
             }
             
@@ -102,7 +89,6 @@ public class SourceViewController: UIViewController {
             }
             
         } catch let error as Parser.Error {
-            if !full { return }
             let c = UIAlertController(title: "Error", message: "Sorry, there is an error in your sourcecode. Maybe this helps you tracking it down:\n\n\(error.string)", preferredStyle: .alert)
             c.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(c, animated: true)

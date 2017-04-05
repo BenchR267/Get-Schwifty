@@ -9,6 +9,12 @@
 import UIKit
 import JavaScriptCore
 
+private let dateFormatter: DateFormatter = {
+    let df = DateFormatter()
+    df.timeStyle = .medium
+    return df
+}()
+
 public class JSEvaluator {
     
     private let context = JSContext()!
@@ -18,46 +24,46 @@ public class JSEvaluator {
     // needed for alerts - stored weak
     private weak var controller: UIViewController?
     private var outStream: (String) -> Void
-    private init(controller: UIViewController, outStream: @escaping (String) -> Void, full: Bool) {
+    private init(controller: UIViewController, outStream: @escaping (String) -> Void) {
         self.controller = controller
         self.outStream = outStream
         
-        if full {
-            let consoleLog: @convention(block) () -> Void = {
-                let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
+        let consoleLog: @convention(block) () -> Void = {
+            let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
+            DispatchQueue.main.async {
                 self.outStream(args)
             }
-            context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
-            
-            let alert: @convention(block) () -> Void = { [weak self] in
-                let args = JSContext.currentArguments().map { "\($0)" }
-                let title: String
-                let message: String
-                switch args.count {
-                case 2:
-                    title = args[0]
-                    message = args[1]
-                case 3..<Int.max:
-                    title = args[0]
-                    message = args[1..<args.count].joined(separator: " ")
-                default:
-                    title = ""
-                    message = args.joined(separator: " ")
-                }
-                self?.alerts.append((title: title, message: message))
-                self?.workAlerts()
-            }
-            context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
-            
-            let sleepHandler: @convention(block) () -> Void = {
-                if let args = JSContext.currentArguments().first, let time = args as? UInt32 {
-                    sleep(time)
-                } else {
-                    sleep(1)
-                }
-            }
-            context.setObject(unsafeBitCast(sleepHandler, to: AnyObject.self), forKeyedSubscript: "sleep" as (NSCopying & NSObjectProtocol)!)
         }
+        context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
+        
+        let alert: @convention(block) () -> Void = { [weak self] in
+            let args = JSContext.currentArguments().map { "\($0)" }
+            let title: String
+            let message: String
+            switch args.count {
+            case 2:
+                title = args[0]
+                message = args[1]
+            case 3..<Int.max:
+                title = args[0]
+                message = args[1..<args.count].joined(separator: " ")
+            default:
+                title = ""
+                message = args.joined(separator: " ")
+            }
+            self?.alerts.append((title: title, message: message))
+            self?.workAlerts()
+        }
+        context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
+        
+        let sleepHandler: @convention(block) () -> Void = {
+            if let args = JSContext.currentArguments().first, let time = args as? UInt32 {
+                sleep(time)
+            } else {
+                sleep(1)
+            }
+        }
+        context.setObject(unsafeBitCast(sleepHandler, to: AnyObject.self), forKeyedSubscript: "sleep" as (NSCopying & NSObjectProtocol)!)
     }
     
     private func workAlerts() {
@@ -67,12 +73,25 @@ public class JSEvaluator {
         let a = self.alerts.removeFirst()
         let c = UIAlertController(title: a.title, message: a.message, preferredStyle: .alert)
         c.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in self.workAlerts() }))
-        self.controller?.present(c, animated: true)
+        DispatchQueue.main.async {
+            self.controller?.present(c, animated: true)
+        }
     }
     
-    public static func run(controller: UIViewController, outStream: @escaping (String) -> Void, full: Bool = true, script: String) {
-        let evaluator = JSEvaluator(controller: controller, outStream: outStream, full: full)
-        evaluator.context.evaluateScript(script)
+    public static func run(controller: UIViewController, outStream: @escaping (String) -> Void, script: Program) {
+        let time = dateFormatter.string(from: Date())
+        outStream("=========== " + time + " ===========")
+        DispatchQueue(label: "js").async {
+            let evaluator = JSEvaluator(controller: controller, outStream: outStream)
+            let generator = Generator()
+            for s in script.scope.statements {
+                evaluator.context.evaluateScript(generator.generate(s))
+            }
+            DispatchQueue.main.async {
+                let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
+                outStream(bottom)
+            }
+        }
     }
     
 }

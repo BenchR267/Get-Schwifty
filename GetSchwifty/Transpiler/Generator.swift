@@ -12,15 +12,11 @@ public class Generator {
     
     init() {}
     
-    public func generate(program: Program) -> String {
-        return generate(program.scope)
-    }
-    
     private func generate(_ a: Scope) -> String {
         return a.statements.map(generate).joined(separator: "\n")
     }
     
-    private func generate(_ a: Statement) -> String {
+    public func generate(_ a: Statement) -> String {
         let o: String
         switch a {
         case .declaration(let decl):

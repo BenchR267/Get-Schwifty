@@ -22,7 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B519F6941E8BEDB000DC9871 /* GetSchwifty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = GetSchwifty.app; path = "Get Schwifty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B519F6941E8BEDB000DC9871 /* Get Schwifty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get Schwifty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B519F6971E8BEDB000DC9871 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B519F6991E8BEDB000DC9871 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B519F69E1E8BEDB000DC9871 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -60,7 +60,7 @@
 		B519F6951E8BEDB000DC9871 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B519F6941E8BEDB000DC9871 /* GetSchwifty.app */,
+				B519F6941E8BEDB000DC9871 /* Get Schwifty.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,7 +118,7 @@
 			);
 			name = "Get Schwifty";
 			productName = GetSchwifty;
-			productReference = B519F6941E8BEDB000DC9871 /* GetSchwifty.app */;
+			productReference = B519F6941E8BEDB000DC9871 /* Get Schwifty.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
