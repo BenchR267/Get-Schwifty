@@ -24,7 +24,7 @@ public class JSEvaluator {
     // needed for alerts - stored weak
     private weak var controller: UIViewController?
     private var outStream: (String) -> Void
-    private init(controller: UIViewController, outStream: @escaping (String) -> Void) {
+    init(controller: UIViewController, outStream: @escaping (String) -> Void) {
         self.controller = controller
         self.outStream = outStream
         
@@ -57,10 +57,10 @@ public class JSEvaluator {
         context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
         
         let sleepHandler: @convention(block) () -> Void = {
-            if let args = JSContext.currentArguments().first, let time = args as? UInt32 {
-                sleep(time)
+            if let args = JSContext.currentArguments().first as? JSValue, args.isNumber {
+                Thread.sleep(forTimeInterval: args.toDouble())
             } else {
-                sleep(1)
+                Thread.sleep(forTimeInterval: 1)
             }
         }
         context.setObject(unsafeBitCast(sleepHandler, to: AnyObject.self), forKeyedSubscript: "sleep" as (NSCopying & NSObjectProtocol)!)
@@ -78,18 +78,17 @@ public class JSEvaluator {
         }
     }
     
-    public static func run(controller: UIViewController, outStream: @escaping (String) -> Void, script: Program) {
+    public func run(script: Program) {
         let time = dateFormatter.string(from: Date())
-        outStream("=========== " + time + " ===========")
+        self.outStream("=========== " + time + " ===========")
         DispatchQueue(label: "js").async {
-            let evaluator = JSEvaluator(controller: controller, outStream: outStream)
             let generator = Generator()
             for s in script.scope.statements {
-                evaluator.context.evaluateScript(generator.generate(s))
+                self.context.evaluateScript(generator.generate(s))
             }
             DispatchQueue.main.async {
                 let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
-                outStream(bottom)
+                self.outStream(bottom)
             }
         }
     }
