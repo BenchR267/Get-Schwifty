@@ -19,9 +19,6 @@ public class SourceViewController: UIViewController {
     
     var textView: UITextView!
     private let generator = Generator()
-    private lazy var evaluator: JSEvaluator = {
-        return JSEvaluator(controller: self.topParent, outStream: self.outStream)
-    }()
     
     public var outStream: (String) -> Void = { print($0) }
     public var clear: () -> Void = {}
@@ -79,10 +76,12 @@ public class SourceViewController: UIViewController {
         do {
             let parser = Parser(input: self.textView.text)
             let program = try parser.parseProgram()
+            let evaluator = JSEvaluator(controller: self.topParent, outStream: self.outStream)
             
             let block: () -> Void = {
-                self.evaluator.run(script: program)
-                self.delegate?.sourceViewControllerDidEvaluate()
+                evaluator.run(script: program) {
+                    self.delegate?.sourceViewControllerDidEvaluate()
+                }
             }
             
             if let delegate = self.delegate {

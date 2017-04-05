@@ -78,7 +78,7 @@ public class JSEvaluator {
         }
     }
     
-    public func run(script: Program) {
+    public func run(script: Program, done: @escaping () -> Void) {
         let time = dateFormatter.string(from: Date())
         self.outStream("=========== " + time + " ===========")
         DispatchQueue(label: "js").async {
@@ -89,6 +89,7 @@ public class JSEvaluator {
             DispatchQueue.main.async {
                 let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
                 self.outStream(bottom)
+                done()
             }
         }
     }
