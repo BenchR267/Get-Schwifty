@@ -15,6 +15,14 @@ private let dateFormatter: DateFormatter = {
     return df
 }()
 
+public func onMain(f: @escaping () -> Void) {
+    if Thread.current.isMainThread {
+        f()
+    } else {
+        DispatchQueue.main.async(execute: f)
+    }
+}
+
 public class JSEvaluator {
     
     private let context = JSContext()!
@@ -30,7 +38,7 @@ public class JSEvaluator {
         
         let consoleLog: @convention(block) () -> Void = {
             let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
-            DispatchQueue.main.async {
+            onMain {
                 self.outStream(args)
             }
         }
@@ -73,7 +81,7 @@ public class JSEvaluator {
         let a = self.alerts.removeFirst()
         let c = UIAlertController(title: a.title, message: a.message, preferredStyle: .alert)
         c.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in self.workAlerts() }))
-        DispatchQueue.main.async {
+        onMain {
             self.controller?.present(c, animated: true)
         }
     }
@@ -86,7 +94,7 @@ public class JSEvaluator {
             for s in script.scope.statements {
                 self.context.evaluateScript(generator.generate(s))
             }
-            DispatchQueue.main.async {
+            onMain {
                 let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
                 self.outStream(bottom)
                 done()
