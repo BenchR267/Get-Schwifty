@@ -59,13 +59,19 @@ public class SourceViewController: UIViewController {
             self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
         }
         let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
+        let info = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showInfo))
         self.navigationItem.rightBarButtonItem = run
-        self.navigationItem.leftBarButtonItem = nil
+        self.navigationItem.leftBarButtonItem = info
         self.title = "Get Schwifty"
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
+    }
+    
+    func showInfo() {
+        let info = InfoViewController().wrapInNavigationController()
+        self.present(info, animated: true)
     }
     
     func clearHandler() {
