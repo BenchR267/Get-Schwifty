@@ -10,7 +10,7 @@ import Foundation
 
 public class Parser {
     
-    public indirect enum Error: Swift.Error {
+    public indirect enum Error: Swift.Error, Equatable, Hashable {
         case unexpectedError
         case unexpectedEOF
         case unexpectedType(expected: TokenType, got: Token)
@@ -22,6 +22,7 @@ public class Parser {
         case wrongType(expected: String, got: String)
         case mutatingNonMutatingVariable(String)
         
+        case multiple([Error])
         case unimplemented
         
         var string: String {
@@ -31,30 +32,56 @@ public class Parser {
             case .unexpectedType(let expected, let got): return "Expected \(expected) but got \(got.type) instead"
             case .unexpectedString(let expected, let got): return "Expected \(expected) but got \(got) instead"
             case .couldNotInferType(let id, _): return "Could not infer type of \(id)."
-            case .unexpectedExpression(let expectedType, let got): return "Expression is unexpected: \(expectedType) - \(got)"
+            case .unexpectedExpression(let expectedType, let got): return "Expression is unexpected: \(got) instead of \(expectedType)"
             case .unknownIdentifier(let id): return "Got unknown identifier '\(id)'"
             case .wrongType(let expected, let got): return "type mismatch: expected \(expected), got \(got)"
             case .mutatingNonMutatingVariable(let id): return "\(id) can not be mutated."
+            case .multiple(let errors):
+                let errorStrings = Set(errors.flatMap { $0.children.map { "* " + $0.string } })
+                return "Multiple errors are possible: \n" + errorStrings.joined(separator: "\n")
             case .unimplemented: return "This functionality is unimplemented."
             }
         }
         
-        var fatal: Bool {
+        var children: Set<Error> {
             switch self {
-                
-            case .unknownIdentifier(_),
-                 .wrongType(_, _),
-                 .mutatingNonMutatingVariable(_),
-                 .unimplemented,
-                 .couldNotInferType(_, _):
-                return true
-                
-            case .unexpectedError,
-                 .unexpectedEOF,
-                 .unexpectedType(_, _),
-                 .unexpectedString(_, _),
-                 .unexpectedExpression(_, _):
-                return false
+            case .multiple(let errors):
+                return Set(errors.flatMap { Set($0.children) })
+            default:
+                return Set([self])
+            }
+        }
+        
+        public static func ==(lhs: Error, rhs: Error) -> Bool {
+            switch (lhs, rhs) {
+            case (.unexpectedError, .unexpectedError): return true
+            case (.unexpectedEOF, .unexpectedEOF): return true
+            case (.unexpectedType, .unexpectedType): return true
+            case (.unexpectedString, .unexpectedString): return true
+            case (.couldNotInferType, .couldNotInferType): return true
+            case (.unexpectedExpression, .unexpectedExpression): return true
+            case (.unknownIdentifier, .unknownIdentifier): return true
+            case (.wrongType, .wrongType): return true
+            case (.mutatingNonMutatingVariable, .mutatingNonMutatingVariable): return true
+            case (.multiple, .multiple): return true
+            case (.unimplemented, .unimplemented): return true
+            default: return false
+            }
+        }
+        
+        public var hashValue: Int {
+            switch self {
+            case .unexpectedError: return 1
+            case .unexpectedEOF: return 2
+            case .unexpectedType(_, _): return 3
+            case .unexpectedString(_, _): return 4
+            case .couldNotInferType(_, _): return 5
+            case .unexpectedExpression(_, _): return 6
+            case .unknownIdentifier(_): return 7
+            case .wrongType(_, _): return 8
+            case .mutatingNonMutatingVariable(_): return 9
+            case .multiple(_): return 10
+            case .unimplemented: return 11
             }
         }
     }
@@ -175,7 +202,7 @@ public class Parser {
             errors.append(error)
         }
 
-        throw errors.filter {$0.fatal}.first ?? errors.first ?? Error.unexpectedError
+        throw Error.multiple(errors)
     }
     
     private func parseDeclaration(namelist: inout [String: IdentifierInformation]) throws -> Declaration {
@@ -227,16 +254,23 @@ public class Parser {
     
     private func parseFunctionBody(namelist: inout [String: IdentifierInformation], returnType: String) throws -> FunctionBody {
         let scope = try self.parseScope(list: namelist, withReturn: true)
-        try checkScope(scope: scope, namelist: namelist, returnType: returnType)
+        let returnFound = try checkScope(scope: scope, namelist: scope.namelist, returnType: returnType)
+        if returnType != "Void" && !returnFound {
+            throw Error.unexpectedExpression(expectedType: "return", got: "}")
+        }
         return FunctionBody(statements: scope.statements)
     }
     
-    private func checkScope(scope: Scope, namelist: [String: IdentifierInformation], returnType: String) throws {
+    // returns if matching return was found
+    private func checkScope(scope: Scope, namelist: [String: IdentifierInformation], returnType: String) throws -> Bool {
+        var found = false
         for s in scope.statements {
             switch s {
             case .returnE(let e):
                 if !(e?.type(namelist).typeMatches(returnType) ?? (returnType != "Void")) {
                     throw Error.wrongType(expected: returnType, got: e?.type(namelist) ?? "Void")
+                } else {
+                    found = true
                 }
             case .controlStructure(let c):
                 switch c {
@@ -244,18 +278,19 @@ public class Parser {
                     throw Error.unimplemented
                 case .ifS(let i):
                     for condition in i.conditions {
-                        try checkScope(scope: condition.1, namelist: namelist, returnType: returnType)
+                        found = try checkScope(scope: condition.1, namelist: namelist, returnType: returnType) || found
                     }
                     if let elseS = i.elseS {
-                        try checkScope(scope: elseS, namelist: namelist, returnType: returnType)
+                        found = try checkScope(scope: elseS, namelist: namelist, returnType: returnType) || found
                     }
                 case .whileS(let w):
-                    try checkScope(scope: w.scope, namelist: namelist, returnType: returnType)
+                    found = try checkScope(scope: w.scope, namelist: namelist, returnType: returnType) || found
                 }
             default:
                 continue
             }
         }
+        return found
     }
     
     private func parseVariableDecl(namelist: inout [String: IdentifierInformation]) throws -> VariableDecl {
@@ -490,7 +525,7 @@ public class Parser {
             errors.append(error)
         }
         
-        throw errors.filter {$0.fatal}.first ?? errors.first ?? Error.unexpectedError
+        throw Error.multiple(errors)
     }
     
     private func parseAssignment(namelist: inout [String: IdentifierInformation]) throws -> Assignment {
