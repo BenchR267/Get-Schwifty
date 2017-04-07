@@ -33,7 +33,7 @@
 		B519F6A31E8BEDB000DC9871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B519F6AA1E8BEDC500DC9871 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 		B51FEB931E957DDA00307859 /* start_script.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = start_script.txt; sourceTree = "<group>"; };
-		B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyntaxHighlighter.swift; path = ../SyntaxHighlighter.swift; sourceTree = "<group>"; };
+		B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyntaxHighlighter.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
 		B5CD4F081E8F8E2E00011B8C /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		B5CD4F0A1E8FB5C700011B8C /* AST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AST.swift; sourceTree = "<group>"; };
 		B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSEvaluator.swift; sourceTree = "<group>"; };
@@ -58,8 +58,8 @@
 		B519F68B1E8BEDB000DC9871 = {
 			isa = PBXGroup;
 			children = (
-				B519F6951E8BEDB000DC9871 /* Products */,
 				B519F6961E8BEDB000DC9871 /* GetSchwifty */,
+				B519F6951E8BEDB000DC9871 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,10 +75,10 @@
 			isa = PBXGroup;
 			children = (
 				B5CD4F0C1E900A1A00011B8C /* Code Helper */,
-				B519F6A91E8BEDB700DC9871 /* Transpiler */,
 				B5E5AB4C1E96A89A00F9B894 /* Helper */,
-				B5E5AB4A1E96A88600F9B894 /* View Controllers */,
 				B5E5AB4B1E96A89000F9B894 /* Ressources */,
+				B519F6A91E8BEDB700DC9871 /* Transpiler */,
+				B5E5AB4A1E96A88600F9B894 /* View Controllers */,
 			);
 			path = GetSchwifty;
 			sourceTree = "<group>";
@@ -97,31 +97,33 @@
 		B5CD4F0C1E900A1A00011B8C /* Code Helper */ = {
 			isa = PBXGroup;
 			children = (
-				B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */,
 				B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */,
+				B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */,
 			);
 			name = "Code Helper";
-			path = JavascriptEvaluator;
+			path = "Code Helper";
 			sourceTree = "<group>";
 		};
 		B5E5AB4A1E96A88600F9B894 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B519F6991E8BEDB000DC9871 /* ViewController.swift */,
+				B5E5AB481E96A69600F9B894 /* InfoViewController.swift */,
 				B5E7E7881E91260C0021025A /* LogViewController.swift */,
 				B5E7E78A1E9126FB0021025A /* PageViewController.swift */,
-				B5E5AB481E96A69600F9B894 /* InfoViewController.swift */,
+				B519F6991E8BEDB000DC9871 /* ViewController.swift */,
 			);
 			name = "View Controllers";
+			path = "View Controllers";
 			sourceTree = "<group>";
 		};
 		B5E5AB4B1E96A89000F9B894 /* Ressources */ = {
 			isa = PBXGroup;
 			children = (
-				B51FEB931E957DDA00307859 /* start_script.txt */,
 				B5E5AB461E96A42000F9B894 /* info.txt */,
+				B51FEB931E957DDA00307859 /* start_script.txt */,
 			);
 			name = Ressources;
+			path = Ressources;
 			sourceTree = "<group>";
 		};
 		B5E5AB4C1E96A89A00F9B894 /* Helper */ = {
@@ -133,6 +135,7 @@
 				B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */,
 			);
 			name = Helper;
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -338,7 +341,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3E4PGPNR47;
-				INFOPLIST_FILE = GetSchwifty/Info.plist;
+				INFOPLIST_FILE = GetSchwifty/Helper/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
@@ -352,7 +355,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3E4PGPNR47;
-				INFOPLIST_FILE = GetSchwifty/Info.plist;
+				INFOPLIST_FILE = GetSchwifty/Helper/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
