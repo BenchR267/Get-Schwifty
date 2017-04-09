@@ -19,6 +19,7 @@ public func attributedString(tokens: [Token]) -> NSAttributedString {
         case .literal(.String(_)):  color = strings
         case .literal(.Integer(_)): color = numbers
         case .literal(.Double(_)):  color = numbers
+        case .literal(.Float(_)):   color = numbers
         case .literal(.Bool(_)):    color = keyword
         default:                    color = standard
         }
