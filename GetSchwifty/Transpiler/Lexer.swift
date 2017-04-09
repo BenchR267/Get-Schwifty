@@ -9,6 +9,7 @@ public enum LiteralType {
     case Integer(Int)
     case String(String)
     case Double(Double)
+    case Float(Float)
     case Bool(Bool)
 }
 
