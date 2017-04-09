@@ -129,6 +129,8 @@ public indirect enum Expression {
                 return "Int"
             case .literal(.Double(_)):
                 return "Double"
+            case .literal(.Float(_)):
+                return "Float"
             case .literal(.Bool(_)):
                 return "Bool"
             default:

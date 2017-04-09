@@ -627,8 +627,8 @@ extension String {
     
     func typeMatches(_ other: String) -> Bool {
         switch self {
-        case "Int", "Double":
-            return other == "Int" || other == "Double"
+        case "Int", "Double", "Float":
+            return other == "Int" || other == "Double" || other == "Float"
         default: return self == other
         }
     }

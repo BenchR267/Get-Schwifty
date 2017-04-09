@@ -132,6 +132,8 @@ public enum TokenType: Equatable {
         default:
             if let i = Int(rawValue) {
                 self = .literal(.Integer(i))
+            } else if let f = Float(rawValue) {
+                self = .literal(.Float(f))
             } else if let d = Double(rawValue) {
                 self = .literal(.Double(d))
             } else if consistsOfLettersOrDigits(rawValue) {
@@ -200,6 +202,7 @@ public enum TokenType: Equatable {
         case (.literal(.Integer(let i)), .literal(.Integer(let j))): return i == j
         case (.literal(.String(let a)), .literal(.String(let b))): return a == b
         case (.literal(.Double(let a)), .literal(.Double(let b))): return a == b
+        case (.literal(.Float(let a)), .literal(.Float(let b))): return a == b
         case (.literal(.Bool(let a)), .literal(.Bool(let b))): return a == b
         case (.comment(let a), .comment(let b)): return a == b
         default: return false
