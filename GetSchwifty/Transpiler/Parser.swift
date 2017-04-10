@@ -94,9 +94,8 @@ public class Parser {
     
     private let tokens: [Token]
     private var iterator: Int
-    public init(input: String) {
-        let lexer = Lexer(input: input)
-        self.tokens = lexer.start().filter {
+    public init(tokens: [Token]) {
+        self.tokens = tokens.filter {
             switch $0.type {
             case .space, .newLine, .tab, .comment(_):
                 return false

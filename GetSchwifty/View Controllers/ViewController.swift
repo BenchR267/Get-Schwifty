@@ -85,7 +85,9 @@ public class SourceViewController: UIViewController {
     private func evaluate() {
         self.textView.resignFirstResponder()
         do {
-            let parser = Parser(input: self.textView.text)
+            let lexer = Lexer(input: self.textView.text)
+            let tokens = lexer.start()
+            let parser = Parser(tokens: tokens)
             let program = try parser.parseProgram()
             let evaluator = JSEvaluator(controller: self.topParent, outStream: self.outStream)
             
