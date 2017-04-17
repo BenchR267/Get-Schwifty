@@ -26,7 +26,6 @@ public class SourceViewController: UIViewController {
     private let generator = Generator()
     
     public var outStream: (String) -> Void = { print($0) }
-    public var clear: () -> Void = {}
     
     private var observer: NSObjectProtocol?
     
@@ -58,8 +57,8 @@ public class SourceViewController: UIViewController {
             }
             self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
         }
-        let run = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(evaluateHandler))
-        let info = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showInfo))
+        let run = UIBarButtonItem(image: #imageLiteral(resourceName: "Play"), style: .plain, target: self, action: #selector(evaluateHandler))
+        let info = UIBarButtonItem(image: #imageLiteral(resourceName: "Info"), style: .plain, target: self, action: #selector(showInfo))
         self.navigationItem.rightBarButtonItem = run
         self.navigationItem.leftBarButtonItem = info
         self.title = "Get Schwifty"
@@ -74,12 +73,14 @@ public class SourceViewController: UIViewController {
         self.present(info, animated: true)
     }
     
-    func clearHandler() {
-        self.clear()
-    }
-    
     func evaluateHandler() {
         self.evaluate()
+    }
+    
+    var currentEvaluator: JSEvaluator?
+    func stop() {
+        self.currentEvaluator?.stop()
+        self.currentEvaluator = nil
     }
     
     private func evaluate() {
@@ -90,10 +91,12 @@ public class SourceViewController: UIViewController {
             let parser = Parser(tokens: tokens)
             let program = try parser.parseProgram()
             let evaluator = JSEvaluator(controller: self.topParent, outStream: self.outStream)
+            self.currentEvaluator = evaluator
             
             let block: () -> Void = {
                 evaluator.run(script: program) {
                     self.delegate?.sourceViewControllerDidEvaluate()
+                    self.currentEvaluator = nil
                 }
             }
             

@@ -31,7 +31,6 @@ public class PageViewController: UIPageViewController {
         super.viewDidLoad()
         
         self.source.outStream = self.log.write(_:)
-        self.source.clear = self.log.clear
         
         self.source.delegate = self
         self.log.delegate = self
@@ -82,18 +81,23 @@ extension PageViewController: LogViewControllerDelegate {
     public func logViewControllerDidPressBack() {
         self.setIndex(0, direction: .reverse)
     }
+    
+    public func logViewControllerDidPressStop() {
+        self.source.stop()
+    }
 }
 
 extension PageViewController: SourceViewControllerDelegate {
     
     public func sourceViewControllerWillEvaluate(start: @escaping () -> Void) {
-        self.setIndex(1, direction: .forward) { _ in
+        self.setIndex(1, direction: .forward) { [weak self] _ in
+            self?.log.didStart()
             start()
         }
     }
     
     public func sourceViewControllerDidEvaluate() {
-        
+        self.log.didStop()
     }
 }
 

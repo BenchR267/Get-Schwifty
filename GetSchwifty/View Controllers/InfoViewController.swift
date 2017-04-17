@@ -37,7 +37,7 @@ class InfoViewController: UIViewController {
         self.textView = textView
         self.view.backgroundColor = textView.backgroundColor
         
-        let closeButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(close))
+        let closeButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
         
         self.navigationItem.rightBarButtonItem = closeButton
         self.title = "Info"

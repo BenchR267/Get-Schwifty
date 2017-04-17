@@ -32,19 +32,26 @@ public class JSEvaluator {
     // needed for alerts - stored weak
     private weak var controller: UIViewController?
     private var outStream: (String) -> Void
+    private var stopped = false
     init(controller: UIViewController, outStream: @escaping (String) -> Void) {
         self.controller = controller
         self.outStream = outStream
         
-        let consoleLog: @convention(block) () -> Void = {
+        let consoleLog: @convention(block) () -> Void = { [weak self] in
+            if self?.stopped ?? true {
+                return
+            }
             let args = JSContext.currentArguments().map { "\($0)" }.joined(separator: " ")
             onMain {
-                self.outStream(args)
+                self?.outStream(args)
             }
         }
         context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
         
         let alert: @convention(block) () -> Void = { [weak self] in
+            if self?.stopped ?? true {
+                return
+            }
             let args = JSContext.currentArguments().map { "\($0)" }
             let title: String
             let message: String
@@ -64,7 +71,10 @@ public class JSEvaluator {
         }
         context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
         
-        let sleepHandler: @convention(block) () -> Void = {
+        let sleepHandler: @convention(block) () -> Void = { [weak self] in
+            if self?.stopped ?? true {
+                return
+            }
             if let args = JSContext.currentArguments().first as? JSValue, args.isNumber {
                 Thread.sleep(forTimeInterval: args.toDouble())
             } else {
@@ -75,6 +85,9 @@ public class JSEvaluator {
     }
     
     private func workAlerts() {
+        if self.stopped {
+            self.alerts = []
+        }
         guard !(self.controller?.presentedViewController is UIAlertController),  !self.alerts.isEmpty else {
             return
         }
@@ -93,6 +106,9 @@ public class JSEvaluator {
             let generator = Generator()
             for s in script.scope.statements {
                 self.context.evaluateScript(generator.generate(s))
+                if self.stopped {
+                    break
+                }
             }
             onMain {
                 let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
@@ -100,6 +116,10 @@ public class JSEvaluator {
                 done()
             }
         }
+    }
+    
+    public func stop() {
+        self.stopped = true
     }
     
 }

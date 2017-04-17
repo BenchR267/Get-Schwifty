@@ -25,4 +25,4 @@ Next features planned:
 - button to stop running scripts
 - inputAccessoryView for tab and cursor keys
 
-If you have any feedback, feel free to write me on Twitter (https://twitter.com/benchr) or write me a mail (mail@benchr.de). Thanks for testing 'Get Schwifty'!
+If you have any feedback, feel free to send me a message on Twitter (https://twitter.com/benchr) or write me a mail (mail@benchr.de). Thanks for using 'Get Schwifty'!

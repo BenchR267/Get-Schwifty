@@ -10,6 +10,7 @@ import UIKit
 
 public protocol LogViewControllerDelegate: class {
     func logViewControllerDidPressBack()
+    func logViewControllerDidPressStop()
 }
 
 public class LogViewController: UIViewController {
@@ -18,8 +19,12 @@ public class LogViewController: UIViewController {
     
     public weak var delegate: LogViewControllerDelegate?
     
+    private weak var stopButton: UIBarButtonItem?
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.didStop()
         
         let textView = UITextView(frame: self.view.bounds)
         textView.font = font
@@ -36,10 +41,12 @@ public class LogViewController: UIViewController {
         self.view.backgroundColor = textView.backgroundColor
         
         let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
-        let clearButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clear))
+        let clearButton = UIBarButtonItem(image: #imageLiteral(resourceName: "Clear"), style: .plain, target: self, action: #selector(clear))
+        let stopButton = UIBarButtonItem(image: #imageLiteral(resourceName: "Stop"), style: .plain, target: self, action: #selector(stop))
+        self.stopButton = stopButton
         
         self.navigationItem.leftBarButtonItem = backButton
-        self.navigationItem.rightBarButtonItem = clearButton
+        self.navigationItem.rightBarButtonItems = [clearButton, stopButton]
         self.title = "Log Output"
     }
     
@@ -54,6 +61,18 @@ public class LogViewController: UIViewController {
     
     func clear() {
         self.textView?.text = ""
+    }
+    
+    func stop() {
+        self.delegate?.logViewControllerDidPressStop()
+    }
+    
+    public func didStart() {
+        self.stopButton?.isEnabled = true
+    }
+    
+    public func didStop() {
+        self.stopButton?.isEnabled = false
     }
     
     public func write(_ text: String) {
