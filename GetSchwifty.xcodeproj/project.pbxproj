@@ -33,7 +33,7 @@
 		B519F6A31E8BEDB000DC9871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B519F6AA1E8BEDC500DC9871 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 		B51FEB931E957DDA00307859 /* start_script.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = start_script.txt; sourceTree = "<group>"; };
-		B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyntaxHighlighter.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
+		B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
 		B5CD4F081E8F8E2E00011B8C /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		B5CD4F0A1E8FB5C700011B8C /* AST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AST.swift; sourceTree = "<group>"; };
 		B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSEvaluator.swift; sourceTree = "<group>"; };
@@ -100,7 +100,6 @@
 				B5CD4F0D1E900A3400011B8C /* JSEvaluator.swift */,
 				B5CD4F061E8F879A00011B8C /* SyntaxHighlighter.swift */,
 			);
-			name = "Code Helper";
 			path = "Code Helper";
 			sourceTree = "<group>";
 		};
@@ -112,7 +111,6 @@
 				B5E7E78A1E9126FB0021025A /* PageViewController.swift */,
 				B519F6991E8BEDB000DC9871 /* ViewController.swift */,
 			);
-			name = "View Controllers";
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
@@ -122,7 +120,6 @@
 				B5E5AB461E96A42000F9B894 /* info.txt */,
 				B51FEB931E957DDA00307859 /* start_script.txt */,
 			);
-			name = Ressources;
 			path = Ressources;
 			sourceTree = "<group>";
 		};
@@ -134,7 +131,6 @@
 				B519F6A31E8BEDB000DC9871 /* Info.plist */,
 				B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */,
 			);
-			name = Helper;
 			path = Helper;
 			sourceTree = "<group>";
 		};
