@@ -31,12 +31,15 @@ class SchwiftyDataStorage {
             
             let pathes = try fileManager.contentsOfDirectory(atPath: path)
             
-            return try pathes.map{
-                let fileURL = URL(fileURLWithPath: "\(path)\($0)")
-                let data = try Data(contentsOf: fileURL)
-                let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
-                return unarchiver.decodeObject() as! Schwifty
-                }.sorted(by: { $0.date > $1.date })
+            return try pathes
+                .map {
+                    let fileURL = URL(fileURLWithPath: "\(path)\($0)")
+                    let data = try Data(contentsOf: fileURL)
+                    let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+                    return unarchiver.decodeObject() as! Schwifty
+                }
+                .sorted(by: { $0.date > $1.date })
+            
         } catch {
             return []
         }
