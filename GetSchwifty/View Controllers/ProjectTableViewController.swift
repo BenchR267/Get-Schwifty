@@ -18,9 +18,15 @@ class ProjectTableViewController: UITableViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ProjectCell")
         title = "Get Schwifty"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushPageViewController))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushPage))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         
         projects = dataStore.all()
+        tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -47,12 +53,15 @@ class ProjectTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        pushPageViewController()
+        push(pageViewController: PageViewController(with: projects[indexPath.row]))
     }
     
-    public func pushPageViewController() {
+    public func push(pageViewController: PageViewController = PageViewController()) {
         
-        let pageViewController = PageViewController()
         navigationController?.pushViewController(pageViewController, animated: true)
+    }
+    
+    public func pushPage() {
+        push()
     }
 }

@@ -15,7 +15,14 @@ public protocol SourceViewControllerDelegate: class {
 
 public class SourceViewController: UIViewController {
     
+    var schwifty: Schwifty?
+    
     lazy var input: String = {
+        
+        if let schwifty = self.schwifty {
+            return schwifty.sources
+        }
+        
         guard let path = Bundle.main.path(forResource: "start_script", ofType: "txt") else {
             fatalError("Could not open start script!")
         }
@@ -67,8 +74,18 @@ public class SourceViewController: UIViewController {
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        let schwifty = Schwifty(with: textView.text)
-        SchwiftyDataStorage().save(schwifty)
+        var schwifty: Schwifty
+        
+        if self.schwifty != nil {
+            schwifty = self.schwifty!
+            schwifty.sources = textView.text
+        } else {
+            schwifty = Schwifty(with: textView.text)
+        }
+        
+        if schwifty.sources != input {
+            SchwiftyDataStorage().save(schwifty)
+        }
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

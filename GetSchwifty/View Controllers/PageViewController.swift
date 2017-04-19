@@ -10,6 +10,7 @@ import UIKit
 
 public class PageViewController: UIPageViewController {
     
+    private let schwifty: Schwifty?
     fileprivate let source = SourceViewController()
     fileprivate let log = LogViewController()
     
@@ -17,11 +18,12 @@ public class PageViewController: UIPageViewController {
         return [self.source.wrapInNavigationController(), self.log.wrapInNavigationController()]
     }()
     
-    public init() {
+    init(with schwifty: Schwifty? = nil) {
+        self.schwifty = schwifty
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
-    public required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -30,6 +32,7 @@ public class PageViewController: UIPageViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.source.schwifty = schwifty
         self.source.outStream = self.log.write(_:)
         
         self.source.delegate = self
