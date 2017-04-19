@@ -8,30 +8,55 @@
 
 import Foundation
 
-class Schwifty: NSObject, NSCoding {
+private let dateFormatter: DateFormatter = {
+    let d = DateFormatter()
+    d.timeStyle = .long
+    d.dateStyle = .long
+    return d
+}()
+
+class Schwifty {
     
     private enum CodingKeys: String {
-        case Sources
         case Date
+        case Name
+        case Source
     }
     
-    var sources: String
+    // MARK: - API
+    var source: String
+    var name: String
     private(set) var date: Date
     
-    required init?(coder aDecoder: NSCoder) {
-        sources = aDecoder.decodeObject(forKey: CodingKeys.Sources.rawValue) as! String
-        date = aDecoder.decodeObject(forKey: CodingKeys.Date.rawValue) as! Date
-        super.init()
+    init(source: String, name: String? = nil) {
+        self.source = source
+        let date = Date()
+        self.date = date
+        self.name = name ?? dateFormatter.string(from: date)
     }
     
-    init(with sources: String) {
-        self.sources = sources
-        date = Date()
-        super.init()
+    // MARK: - Serialization
+    
+    init?(json: [String: Any]) {
+        guard
+            let date = json[CodingKeys.Date.rawValue] as? TimeInterval,
+            let name = json[CodingKeys.Name.rawValue] as? String,
+            let source = json[CodingKeys.Source.rawValue] as? String
+        else {
+            return nil
+        }
+        
+        self.date = Date(timeIntervalSince1970: date)
+        self.name = name
+        self.source = source
     }
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(sources, forKey: CodingKeys.Sources.rawValue)
-        aCoder.encode(date, forKey: CodingKeys.Date.rawValue)
+    var json: [String: Any] {
+        return [
+            CodingKeys.Date.rawValue: self.date.timeIntervalSince1970,
+            CodingKeys.Name.rawValue: self.name,
+            CodingKeys.Source.rawValue: self.source
+        ]
     }
+    
 }

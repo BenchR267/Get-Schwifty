@@ -28,15 +28,14 @@ class SchwiftyDataStorage {
     func all() -> [Schwifty] {
         
         do {
-            
             let pathes = try fileManager.contentsOfDirectory(atPath: path)
             
             return try pathes
-                .map {
+                .flatMap {
                     let fileURL = URL(fileURLWithPath: "\(path)\($0)")
                     let data = try Data(contentsOf: fileURL)
-                    let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
-                    return unarchiver.decodeObject() as! Schwifty
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    return Schwifty(json: json as? [String: Any] ?? [:])
                 }
                 .sorted(by: { $0.date > $1.date })
             
@@ -47,16 +46,13 @@ class SchwiftyDataStorage {
     
     func save(_ schwifty: Schwifty) {
         
-        let data = NSMutableData()
-        let keyedArchiver = NSKeyedArchiver(forWritingWith: data)
-        keyedArchiver.encodeRootObject(schwifty)
-        keyedArchiver.finishEncoding()
+        let json = schwifty.json
+        guard let data = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+            print("‼️ Could not save schwifty file…")
+            return
+        }
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .full
-        dateFormatter.timeStyle = .full
-        
-        let archiveURL = URL(fileURLWithPath: "\(path)\(dateFormatter.string(from: schwifty.date))")
-        try! data.write(to: archiveURL, options: .atomic)
+        let archiveURL = URL(fileURLWithPath: "\(path)\(schwifty.date.timeIntervalSince1970)")
+        try? data.write(to: archiveURL, options: .atomic)
     }
 }
