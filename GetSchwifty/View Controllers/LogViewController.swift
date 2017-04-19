@@ -45,8 +45,8 @@ public class LogViewController: UIViewController {
         let stopButton = UIBarButtonItem(image: #imageLiteral(resourceName: "Stop"), style: .plain, target: self, action: #selector(stop))
         self.stopButton = stopButton
         
-        self.navigationItem.leftBarButtonItem = backButton
-        self.navigationItem.rightBarButtonItems = [clearButton, stopButton]
+        self.navigationItem.rightBarButtonItem = backButton
+        self.navigationItem.leftBarButtonItems = [clearButton, stopButton]
         self.title = "Log Output"
     }
     

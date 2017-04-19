@@ -11,11 +11,12 @@ import UIKit
 public protocol SourceViewControllerDelegate: class {
     func sourceViewControllerWillEvaluate(start: @escaping () -> Void)
     func sourceViewControllerDidEvaluate()
+    func sourceViewControllerDidPressShowList()
 }
 
 public class SourceViewController: UIViewController {
     
-    private var schwifty: Schwifty {
+    fileprivate var schwifty: Schwifty {
         didSet {
             self.title = self.schwifty.name
             self.updateText(text: self.schwifty.source)
@@ -71,27 +72,25 @@ public class SourceViewController: UIViewController {
             }
             self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
         }
-        let run = UIBarButtonItem(image: #imageLiteral(resourceName: "Play"), style: .plain, target: self, action: #selector(evaluateHandler))
-        let info = UIBarButtonItem(image: #imageLiteral(resourceName: "Info"), style: .plain, target: self, action: #selector(showInfo))
-        self.navigationItem.rightBarButtonItem = run
-        self.navigationItem.leftBarButtonItem = info
+        let run = UIBarButtonItem(image: #imageLiteral(resourceName: "Play"), style: .plain, target: self, action: #selector(self.evaluateHandler))
+        let list = UIBarButtonItem(image: #imageLiteral(resourceName: "List"), style: .plain, target: self, action: #selector(self.showList))
+        let save = UIBarButtonItem(image: #imageLiteral(resourceName: "Save"), style: .plain, target: self, action: #selector(self.save))
+        self.navigationItem.leftBarButtonItem = run
+        self.navigationItem.rightBarButtonItems = [list, save]
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.schwifty.source = textView.text
+    func showList() {
+        self.delegate?.sourceViewControllerDidPressShowList()
+    }
+    
+    func save() {
+        self.schwifty.temporary = false
         SchwiftyDataStorage().save(self.schwifty)
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
-    }
-    
-    func showInfo() {
-        let info = InfoViewController().wrapInNavigationController()
-        self.present(info, animated: true)
     }
     
     func evaluateHandler() {
@@ -105,6 +104,9 @@ public class SourceViewController: UIViewController {
     }
     
     func load(schwifty: Schwifty) {
+        if self.schwifty.id != schwifty.id {
+            SchwiftyDataStorage().save(self.schwifty)
+        }
         self.schwifty = schwifty
     }
     
@@ -151,6 +153,7 @@ extension SourceViewController: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         self.perform(#selector(updateText), with: textView.text, afterDelay: SourceViewController.throttle)
+        self.schwifty.source = textView.text
     }
     
     func updateText(text: String) {

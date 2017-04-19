@@ -52,7 +52,15 @@ class SchwiftyDataStorage {
             return
         }
         
-        let archiveURL = URL(fileURLWithPath: "\(path)\(schwifty.date.timeIntervalSince1970)")
+        let archiveURL = URL(fileURLWithPath: "\(path)\(schwifty.id)")
         try? data.write(to: archiveURL, options: .atomic)
     }
+    
+    func delete(_ schwifty: Schwifty) {
+        let itemPath = path + "\(schwifty.id)"
+        if self.fileManager.fileExists(atPath: itemPath) {
+            try? self.fileManager.removeItem(atPath: itemPath)
+        }
+    }
+    
 }

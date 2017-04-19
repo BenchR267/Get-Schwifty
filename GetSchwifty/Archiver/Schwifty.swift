@@ -18,21 +18,24 @@ private let dateFormatter: DateFormatter = {
 class Schwifty {
     
     private enum CodingKeys: String {
-        case Date
-        case Name
-        case Source
+        case Date, Name, Source, Temporary
     }
     
     // MARK: - API
     var source: String
     var name: String
     private(set) var date: Date
+    var temporary: Bool
+    var id: Double {
+        return self.date.timeIntervalSince1970
+    }
     
-    init(source: String, name: String? = nil) {
+    init(source: String) {
         self.source = source
         let date = Date()
         self.date = date
-        self.name = name ?? dateFormatter.string(from: date)
+        self.name = dateFormatter.string(from: date)
+        self.temporary = true
     }
     
     // MARK: - Serialization
@@ -41,7 +44,8 @@ class Schwifty {
         guard
             let date = json[CodingKeys.Date.rawValue] as? TimeInterval,
             let name = json[CodingKeys.Name.rawValue] as? String,
-            let source = json[CodingKeys.Source.rawValue] as? String
+            let source = json[CodingKeys.Source.rawValue] as? String,
+            let temporary = json[CodingKeys.Temporary.rawValue] as? Bool
         else {
             return nil
         }
@@ -49,13 +53,15 @@ class Schwifty {
         self.date = Date(timeIntervalSince1970: date)
         self.name = name
         self.source = source
+        self.temporary = temporary
     }
     
     var json: [String: Any] {
         return [
             CodingKeys.Date.rawValue: self.date.timeIntervalSince1970,
             CodingKeys.Name.rawValue: self.name,
-            CodingKeys.Source.rawValue: self.source
+            CodingKeys.Source.rawValue: self.source,
+            CodingKeys.Temporary.rawValue: self.temporary
         ]
     }
     

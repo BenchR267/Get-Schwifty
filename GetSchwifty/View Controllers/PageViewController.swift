@@ -15,7 +15,7 @@ public class PageViewController: UIPageViewController {
     fileprivate let log = LogViewController()
     
     fileprivate lazy var controllers: [UIViewController] = {
-        return [self.browser, self.source, self.log].map {
+        return [self.log, self.source, self.browser].map {
             $0.wrapInNavigationController()
         }
     }()
@@ -84,7 +84,7 @@ extension PageViewController {
 
 extension PageViewController: LogViewControllerDelegate {
     public func logViewControllerDidPressBack() {
-        self.setIndex(1, direction: .reverse)
+        self.setIndex(1, direction: .forward)
     }
     
     public func logViewControllerDidPressStop() {
@@ -95,7 +95,7 @@ extension PageViewController: LogViewControllerDelegate {
 extension PageViewController: SourceViewControllerDelegate {
     
     public func sourceViewControllerWillEvaluate(start: @escaping () -> Void) {
-        self.setIndex(2, direction: .forward) { [weak self] _ in
+        self.setIndex(0, direction: .reverse) { [weak self] _ in
             self?.log.didStart()
             start()
         }
@@ -104,13 +104,21 @@ extension PageViewController: SourceViewControllerDelegate {
     public func sourceViewControllerDidEvaluate() {
         self.log.didStop()
     }
+    
+    public func sourceViewControllerDidPressShowList() {
+        self.setIndex(2, direction: .forward)
+    }
 }
 
 extension PageViewController: ProjectTableViewControllerDelegate {
     
+    func projectTableViewControllerDidPressBack() {
+        self.setIndex(1, direction: .reverse)
+    }
+    
     func projectTableViewControllerDidSelect(schwifty: Schwifty) {
         self.source.load(schwifty: schwifty)
-        self.setIndex(1, direction: .forward)
+        self.projectTableViewControllerDidPressBack()
     }
     
 }
