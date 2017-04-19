@@ -8,42 +8,44 @@
 
 import UIKit
 
+protocol ProjectTableViewControllerDelegate: class {
+    func projectTableViewControllerDidSelect(schwifty: Schwifty)
+}
+
 class ProjectTableViewController: UITableViewController {
     
     private var projects = [Schwifty]()
     private let dataStore = SchwiftyDataStorage()
 
+    weak var delegate: ProjectTableViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ProjectCell")
         title = "Get Schwifty"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushPage))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(self.newSchwifty))
         tableView.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
         tableView.tintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
+        tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         
-        projects = dataStore.all()
-        tableView.reloadData()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        self.projects = dataStore.all()
+        self.tableView.reloadData()
     }
 
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return projects.count > 0 ? 1 : 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return projects.count
+        return self.projects.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -54,21 +56,17 @@ class ProjectTableViewController: UITableViewController {
         view.backgroundColor = UIColor(r: 36, g: 37, b: 46, a: 1)
         cell.selectedBackgroundView = view
         cell.textLabel?.font = font
-        cell.textLabel?.text = "Project \(projects[indexPath.row].date)"
+        cell.textLabel?.text = projects[indexPath.row].name
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        push(pageViewController: PageViewController(with: projects[indexPath.row]))
+        // TODO: Select other file
+        self.delegate?.projectTableViewControllerDidSelect(schwifty: self.projects[indexPath.row])
     }
     
-    public func push(pageViewController: PageViewController = PageViewController()) {
-        
-        navigationController?.pushViewController(pageViewController, animated: true)
-    }
-    
-    public func pushPage() {
-        push()
+    public func newSchwifty() {
+        self.delegate?.projectTableViewControllerDidSelect(schwifty: Schwifty(source: ""))
     }
 }

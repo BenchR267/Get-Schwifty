@@ -15,21 +15,28 @@ public protocol SourceViewControllerDelegate: class {
 
 public class SourceViewController: UIViewController {
     
-    var schwifty: Schwifty?
-    
-    lazy var input: String = {
-        
-        if let schwifty = self.schwifty {
-            return schwifty.sources
+    private var schwifty: Schwifty {
+        didSet {
+            self.title = self.schwifty.name
+            self.updateText(text: self.schwifty.source)
         }
-        
+    }
+    
+    init() {
         guard let path = Bundle.main.path(forResource: "start_script", ofType: "txt") else {
             fatalError("Could not open start script!")
         }
-        return (try? String(contentsOfFile: path)) ?? ""
-    }()
+        let startContent = (try? String(contentsOfFile: path)) ?? ""
+        
+        self.schwifty = Schwifty(source: startContent)
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    var textView: UITextView!
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate var textView: UITextView!
     private let generator = Generator()
     
     public var outStream: (String) -> Void = { print($0) }
@@ -52,10 +59,10 @@ public class SourceViewController: UIViewController {
         self.textView.tintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
         self.view.backgroundColor = self.textView.backgroundColor
         
-        self.textView.text = self.input
         self.textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.addSubview(self.textView)
-        self.updateText(text: self.textView.text)
+        
+        self.load(schwifty: self.schwifty)
         
         self.observer = NotificationCenter.default.addObserver(forName: .UIKeyboardWillChangeFrame, object: nil, queue: .main) { [weak self] n in
             guard let `self` = self else { return }
@@ -68,27 +75,17 @@ public class SourceViewController: UIViewController {
         let info = UIBarButtonItem(image: #imageLiteral(resourceName: "Info"), style: .plain, target: self, action: #selector(showInfo))
         self.navigationItem.rightBarButtonItem = run
         self.navigationItem.leftBarButtonItem = info
-        self.title = "Get Schwifty"
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        var schwifty: Schwifty
-        
-        if self.schwifty != nil {
-            schwifty = self.schwifty!
-            schwifty.sources = textView.text
-        } else {
-            schwifty = Schwifty(with: textView.text)
-        }
-        
-        if schwifty.sources != input {
-            SchwiftyDataStorage().save(schwifty)
-        }
+        self.schwifty.source = textView.text
+        SchwiftyDataStorage().save(self.schwifty)
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
         self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
     }
     
@@ -105,6 +102,10 @@ public class SourceViewController: UIViewController {
     func stop() {
         self.currentEvaluator?.stop()
         self.currentEvaluator = nil
+    }
+    
+    func load(schwifty: Schwifty) {
+        self.schwifty = schwifty
     }
     
     private func evaluate() {

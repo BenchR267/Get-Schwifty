@@ -10,16 +10,17 @@ import UIKit
 
 public class PageViewController: UIPageViewController {
     
-    private let schwifty: Schwifty?
+    fileprivate let browser = ProjectTableViewController()
     fileprivate let source = SourceViewController()
     fileprivate let log = LogViewController()
     
     fileprivate lazy var controllers: [UIViewController] = {
-        return [self.source.wrapInNavigationController(), self.log.wrapInNavigationController()]
+        return [self.browser, self.source, self.log].map {
+            $0.wrapInNavigationController()
+        }
     }()
     
-    init(with schwifty: Schwifty? = nil) {
-        self.schwifty = schwifty
+    init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
@@ -32,16 +33,17 @@ public class PageViewController: UIPageViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.source.schwifty = schwifty
         self.source.outStream = self.log.write(_:)
         
+        self.browser.delegate = self
         self.source.delegate = self
         self.log.delegate = self
         
         self.dataSource = self
-        self.setViewControllers([self.controllers[0]], direction: .forward, animated: false, completion: nil)
+        self.setViewControllers([self.controllers[1]], direction: .forward, animated: false, completion: nil)
         
         // trigger viewDidLoad initially
+        _ = self.browser.view
         _ = self.source.view
         _ = self.log.view
     }
@@ -82,7 +84,7 @@ extension PageViewController {
 
 extension PageViewController: LogViewControllerDelegate {
     public func logViewControllerDidPressBack() {
-        self.setIndex(0, direction: .reverse)
+        self.setIndex(1, direction: .reverse)
     }
     
     public func logViewControllerDidPressStop() {
@@ -93,7 +95,7 @@ extension PageViewController: LogViewControllerDelegate {
 extension PageViewController: SourceViewControllerDelegate {
     
     public func sourceViewControllerWillEvaluate(start: @escaping () -> Void) {
-        self.setIndex(1, direction: .forward) { [weak self] _ in
+        self.setIndex(2, direction: .forward) { [weak self] _ in
             self?.log.didStart()
             start()
         }
@@ -102,6 +104,15 @@ extension PageViewController: SourceViewControllerDelegate {
     public func sourceViewControllerDidEvaluate() {
         self.log.didStop()
     }
+}
+
+extension PageViewController: ProjectTableViewControllerDelegate {
+    
+    func projectTableViewControllerDidSelect(schwifty: Schwifty) {
+        self.source.load(schwifty: schwifty)
+        self.setIndex(1, direction: .forward)
+    }
+    
 }
 
 extension UIViewController {
