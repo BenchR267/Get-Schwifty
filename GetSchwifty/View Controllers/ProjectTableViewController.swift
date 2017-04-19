@@ -9,6 +9,9 @@
 import UIKit
 
 class ProjectTableViewController: UITableViewController {
+    
+    private var projects = [Schwifty]()
+    private let dataStore = SchwiftyDataStorage()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,6 +19,8 @@ class ProjectTableViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ProjectCell")
         title = "Get Schwifty"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushPageViewController))
+        
+        projects = dataStore.all()
     }
 
     override func didReceiveMemoryWarning() {
@@ -24,15 +29,19 @@ class ProjectTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return projects.count > 0 ? 1 : 0
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return projects.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectCell", for: indexPath)
         
-        cell.textLabel?.text = "Project 1"
+        cell.textLabel?.text = "Project \(projects[indexPath.row].date)"
         
         return cell
     }

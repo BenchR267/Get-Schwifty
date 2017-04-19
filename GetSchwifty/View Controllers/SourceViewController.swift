@@ -64,6 +64,13 @@ public class SourceViewController: UIViewController {
         self.title = "Get Schwifty"
     }
     
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        let schwifty = Schwifty(with: textView.text)
+        SchwiftyDataStorage().save(schwifty)
+    }
+    
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
     }

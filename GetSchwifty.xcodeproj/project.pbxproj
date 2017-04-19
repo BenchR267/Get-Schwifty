@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		29AB6D4C1EA7859B00456722 /* ProjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AB6D4B1EA7859B00456722 /* ProjectTableViewController.swift */; };
+		29AB6D4F1EA7897900456722 /* Schwifty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AB6D4E1EA7897900456722 /* Schwifty.swift */; };
+		29AB6D511EA78B7600456722 /* SchwiftyDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AB6D501EA78B7600456722 /* SchwiftyDataStorage.swift */; };
 		B519F6981E8BEDB000DC9871 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B519F6971E8BEDB000DC9871 /* AppDelegate.swift */; };
 		B519F69A1E8BEDB000DC9871 /* SourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B519F6991E8BEDB000DC9871 /* SourceViewController.swift */; };
 		B519F69F1E8BEDB000DC9871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B519F69E1E8BEDB000DC9871 /* Assets.xcassets */; };
@@ -27,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		29AB6D4B1EA7859B00456722 /* ProjectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTableViewController.swift; sourceTree = "<group>"; };
+		29AB6D4E1EA7897900456722 /* Schwifty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Schwifty.swift; path = Archiver/Schwifty.swift; sourceTree = "<group>"; };
+		29AB6D501EA78B7600456722 /* SchwiftyDataStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SchwiftyDataStorage.swift; path = Archiver/SchwiftyDataStorage.swift; sourceTree = "<group>"; };
 		B519F6941E8BEDB000DC9871 /* Get Schwifty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get Schwifty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B519F6971E8BEDB000DC9871 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B519F6991E8BEDB000DC9871 /* SourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceViewController.swift; sourceTree = "<group>"; };
@@ -57,6 +61,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		29AB6D4D1EA7895A00456722 /* Archiver */ = {
+			isa = PBXGroup;
+			children = (
+				29AB6D4E1EA7897900456722 /* Schwifty.swift */,
+				29AB6D501EA78B7600456722 /* SchwiftyDataStorage.swift */,
+			);
+			name = Archiver;
+			sourceTree = "<group>";
+		};
 		B519F68B1E8BEDB000DC9871 = {
 			isa = PBXGroup;
 			children = (
@@ -76,6 +89,7 @@
 		B519F6961E8BEDB000DC9871 /* GetSchwifty */ = {
 			isa = PBXGroup;
 			children = (
+				29AB6D4D1EA7895A00456722 /* Archiver */,
 				B5CD4F0C1E900A1A00011B8C /* Code Helper */,
 				B5E5AB4C1E96A89A00F9B894 /* Helper */,
 				B5E5AB4B1E96A89000F9B894 /* Ressources */,
@@ -221,6 +235,8 @@
 				B5CD4F071E8F879A00011B8C /* SyntaxHighlighter.swift in Sources */,
 				B519F69A1E8BEDB000DC9871 /* SourceViewController.swift in Sources */,
 				B5CD4F091E8F8E2E00011B8C /* Parser.swift in Sources */,
+				29AB6D511EA78B7600456722 /* SchwiftyDataStorage.swift in Sources */,
+				29AB6D4F1EA7897900456722 /* Schwifty.swift in Sources */,
 				B519F6AB1E8BEDC500DC9871 /* Lexer.swift in Sources */,
 				B519F6981E8BEDB000DC9871 /* AppDelegate.swift in Sources */,
 			);
