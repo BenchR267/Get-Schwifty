@@ -19,6 +19,8 @@ class ProjectTableViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ProjectCell")
         title = "Get Schwifty"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushPage))
+        tableView.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
+        tableView.tintColor = UIColor(r: 237, g: 82, b: 63, a: 1)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,7 +48,12 @@ class ProjectTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectCell", for: indexPath)
-        
+        cell.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
+        cell.textLabel?.textColor = UIColor(r: 225, g: 226, b: 231, a: 1)
+        let view = UIView(frame: cell.bounds)
+        view.backgroundColor = UIColor(r: 36, g: 37, b: 46, a: 1)
+        cell.selectedBackgroundView = view
+        cell.textLabel?.font = font
         cell.textLabel?.text = "Project \(projects[indexPath.row].date)"
         
         return cell
