@@ -36,7 +36,7 @@ class SchwiftyDataStorage {
                 let data = try Data(contentsOf: fileURL)
                 let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
                 return unarchiver.decodeObject() as! Schwifty
-            }
+                }.sorted(by: { $0.date > $1.date })
         } catch {
             return []
         }
