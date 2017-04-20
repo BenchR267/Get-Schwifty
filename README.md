@@ -1,6 +1,6 @@
 # Get Schwifty
 
-Get Schwifty is an app to run Swift on your iOS device. I created this project as an application for a scholarship to Apples WWDC 2017. The app is currently not available on the App Store.
+Get Schwifty is an app to run Swift on your iOS device. I created this project as an application for a scholarship to Apples WWDC 2017. Get Schwifty is also available on the [App Store](https://itunes.apple.com/de/app/get-schwifty/id1222398681?l=en&mt=8).
 
 It is using a lexer to power syntax highlighting, a parser, abstract syntax tree to get semantic information about the source code.
 
