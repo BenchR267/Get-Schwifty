@@ -41,7 +41,7 @@ The list of missing features is too long for this page, so I will only name one 
 
 ## How can I get it?
 
-Currently the app is only available through Testflight external testing. If you would like to test the app, send me a message on Twitter ([@benchr](https://twitter.com/benchr)) and I'll add you if there are enough free slots.
+The easiest way to get 'Get Schwifty' is by installing it from the [App Store](https://itunes.apple.com/de/app/get-schwifty/id1222398681?l=en&mt=8). If you would like to test the latest version of the app, send me a message on Twitter ([@benchr](https://twitter.com/benchr)) and I'll add you to Testflight if there are enough free slots.
 
 ## What about the license?
 
