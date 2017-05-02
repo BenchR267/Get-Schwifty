@@ -16,11 +16,11 @@ private let dateFormatter: DateFormatter = {
 }()
 
 class Schwifty {
-    
+
     private enum CodingKeys: String {
-        case Date, Name, Source, Temporary
+        case date, name, source, temporary
     }
-    
+
     // MARK: - API
     var source: String
     var name: String
@@ -29,7 +29,7 @@ class Schwifty {
     var id: Double {
         return self.date.timeIntervalSince1970
     }
-    
+
     init(source: String) {
         self.source = source
         let date = Date()
@@ -37,32 +37,32 @@ class Schwifty {
         self.name = dateFormatter.string(from: date)
         self.temporary = true
     }
-    
+
     // MARK: - Serialization
-    
+
     init?(json: [String: Any]) {
         guard
-            let date = json[CodingKeys.Date.rawValue] as? TimeInterval,
-            let name = json[CodingKeys.Name.rawValue] as? String,
-            let source = json[CodingKeys.Source.rawValue] as? String,
-            let temporary = json[CodingKeys.Temporary.rawValue] as? Bool
+            let date = json[CodingKeys.date.rawValue] as? TimeInterval,
+            let name = json[CodingKeys.name.rawValue] as? String,
+            let source = json[CodingKeys.source.rawValue] as? String,
+            let temporary = json[CodingKeys.temporary.rawValue] as? Bool
         else {
             return nil
         }
-        
+
         self.date = Date(timeIntervalSince1970: date)
         self.name = name
         self.source = source
         self.temporary = temporary
     }
-    
+
     var json: [String: Any] {
         return [
-            CodingKeys.Date.rawValue: self.date.timeIntervalSince1970,
-            CodingKeys.Name.rawValue: self.name,
-            CodingKeys.Source.rawValue: self.source,
-            CodingKeys.Temporary.rawValue: self.temporary
+            CodingKeys.date.rawValue: self.date.timeIntervalSince1970,
+            CodingKeys.name.rawValue: self.name,
+            CodingKeys.source.rawValue: self.source,
+            CodingKeys.temporary.rawValue: self.temporary
         ]
     }
-    
+
 }

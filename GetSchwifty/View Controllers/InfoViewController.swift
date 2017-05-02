@@ -9,19 +9,19 @@
 import UIKit
 
 class InfoViewController: UIViewController {
-    
+
     private weak var textView: UITextView?
-    
+
     override var modalPresentationStyle: UIModalPresentationStyle {
-        get{
+        get {
             return .formSheet
         }
         set {}
     }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let textView = UITextView(frame: self.view.bounds)
         textView.font = font
         textView.dataDetectorTypes = .link
@@ -32,24 +32,24 @@ class InfoViewController: UIViewController {
         textView.alwaysBounceVertical = true
         textView.isEditable = false
         textView.backgroundColor = UIColor(r: 31, g: 32, b: 41, a: 1)
-        
+
         self.view.addSubview(textView)
         self.textView = textView
         self.view.backgroundColor = textView.backgroundColor
-        
+
         let closeButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
-        
+
         self.navigationItem.rightBarButtonItem = closeButton
         self.title = "Info"
-        
+
         guard let path = Bundle.main.path(forResource: "info", ofType: "txt") else {
             return
         }
         textView.text = try? String(contentsOfFile: path)
     }
-    
+
     func close() {
         self.dismiss(animated: true, completion: nil)
     }
-    
+
 }

@@ -53,13 +53,13 @@ public enum TokenType: Equatable {
     case space
     case tab
     case newLine
-    
+
     // RawRepresentable needs also the other way around, not needed here
     public init?(rawValue: String) {
         guard !rawValue.isEmpty else {
             return nil
         }
-        
+
         switch rawValue {
         case "(":
             self = .parenthesisOpen
@@ -144,7 +144,7 @@ public enum TokenType: Equatable {
                     self = .literal(.Bool(false))
                     return
                 }
-                
+
                 if keywords.contains(rawValue) {
                     self = .keyword
                     return
@@ -159,7 +159,7 @@ public enum TokenType: Equatable {
             }
         }
     }
-    
+
     public static func ==(lhs: TokenType, rhs: TokenType) -> Bool {
         switch (lhs, rhs) {
         case (.identifier, .identifier): return true
@@ -241,7 +241,7 @@ public class Token {
     public let loc: Location
     public let type: TokenType
     public let raw: String
-    
+
     init(loc: Location, type: TokenType, raw: String) {
         self.loc = loc
         self.type = type
@@ -250,18 +250,18 @@ public class Token {
 }
 
 public class Lexer {
-    
+
     let input: String
     let tokenizer = Tokenizer()
     var currLoc = Location(row: 1, column: 0, len: 0)
     public init(input: String) {
         self.input = input
     }
-    
+
     public func start() -> [Token] {
-        
+
         var tokens = [Token]()
-        
+
         for c in self.input.unicodeScalars {
             let token: Token?
             if !isWhitespace(c) || (c != "\n" && self.tokenizer.needsMore) || (c != "\n" && self.tokenizer.comment) {
@@ -269,11 +269,11 @@ public class Lexer {
             } else {
                 token = self.tokenizer.token(loc: self.currLoc)
             }
-            
+
             if let t = token {
                 tokens.append(t)
             }
-            
+
             if c == "\n" {
                 tokens.append(Token(loc: self.currLoc, type: .newLine, raw: "\n"))
                 if self.tokenizer.comment {
@@ -291,22 +291,22 @@ public class Lexer {
             }
             self.currLoc.column += 1
         }
-        
+
         if let t = self.tokenizer.token(loc: self.currLoc) {
             tokens.append(t)
         }
-        
+
         return tokens
     }
-    
+
 }
 
 class Tokenizer {
-    
+
     private(set) var buffer = [UnicodeScalar]()
     private var escaped = false
     var comment = false
-    
+
     var needsMore: Bool {
         switch buffer.count {
         case 1:
@@ -317,65 +317,65 @@ class Tokenizer {
             return false
         }
     }
-    
+
     func append(char: UnicodeScalar, loc: Location) -> Token? {
         defer {
             self.buffer.append(char)
         }
-        
+
         return belongsTogether(curr: self.buffer, next: char) ? nil : self.token(loc: loc)
     }
-    
+
     func token(loc: Location) -> Token? {
         let buffer = self.buffer.string
-        
+
         guard let type = TokenType(rawValue: buffer) else {
             return nil
         }
-        
+
         let length = self.buffer.count
         self.buffer = []
-        
+
         var location = loc
         location.column -= length
         location.len = length
         return Token(loc: location, type: type, raw: buffer)
     }
-    
+
     func belongsTogether(curr: [UnicodeScalar], next: UnicodeScalar) -> Bool {
         if self.comment {
             return true
         }
-        
+
         if self.escaped {
             self.escaped = false
             return true
         }
-        
+
         if next == "\\" {
             self.escaped = true
             return true
         }
-        
+
         if curr.string == "/" && next == "/" {
             self.comment = true
             return true
         }
-        
+
         guard !curr.isEmpty else {
             return true
         }
-        
+
         if self.needsMore {
             return true
         }
-        
+
         let string = curr.string
-        
+
         if Double(string) != nil {
             return Double((curr + [next]).string) != nil
         }
-        
+
         if curr.count == 1 {
             switch curr[0] {
             case "+":
@@ -401,8 +401,7 @@ class Tokenizer {
             guard let token = TokenType(rawValue: string) else {
                 return false
             }
-            
-            
+
             switch token {
             case .identifier, .illegal, .literal(.String(_)), .keyword:
                 return letters.contains(next)
@@ -424,13 +423,13 @@ class Tokenizer {
             }
         }
     }
-    
+
 }
 
 extension Collection where Iterator.Element == UnicodeScalar {
-    
+
     var string: String {
         return self.map { String($0) }.joined()
     }
-    
+
 }

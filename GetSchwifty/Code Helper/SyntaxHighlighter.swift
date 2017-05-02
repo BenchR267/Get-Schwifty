@@ -10,10 +10,10 @@ import UIKit
 
 public func attributedString(tokens: [Token]) -> NSAttributedString {
     let attr = NSMutableAttributedString(string: "")
-    
-    for t in tokens {
+
+    for token in tokens {
         let color: UIColor
-        switch t.type {
+        switch token.type {
         case .keyword:              color = keyword
         case .comment(_):           color = comments
         case .literal(.String(_)):  color = strings
@@ -27,13 +27,13 @@ public func attributedString(tokens: [Token]) -> NSAttributedString {
             NSFontAttributeName: font,
             NSForegroundColorAttributeName: color
         ]
-        if t.type == .illegal {
+        if token.type == .illegal {
             attributes[NSStrikethroughStyleAttributeName] = 1 as NSNumber
             attributes[NSStrikethroughColorAttributeName] = UIColor.red
         }
-        attr.append(NSAttributedString(string: t.raw, attributes: attributes))
+        attr.append(NSAttributedString(string: token.raw, attributes: attributes))
     }
-    
+
     return attr
 }
 

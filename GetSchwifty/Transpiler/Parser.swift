@@ -9,7 +9,7 @@
 import Foundation
 
 public class Parser {
-    
+
     public indirect enum Error: Swift.Error, Equatable, Hashable {
         case unexpectedError
         case unexpectedEOF
@@ -17,14 +17,14 @@ public class Parser {
         case unexpectedString(expected: String, got: String)
         case couldNotInferType(String, Location?)
         case unexpectedExpression(expectedType: String, got: String)
-        
+
         case unknownIdentifier(String)
         case wrongType(expected: String, got: String)
         case mutatingNonMutatingVariable(String)
-        
+
         case multiple([Error])
         case unimplemented
-        
+
         var string: String {
             switch self {
             case .unexpectedError: return "Unexpected Error :("
@@ -42,7 +42,7 @@ public class Parser {
             case .unimplemented: return "This functionality is unimplemented."
             }
         }
-        
+
         var children: Set<Error> {
             switch self {
             case .multiple(let errors):
@@ -51,7 +51,7 @@ public class Parser {
                 return Set([self])
             }
         }
-        
+
         public static func ==(lhs: Error, rhs: Error) -> Bool {
             switch (lhs, rhs) {
             case (.unexpectedError, .unexpectedError): return true
@@ -68,7 +68,7 @@ public class Parser {
             default: return false
             }
         }
-        
+
         public var hashValue: Int {
             switch self {
             case .unexpectedError: return 1
@@ -85,13 +85,13 @@ public class Parser {
             }
         }
     }
-    
+
     private static let standardNamelist = [
         "alert": IdentifierInformation(type: "Void", mutable: false),
         "sleep": IdentifierInformation(type: "Void", mutable: false),
         "print": IdentifierInformation(type: "Void", mutable: false)
     ]
-    
+
     private let tokens: [Token]
     private var iterator: Int
     public init(tokens: [Token]) {
@@ -105,23 +105,23 @@ public class Parser {
         }
         self.iterator = 0
     }
-    
+
     func reset() {
         self.iterator = 0
     }
-    
+
     private func iteratedElement() -> Token? {
         return self.tokens.count <= self.iterator ? nil : self.tokens[self.iterator]
     }
-    
+
     private func peekedElement() -> Token? {
         return self.tokens.count <= self.iterator + 1 ? nil : self.tokens[self.iterator + 1]
     }
-    
+
     private func nextToken() {
         self.iterator += 1
     }
-    
+
     @discardableResult
     private func parse(_ tokenType: TokenType) throws -> String {
         guard let current = self.iteratedElement() else {
@@ -133,7 +133,7 @@ public class Parser {
         self.nextToken()
         return current.raw
     }
-    
+
     func parseProgram() throws -> Program {
         let scope = try self.parseScope(list: Parser.standardNamelist)
         if let additional = self.iteratedElement() {
@@ -141,7 +141,7 @@ public class Parser {
         }
         return Program(scope: scope)
     }
-    
+
     private func parseScope(list: [String: IdentifierInformation], withReturn: Bool = false) throws -> Scope {
         var statements = [Statement]()
         var namelist = list
@@ -151,11 +151,11 @@ public class Parser {
         }
         return Scope(statements: statements, namelist: namelist)
     }
-    
+
     private func parseStatement(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> Statement {
         let start = self.iterator
         var errors = [Error]()
-        
+
         if withReturn {
             do {
                 let raw = try self.parse(.keyword)
@@ -167,7 +167,7 @@ public class Parser {
                 errors.append(error)
             }
         }
-        
+
         // reset to begin of statement
         self.iterator = start
         do {
@@ -176,7 +176,7 @@ public class Parser {
         } catch let error as Parser.Error {
             errors.append(error)
         }
-        
+
         self.iterator = start
         do {
             let control = try self.parseControlStructure(namelist: &namelist, withReturn: withReturn)
@@ -184,7 +184,7 @@ public class Parser {
         } catch let error as Parser.Error {
             errors.append(error)
         }
-        
+
         self.iterator = start
         do {
             let ass = try self.parseAssignment(namelist: &namelist)
@@ -192,7 +192,7 @@ public class Parser {
         } catch let error as Parser.Error {
             errors.append(error)
         }
-        
+
         self.iterator = start
         do {
             let expr = try self.parseExpression(namelist: &namelist)
@@ -203,7 +203,7 @@ public class Parser {
 
         throw Error.multiple(errors)
     }
-    
+
     private func parseDeclaration(namelist: inout [String: IdentifierInformation]) throws -> Declaration {
         let keyword = try self.parseKeyword()
         switch keyword {
@@ -217,7 +217,7 @@ public class Parser {
             throw Error.unimplemented
         }
     }
-    
+
     private func parseFunctionDecl(namelist: inout [String: IdentifierInformation]) throws -> FunctionDecl {
         let name = try self.parseIdentifier().raw
         try self.parse(.parenthesisOpen)
@@ -235,7 +235,7 @@ public class Parser {
             returnType = try self.parseIdentifier().raw
         }
         try self.parse(.curlyBracketOpen)
-        
+
         var stack = namelist
         for p in parameters {
             stack[p.name] = IdentifierInformation(type: p.type, mutable: false)
@@ -250,7 +250,7 @@ public class Parser {
         }
         return FunctionDecl(name: name, parameters: parameters, returnType: returnType, body: body)
     }
-    
+
     private func parseFunctionBody(namelist: inout [String: IdentifierInformation], returnType: String) throws -> FunctionBody {
         let scope = try self.parseScope(list: namelist, withReturn: true)
         let returnFound = try checkScope(scope: scope, namelist: scope.namelist, returnType: returnType)
@@ -259,7 +259,7 @@ public class Parser {
         }
         return FunctionBody(statements: scope.statements)
     }
-    
+
     // returns if matching return was found
     private func checkScope(scope: Scope, namelist: [String: IdentifierInformation], returnType: String) throws -> Bool {
         var found = false
@@ -291,7 +291,7 @@ public class Parser {
         }
         return found
     }
-    
+
     private func parseVariableDecl(namelist: inout [String: IdentifierInformation]) throws -> VariableDecl {
         let loc = self.iteratedElement()?.loc
         var param = try self.parseParameterDecl(namelist: &namelist)
@@ -307,7 +307,7 @@ public class Parser {
         namelist[param.name] = IdentifierInformation(type: type, mutable: true)
         return VariableDecl(parameter: param, expression: expr)
     }
-    
+
     private func parseLetDecl(namelist: inout [String: IdentifierInformation]) throws -> LetDecl {
         let loc = self.iteratedElement()?.loc
         var param = try self.parseParameterDecl(namelist: &namelist)
@@ -326,7 +326,7 @@ public class Parser {
         namelist[param.name] = IdentifierInformation(type: type, mutable: false)
         return LetDecl(parameter: param, expression: expr)
     }
-    
+
     private func parseParameterDecl(namelist: inout [String: IdentifierInformation]) throws -> ParameterDecl {
         let identifier = try self.parseIdentifier().raw
         var type = ""
@@ -336,7 +336,7 @@ public class Parser {
         }
         return ParameterDecl(name: identifier, type: type)
     }
-    
+
     private func parseControlStructure(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> ControlStructure {
         let keyword = try self.parseKeyword()
         switch keyword {
@@ -349,14 +349,14 @@ public class Parser {
         default: throw Error.unimplemented
         }
     }
-    
+
     private func parseIf(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> If {
-        
+
         var conditions = [(MultipleCondition, Scope)]()
-        
+
         let first = try self.parseSpecificIf(namelist: &namelist, withReturn: withReturn) // if itself
         conditions.append(first)
-        
+
         while let next = self.iteratedElement(),
               let overNext = self.peekedElement(),
             next.raw == "else", overNext.raw == "if" {
@@ -364,7 +364,7 @@ public class Parser {
                 self.nextToken() // 'if'
                 conditions.append(try self.parseSpecificIf(namelist: &namelist, withReturn: withReturn))
         }
-        
+
         var elseS: Scope? = nil
         if let next = self.iteratedElement(), next.type == .keyword && next.raw == "else" {
             self.nextToken() // 'else'
@@ -377,7 +377,7 @@ public class Parser {
         }
         return If(conditions: conditions, elseS: elseS)
     }
-    
+
     private func parseSpecificIf(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> (MultipleCondition, Scope) {
         let multipleCondition = try self.parseMultipleCondition(namelist: &namelist)
         try self.parse(.curlyBracketOpen)
@@ -385,7 +385,7 @@ public class Parser {
         try self.parse(.curlyBracketClose)
         return (multipleCondition, scope)
     }
-    
+
     private func parseMultipleCondition(namelist: inout [String: IdentifierInformation], rec: Bool = true) throws -> MultipleCondition {
         var expressions = [Expression]()
         var operators = [Token]()
@@ -408,7 +408,7 @@ public class Parser {
         }
         return MultipleCondition(conditions: expressions, operators: operators)
     }
-    
+
     private func parseMutlipleCalculation(namelist: inout [String: IdentifierInformation], rec: Bool = true) throws -> MultipleCalculation {
         var expressions = [Expression]()
         var operators = [String]()
@@ -436,14 +436,14 @@ public class Parser {
         }
         return MultipleCalculation(expressions: expressions, operators: operators)
     }
-    
+
     private func parseCondition(namelist: inout [String: IdentifierInformation], rec: Bool = true) throws -> Condition {
         let expr1 = try self.parseExpression(namelist: &namelist, condition: rec, calculation: false)
         let op = try self.parseBoolOperator()
         let expr2 = try self.parseExpression(namelist: &namelist, condition: rec, calculation: false)
         return Condition(expr1: expr1, operatorT: op, expr2: expr2)
     }
-    
+
     private func parseWhile(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> While {
         let expression = try parseMultipleCondition(namelist: &namelist)
         try self.parse(.curlyBracketOpen)
@@ -451,7 +451,7 @@ public class Parser {
         try self.parse(.curlyBracketClose)
         return While(expression: expression, scope: scope)
     }
-    
+
     private func parseCall(namelist: inout [String: IdentifierInformation]) throws -> Call {
         let name = try self.parseIdentifier().raw
         try namelist.lookup(name)
@@ -472,14 +472,14 @@ public class Parser {
         try self.parse(.parenthesisClose)
         return Call(name: name, parameters: exprs)
     }
-    
+
     private func parseFor(namelist: inout [String: IdentifierInformation], withReturn: Bool = false) throws -> For {
         // TODO
         throw Error.unimplemented
     }
-    
+
     private func parseExpression(namelist: inout [String: IdentifierInformation], condition: Bool = true, calculation: Bool = true) throws -> Expression {
-        
+
         let start = self.iterator
         var errors = [Error]()
         if condition {
@@ -490,7 +490,7 @@ public class Parser {
                 errors.append(error)
             }
         }
-        
+
         self.iterator = start
         if calculation {
             do {
@@ -500,21 +500,21 @@ public class Parser {
                 errors.append(error)
             }
         }
-        
+
         self.iterator = start
         do {
             return .call(try self.parseCall(namelist: &namelist))
         } catch let error as Error {
             errors.append(error)
         }
-        
+
         self.iterator = start
         do {
             return .literal(try self.parseLiteral())
         } catch let error as Error {
             errors.append(error)
         }
-        
+
         self.iterator = start
         do {
             let identifier = try self.parseIdentifier()
@@ -523,10 +523,10 @@ public class Parser {
         } catch let error as Error {
             errors.append(error)
         }
-        
+
         throw Error.multiple(errors)
     }
-    
+
     private func parseAssignment(namelist: inout [String: IdentifierInformation]) throws -> Assignment {
         let identifier = try self.parseIdentifier()
         var tokenType = TokenType.assign
@@ -551,10 +551,10 @@ public class Parser {
         } else if tokenType == .minusAssign {
             finalExpression = Expression.calculation(MultipleCalculation(expressions: [.identifier(identifier), expr], operators: ["-"]))
         }
-        
+
         return Assignment(identifer: identifier, expression: finalExpression)
     }
-    
+
     private func parseLiteral() throws -> Token {
         guard let current = self.iteratedElement() else {
             throw Error.unexpectedEOF
@@ -565,24 +565,24 @@ public class Parser {
         }
         throw Error.unexpectedString(expected: "literal", got: current.raw)
     }
-    
+
     private func parseIdentifier() throws -> Token {
         let raw = self.iteratedElement()
         try self.parse(.identifier)
         return raw!
     }
-    
+
     private func parseKeyword() throws -> String {
         let raw = self.iteratedElement()?.raw
         try self.parse(.keyword)
         return raw!
     }
-    
+
     private func parseCalculationOperator() throws -> Token {
         guard let token = self.iteratedElement() else {
             throw Error.unexpectedEOF
         }
-        
+
         switch token.type {
         case .plus, .minus, .multiply, .slash:
             self.nextToken()
@@ -591,12 +591,12 @@ public class Parser {
             throw Error.unexpectedString(expected: "+ - * /", got: token.raw)
         }
     }
-    
+
     private func parseBoolOperator() throws -> Token {
         guard let token = self.iteratedElement() else {
             throw Error.unexpectedEOF
         }
-        
+
         switch token.type {
         case .equal, .notEqual, .greater, .greaterEqual, .less, .lessEqual:
             self.nextToken()
@@ -605,12 +605,12 @@ public class Parser {
             throw Error.unexpectedString(expected: "== != > >= < <=", got: token.raw)
         }
     }
-    
+
     private func parseLogicalOperator() throws -> Token {
         guard let token = self.iteratedElement() else {
             throw Error.unexpectedEOF
         }
-        
+
         switch token.type {
         case .logicalAnd, .logicalOr:
             self.nextToken()
@@ -619,11 +619,11 @@ public class Parser {
             throw Error.unexpectedString(expected: "&& ||", got: token.raw)
         }
     }
-    
+
 }
 
 extension String {
-    
+
     func typeMatches(_ other: String) -> Bool {
         switch self {
         case "Int", "Double", "Float":
@@ -631,17 +631,17 @@ extension String {
         default: return self == other
         }
     }
-    
+
 }
 
 extension Dictionary where Key == String, Value == IdentifierInformation {
-    
+
     func lookup(_ identifier: String) throws {
         guard self[identifier] != nil else {
             throw Parser.Error.unknownIdentifier(identifier)
         }
     }
-    
+
     func assert(_ identifier: String, type: String) throws {
         guard let got = self[identifier]?.type else {
             throw Parser.Error.unknownIdentifier(identifier)
@@ -650,5 +650,5 @@ extension Dictionary where Key == String, Value == IdentifierInformation {
             throw Parser.Error.wrongType(expected: type, got: got)
         }
     }
-    
+
 }

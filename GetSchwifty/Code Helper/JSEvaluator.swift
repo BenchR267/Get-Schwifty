@@ -24,11 +24,11 @@ public func onMain(f: @escaping () -> Void) {
 }
 
 public class JSEvaluator {
-    
+
     private let context = JSContext()!
-    
+
     private var alerts = [(title: String, message: String)]()
-    
+
     // needed for alerts - stored weak
     private weak var controller: UIViewController?
     private var outStream: (String) -> Void
@@ -36,7 +36,7 @@ public class JSEvaluator {
     init(controller: UIViewController, outStream: @escaping (String) -> Void) {
         self.controller = controller
         self.outStream = outStream
-        
+
         let consoleLog: @convention(block) () -> Void = { [weak self] in
             if self?.stopped ?? true {
                 return
@@ -47,7 +47,7 @@ public class JSEvaluator {
             }
         }
         context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
-        
+
         let alert: @convention(block) () -> Void = { [weak self] in
             if self?.stopped ?? true {
                 return
@@ -70,7 +70,7 @@ public class JSEvaluator {
             self?.workAlerts()
         }
         context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
-        
+
         let sleepHandler: @convention(block) () -> Void = { [weak self] in
             if self?.stopped ?? true {
                 return
@@ -83,12 +83,12 @@ public class JSEvaluator {
         }
         context.setObject(unsafeBitCast(sleepHandler, to: AnyObject.self), forKeyedSubscript: "sleep" as (NSCopying & NSObjectProtocol)!)
     }
-    
+
     private func workAlerts() {
         if self.stopped {
             self.alerts = []
         }
-        guard !(self.controller?.presentedViewController is UIAlertController),  !self.alerts.isEmpty else {
+        guard !(self.controller?.presentedViewController is UIAlertController), !self.alerts.isEmpty else {
             return
         }
         let a = self.alerts.removeFirst()
@@ -98,7 +98,7 @@ public class JSEvaluator {
             self.controller?.present(c, animated: true)
         }
     }
-    
+
     public func run(script: Program, done: @escaping () -> Void) {
         let time = dateFormatter.string(from: Date())
         self.outStream("=========== " + time + " ===========")
@@ -117,9 +117,9 @@ public class JSEvaluator {
             }
         }
     }
-    
+
     public func stop() {
         self.stopped = true
     }
-    
+
 }

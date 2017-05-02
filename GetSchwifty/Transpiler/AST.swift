@@ -19,7 +19,7 @@ public struct IdentifierInformation {
 
 public struct Scope {
     public var statements = [Statement]()
-    
+
     // name: type
     // function parameters: _func_NAME_0, _func_NAME_1, ...
     public var namelist = [String: IdentifierInformation]()
@@ -118,7 +118,7 @@ public indirect enum Expression {
     case call(Call)
     case condition(Condition)
     case calculation(MultipleCalculation)
-    
+
     public func type(_ namelist: [String: IdentifierInformation]) -> String {
         switch self {
         case .literal(let token):

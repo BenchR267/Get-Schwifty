@@ -9,13 +9,13 @@
 import Foundation
 
 public class Generator {
-    
+
     init() {}
-    
+
     private func generate(_ a: Scope) -> String {
         return a.statements.map(generate).joined(separator: "\n")
     }
-    
+
     public func generate(_ a: Statement) -> String {
         let o: String
         switch a {
@@ -32,11 +32,11 @@ public class Generator {
         }
         return o + ";\n"
     }
-    
+
     private func generate(_ a: Assignment) -> String {
         return "\(a.identifer.raw) = \(generate(a.expression))"
     }
-    
+
     private func generate(_ a: Declaration) -> String {
         switch a {
         case .constant(let l):
@@ -47,7 +47,7 @@ public class Generator {
             return generate(f)
         }
     }
-    
+
     private func generate(_ a: LetDecl) -> String {
         var o = "const \(a.parameter.name)"
         if let e = a.expression {
@@ -56,7 +56,7 @@ public class Generator {
         o.append("")
         return o
     }
-    
+
     private func generate(_ f: FunctionDecl) -> String {
         var o = "function \(f.name)("
         o.append(f.parameters.map(generate).joined(separator: ", "))
@@ -65,15 +65,15 @@ public class Generator {
         o.append("}\n")
         return o
     }
-    
+
     private func generate(_ a: ParameterDecl) -> String {
         return a.name
     }
-    
+
     private func generate(_ a: FunctionBody) -> String {
         return a.statements.map(generate).joined(separator: "\n")
     }
-    
+
     private func generate(_ a: VariableDecl) -> String {
         var o = "var \(a.parameter.name)"
         if let e = a.expression {
@@ -81,18 +81,18 @@ public class Generator {
         }
         return o
     }
-    
+
     private func generate(_ a: Call) -> String {
         var o = "\(a.name)("
         o.append(a.parameters.map(generate).joined(separator: ", "))
         o.append(")")
         return o
     }
-    
+
     private func generate(_ a: Condition) -> String {
         return "\(generate(a.expr1)) \(a.operatorT.raw) \(generate(a.expr2))"
     }
-    
+
     private func generate(_ a: MultipleCalculation) -> String {
         var o = ""
         for (i, e) in a.expressions.enumerated() {
@@ -105,7 +105,7 @@ public class Generator {
         }
         return o
     }
-    
+
     private func generate(_ a: ControlStructure) -> String {
         switch a {
         case .ifS(let i):
@@ -116,7 +116,7 @@ public class Generator {
             return "// unimplemented \(a)"
         }
     }
-    
+
     private func generate(_ a: If) -> String {
         var conditions = a.conditions
         var o = "if ("
@@ -139,7 +139,7 @@ public class Generator {
         }
         return o
     }
-    
+
     private func generate(_ a: MultipleCondition) -> String {
         var o = ""
         for (i, e) in a.conditions.enumerated() {
@@ -152,11 +152,11 @@ public class Generator {
         }
         return o
     }
-    
+
     private func generate(_ a: While) -> String {
         return "while (\(generate(a.expression))) {\n\(generate(a.scope))\n}"
     }
-    
+
     private func generate(_ a: Expression) -> String {
         switch a {
         case .literal(let t):
@@ -171,5 +171,5 @@ public class Generator {
             return generate(c)
         }
     }
-    
+
 }
