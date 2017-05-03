@@ -1,5 +1,5 @@
 //
-//  TypingHelper.swift
+//  FormattingHelper.swift
 //  GetSchwifty
 //
 //  Created by Lennart Wisbar on 03.05.17.
