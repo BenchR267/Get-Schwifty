@@ -203,6 +203,7 @@ private extension UITextView {
     
     // MARK: - ACTIONS
     func newLine(_ times: UInt = 1) {
+        guard times > 0 else { return }
         for _ in 1...times { insertText("\n") }
     }
     
