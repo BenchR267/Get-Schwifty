@@ -98,29 +98,31 @@ class FormattingHelperTests: XCTestCase {
     
     // MARK: - Colon
     func test_ColonAfterCase_AdoptsSwitchIndentation() {
-        textView.text = "\t\tswitch test {" +
+        textView.text =
+			"\t\tswitch test {" +
             "\n\t\t\tcase" +
-        "\n\t\t}"
+			"\n\t\t}"
         cursorOffsetFromEnd = -4    // After the open curly brace
         textView.insertAsCode(":")
         
         XCTAssertEqual(textView.text,
-                       "\t\tswitch test {" +
-                        "\n\t\tcase:" +     // Colon after "case", one tab removed
+			"\t\tswitch test {" +
+			"\n\t\tcase:" +     // Colon after "case", one tab removed
             "\n\t\t}")
         XCTAssertEqual(cursorOffsetFromEnd, -4) // after the typed colon
     }
     
     func test_ColonAfterDefault_AdoptsSwitchIndentation() {
-        textView.text = "\t\tswitch test {" +
+        textView.text =
+			"\t\tswitch test {" +
             "\n\t\t\tdefault" +
-        "\n\t\t}"
+			"\n\t\t}"
         cursorOffsetFromEnd = -4    // After the open curly brace
         textView.insertAsCode(":")
         
         XCTAssertEqual(textView.text,
-                       "\t\tswitch test {" +
-                        "\n\t\tdefault:" +     // Colon after "default", one tab removed
+			"\t\tswitch test {" +
+			"\n\t\tdefault:" +     // Colon after "default", one tab removed
             "\n\t\t}")
         XCTAssertEqual(cursorOffsetFromEnd, -4) // After the typed colon
     }
@@ -139,8 +141,7 @@ class FormattingHelperTests: XCTestCase {
         cursorOffsetFromEnd = 0
         textView.insertAsCode(":")
         
-        XCTAssertEqual(textView.text,
-                       "\t\t\tnormalText:")    // No tabs removed
+        XCTAssertEqual(textView.text, "\t\t\tnormalText:")    // No tabs removed
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
     
@@ -151,7 +152,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tnormalText" +
+			"\t\tnormalText" +
             "\n\t\t")     // Indentation level maintained
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -163,8 +164,8 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\ttest {" +
-                        "\n\t\t\t" +    // Indentation level maintained
+			"\t\ttest {" +
+			"\n\t\t\t" +    // Indentation level maintained
             "\n\t\t}")     // Closed curly brace added
         XCTAssertEqual(cursorOffsetFromEnd, -4) // End of the middle line
     }
@@ -175,21 +176,22 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\ttest {" +
-                        "\n\t\t\t" +    // Indentation level maintained
+			"\t\ttest {" +
+			"\n\t\t\t" +    // Indentation level maintained
             "\n\t\t}")      // No curly brace added
         XCTAssertEqual(cursorOffsetFromEnd, -4) // End of the middle line
     }
     
     func test_ReturnKeyAfterCurlyBrace_DoesNotAddAnotherBrace_IfTooManyClosedBraces() {
-        textView.text = "test {" +
-        "\nanother line }"
+        textView.text =
+			"test {" +
+			"\nanother line }"
         cursorOffsetFromEnd = -15   // After the open curly brace
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "test {" +
-                        "\n\t" +    // Indentation works as normal after "{"
+			"test {" +
+			"\n\t" +    // Indentation works as normal after "{"
             "\nanother line }") // No extra "}" added
         XCTAssertEqual(cursorOffsetFromEnd, -15)    // End of the middle line
     }
@@ -200,8 +202,8 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tswitch test {" +
-                        "\n\t\t" +    // Indentation level maintained
+			"\t\tswitch test {" +
+			"\n\t\t" +    // Indentation level maintained
             "\n\t\t}")     // Closed curly brace added
         XCTAssertEqual(cursorOffsetFromEnd, -4) // End of the middle line
     }
@@ -213,7 +215,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tcase test:" +
+			"\t\tcase test:" +
             "\n\t\t\t")     // Indentation level raised
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -224,7 +226,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tcase test:   " +
+			"\t\tcase test:   " +
             "\n\t\t\t")     // Indentation level raised
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -235,7 +237,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tcase test" +
+			"\t\tcase test" +
             "\n\t\t")     // Indentation level maintained
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -246,7 +248,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tcase test: text" +
+			"\t\tcase test: text" +
             "\n\t\t")     // Indentation level maintained
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -258,7 +260,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tdefault:" +
+			"\t\tdefault:" +
             "\n\t\t\t")     // Indentation level raised
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -269,7 +271,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tdefault:   " +
+			"\t\tdefault:   " +
             "\n\t\t\t")     // Indentation level raised
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -280,7 +282,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tdefault" +
+			"\t\tdefault" +
             "\n\t\t")     // Indentation level maintained
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
@@ -291,7 +293,7 @@ class FormattingHelperTests: XCTestCase {
         textView.insertAsCode("\n")
         
         XCTAssertEqual(textView.text,
-                       "\t\tdefault: text" +
+			"\t\tdefault: text" +
             "\n\t\t")     // Indentation level maintained
         XCTAssertEqual(cursorOffsetFromEnd, 0)
     }
