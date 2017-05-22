@@ -1,1 +1,1 @@
-gem 'fastlane', '>=2.0'
+gem 'fastlane', '2.32.1'

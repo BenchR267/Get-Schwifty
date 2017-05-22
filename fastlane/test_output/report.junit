@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites name='Get SchwiftyTests.xctest' tests='38' failures='0'>
+  <testsuite name='Get_SchwiftyTests.FormattingHelperTests' tests='38' failures='0'>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_BackspaceOneCharacter' time='0.011'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_BackspaceSelection' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedCurlyBraceAfterNormalCharacter_TreatedNormally' time='0.004'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedCurlyBraceBeforeClosedCurlyBrace_StepsOver' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedCurlyBraceBeforeClosedCurlyBrace_TreatedNormally_IfTooManyOpenBraces' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedRoundBracketAfterNormalCharacter_TreatedNormally' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedRoundBracketBeforeClosedRoundBracket_StepsOver' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedRoundBracketBeforeClosedRoundBracket_TreatedNormally_IfTooManyOpenBrackets' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedSquareBracketAfterNormalCharacter_TreatedNormally' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedSquareBracketBeforeClosedSquareBracket_StepsOver' time='0.001'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_closedSquareBracketBeforeClosedSquareBracket_TreatedNormally_IfTooManyOpenBrackets' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_Colon_TreatedNormally_IfNoCaseOrDefault' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ColonAfterCase_AdoptsSwitchIndentation' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ColonAfterCase_TreatedNormally_IfNoSwitch' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ColonAfterDefault_AdoptsSwitchIndentation' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_NormalCharacters_NotAffected' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_openRoundBracket_DoesNotProduceClosedBracket_IfTooManyClosedBrackets' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_openRoundBracket_ProducesClosedBracket' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_openSquareBracket_DoesNotProduceClosedBracket_IfTooManyClosedBrackets' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_openSquareBracket_ProducesClosedBracket' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_Paste' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_PasteOverSelection' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_QuotationMark_CompletedByAnotherOne' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_QuotationMark_TreatedNormally_IfUnevenNumberOfQuotesInDocument' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_QuotationMarkBeforeQuotationMark_StepsOver_IfEvenNumberOfQuotesInDocument' time='0.001'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterCaseWithColon_IndentsNextLine' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterCaseWithColonAndSpaces_IndentsNextLine' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterCaseWithoutColon_DoesNotIndentNextLine' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterCaseWithTextAfterColon_DoesNotIndentNextLine' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterCurlyBrace_DoesNotAddAnotherBrace_IfTooManyClosedBraces' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterCurlyBrace_IndentsNextLineAndClosesBrace' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterDefaultWithColon_IndentsNextLine' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterDefaultWithColonAndSpaces_IndentsNextLine' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterDefaultWithoutColon_DoesNotIndentNextLine' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterDefaultWithTextAfterColon_DoesNotIndentNextLine' time='0.002'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterNormalCharacter_MaintainsIndentation' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyAfterSwitchWithCurlyBrace_MaintainsIndentationAndClosesBrace' time='0.003'/>
+    <testcase classname='Get_SchwiftyTests.FormattingHelperTests' name='test_ReturnKeyBetweenCurlyBraces_UsesExistingBrace' time='0.004'/>
+  </testsuite>
+</testsuites>
