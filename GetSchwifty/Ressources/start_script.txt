@@ -2,16 +2,16 @@
 // Feel free to write and run scripts written in Swift! 🚀
 
 func fib(n: Int) -> Int {
-    if n == 0 || n == 1 {
-        return n
-    }
-    return fib(n-1) + fib(n-2)
+	if n == 0 || n == 1 {
+		return n
+	}
+	return fib(n-1) + fib(n-2)
 }
 
 var i = 20
 while i < 30 {
-    print("fib(" + i + ") = " + fib(i))
-    sleep(0.4)
-    i += 1
+	print("fib(" + i + ") = " + fib(i))
+	sleep(0.4)
+	i += 1
 }
 alert("done!")
