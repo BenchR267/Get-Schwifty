@@ -82,11 +82,11 @@ class SourceViewController: UIViewController {
         self.navigationItem.rightBarButtonItems = [list, save]
     }
 
-    func showList() {
+    @objc func showList() {
         self.delegate?.sourceViewControllerDidPressShowList()
     }
 
-    func save() {
+    @objc func save() {
         self.schwifty.temporary = false
         SchwiftyDataStorage().save(self.schwifty)
     }
@@ -96,7 +96,7 @@ class SourceViewController: UIViewController {
         self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
     }
 
-    func evaluateHandler() {
+    @objc func evaluateHandler() {
         self.evaluate()
     }
 
@@ -159,7 +159,7 @@ extension SourceViewController: UITextViewDelegate {
         self.schwifty.source = textView.text
     }
 
-    func updateText(text: String) {
+    @objc func updateText(text: String) {
         let lexer = Lexer(input: text)
         let tokens = lexer.start()
         let range = textView.selectedRange

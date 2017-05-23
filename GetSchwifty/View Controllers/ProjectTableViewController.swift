@@ -46,16 +46,16 @@ class ProjectTableViewController: UITableViewController {
         self.tableView.reloadData()
     }
 
-    func back() {
+    @objc func back() {
         self.delegate?.projectTableViewControllerDidPressBack()
     }
 
-    func showInfo() {
+    @objc func showInfo() {
         let info = InfoViewController().wrapInNavigationController()
         self.present(info, animated: true)
     }
 
-    public func newSchwifty() {
+    @objc public func newSchwifty() {
         self.delegate?.projectTableViewControllerDidSelect(schwifty: Schwifty(source: ""))
     }
 
