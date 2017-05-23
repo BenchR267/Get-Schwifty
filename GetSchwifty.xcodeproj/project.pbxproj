@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		300570211EBA716E00561D1C /* FormattingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300570201EBA716E00561D1C /* FormattingHelper.swift */; };
+		30FBF2361ECC3E31005E8D22 /* FormattingHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FBF2351ECC3E31005E8D22 /* FormattingHelperTests.swift */; };
 		B519F6981E8BEDB000DC9871 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B519F6971E8BEDB000DC9871 /* AppDelegate.swift */; };
 		B519F69A1E8BEDB000DC9871 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B519F6991E8BEDB000DC9871 /* ViewController.swift */; };
 		B519F69F1E8BEDB000DC9871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B519F69E1E8BEDB000DC9871 /* Assets.xcassets */; };
@@ -25,8 +26,21 @@
 		B5E7E78B1E9126FB0021025A /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E7E78A1E9126FB0021025A /* PageViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		30FBF22E1ECC3DB2005E8D22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B519F68C1E8BEDB000DC9871 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B519F6931E8BEDB000DC9871;
+			remoteInfo = "Get Schwifty";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		300570201EBA716E00561D1C /* FormattingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormattingHelper.swift; sourceTree = "<group>"; };
+		30FBF2291ECC3DB2005E8D22 /* Get SchwiftyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Get SchwiftyTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		30FBF22D1ECC3DB2005E8D22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		30FBF2351ECC3E31005E8D22 /* FormattingHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormattingHelperTests.swift; sourceTree = "<group>"; };
 		B519F6941E8BEDB000DC9871 /* Get Schwifty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get Schwifty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B519F6971E8BEDB000DC9871 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B519F6991E8BEDB000DC9871 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +61,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		30FBF2261ECC3DB2005E8D22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B519F6911E8BEDB000DC9871 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -57,10 +78,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		30FBF22A1ECC3DB2005E8D22 /* Get SchwiftyTests */ = {
+			isa = PBXGroup;
+			children = (
+				30FBF2351ECC3E31005E8D22 /* FormattingHelperTests.swift */,
+				30FBF22D1ECC3DB2005E8D22 /* Info.plist */,
+			);
+			path = "Get SchwiftyTests";
+			sourceTree = "<group>";
+		};
 		B519F68B1E8BEDB000DC9871 = {
 			isa = PBXGroup;
 			children = (
 				B519F6961E8BEDB000DC9871 /* GetSchwifty */,
+				30FBF22A1ECC3DB2005E8D22 /* Get SchwiftyTests */,
 				B519F6951E8BEDB000DC9871 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				B519F6941E8BEDB000DC9871 /* Get Schwifty.app */,
+				30FBF2291ECC3DB2005E8D22 /* Get SchwiftyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,6 +172,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		30FBF2281ECC3DB2005E8D22 /* Get SchwiftyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 30FBF2321ECC3DB2005E8D22 /* Build configuration list for PBXNativeTarget "Get SchwiftyTests" */;
+			buildPhases = (
+				30FBF2251ECC3DB2005E8D22 /* Sources */,
+				30FBF2261ECC3DB2005E8D22 /* Frameworks */,
+				30FBF2271ECC3DB2005E8D22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				30FBF22F1ECC3DB2005E8D22 /* PBXTargetDependency */,
+			);
+			name = "Get SchwiftyTests";
+			productName = "Get SchwiftyTests";
+			productReference = 30FBF2291ECC3DB2005E8D22 /* Get SchwiftyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B519F6931E8BEDB000DC9871 /* Get Schwifty */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B519F6A61E8BEDB000DC9871 /* Build configuration list for PBXNativeTarget "Get Schwifty" */;
@@ -167,6 +217,13 @@
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Benjamin Herzog";
 				TargetAttributes = {
+					30FBF2281ECC3DB2005E8D22 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = 9SPL76B3GR;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B519F6931E8BEDB000DC9871;
+					};
 					B519F6931E8BEDB000DC9871 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = 3E4PGPNR47;
@@ -188,11 +245,19 @@
 			projectRoot = "";
 			targets = (
 				B519F6931E8BEDB000DC9871 /* Get Schwifty */,
+				30FBF2281ECC3DB2005E8D22 /* Get SchwiftyTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		30FBF2271ECC3DB2005E8D22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B519F6921E8BEDB000DC9871 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -207,6 +272,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		30FBF2251ECC3DB2005E8D22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				30FBF2361ECC3E31005E8D22 /* FormattingHelperTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B519F6901E8BEDB000DC9871 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -228,6 +301,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		30FBF22F1ECC3DB2005E8D22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B519F6931E8BEDB000DC9871 /* Get Schwifty */;
+			targetProxy = 30FBF22E1ECC3DB2005E8D22 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		B519F6A01E8BEDB000DC9871 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -241,6 +322,37 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		30FBF2301ECC3DB2005E8D22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 9SPL76B3GR;
+				INFOPLIST_FILE = "Get SchwiftyTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.lennartwisbar.Get-SchwiftyTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Get Schwifty.app/Get Schwifty";
+			};
+			name = Debug;
+		};
+		30FBF2311ECC3DB2005E8D22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 9SPL76B3GR;
+				INFOPLIST_FILE = "Get SchwiftyTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.lennartwisbar.Get-SchwiftyTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Get Schwifty.app/Get Schwifty";
+			};
+			name = Release;
+		};
 		B519F6A41E8BEDB000DC9871 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -367,6 +479,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		30FBF2321ECC3DB2005E8D22 /* Build configuration list for PBXNativeTarget "Get SchwiftyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				30FBF2301ECC3DB2005E8D22 /* Debug */,
+				30FBF2311ECC3DB2005E8D22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B519F68F1E8BEDB000DC9871 /* Build configuration list for PBXProject "GetSchwifty" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

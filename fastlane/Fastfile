@@ -1,0 +1,35 @@
+fastlane_version "2.14.2"
+
+default_platform :ios
+
+platform :ios do
+  before_all do
+
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    scan
+  end
+
+  desc "Submit a new Beta Build to Apple TestFlight"
+  desc "This will also make sure the profile is up to date"
+  lane :beta do
+    gym # Build your app - more options available
+    pilot
+  end
+
+  desc "Deploy a new version to the App Store"
+  lane :release do
+    gym # Build your app - more options available
+    deliver(force: true)
+  end
+
+  after_all do |lane|
+    
+  end
+
+  error do |lane, exception|
+    
+  end
+end

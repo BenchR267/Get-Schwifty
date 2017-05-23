@@ -1,4 +1,4 @@
-# Get Schwifty
+# Get Schwifty \o/ [![Build Status](https://travis-ci.org/BenchR267/Get-Schwifty.svg?branch=master)](https://travis-ci.org/BenchR267/Get-Schwifty)
 
 Get Schwifty is an app to run Swift on your iOS device. I created this project as an application for a scholarship to Apples WWDC 2017. Get Schwifty is also available on the [App Store](https://itunes.apple.com/de/app/get-schwifty/id1222398681?l=en&mt=8).
 
