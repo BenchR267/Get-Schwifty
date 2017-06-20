@@ -259,7 +259,7 @@ private extension String {
     }
     
     func indentationLevelOfLast(_ phrase: String, before position: String.Index) -> Int? {
-        guard let switchRange = range(ofClosest: "switch", before: position)
+        guard let switchRange = range(ofClosest: phrase, before: position)
             else { return nil }
         let switchLine = lineRange(for: switchRange)
         return indentationLevel(of: switchLine)
