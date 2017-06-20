@@ -10,8 +10,10 @@ import Foundation
 
 struct Completer {
     static func completedText(for input: String, in text: String, range: NSRange) -> (newText: String, newRange: NSRange) {
-        guard let selection = text.stringRange(from: range),
-            let scenario = Completer.scenario(for: input, in: text, range: range) else { return (text, range) }
+        guard
+            let selection = text.stringRange(from: range),
+            let scenario = Completer.scenario(for: input, in: text, range: range)
+            else { return (text, range) }
         
         let line = text.lineRange(for: selection.lowerBound..<selection.lowerBound)
         let indentation = text.indentationLevel(of: line)
@@ -138,7 +140,8 @@ private extension Completer {
     }
     
     static func scenario(for input: String, in text: String, range: NSRange) -> Scenario? {
-        guard let selection = text.stringRange(from: range) else { return nil }
+        guard let selection = text.stringRange(from: range)
+            else { return nil }
         
         let previousCharacter = text.character(before: selection.lowerBound, ignoring: [" ", "\t"])
         let nextCharacter = text.character(at: selection.lowerBound)
@@ -201,37 +204,42 @@ private extension Completer {
 private extension String {
     
     func stringRange(from range: NSRange) -> Range<String.Index>? {
-        guard let utf16Start = utf16.index(utf16.startIndex, offsetBy: range.location, limitedBy: utf16.endIndex),
+        guard
+            let utf16Start = utf16.index(utf16.startIndex, offsetBy: range.location, limitedBy: utf16.endIndex),
             let utf16End = utf16.index(utf16.startIndex, offsetBy: range.location + range.length, limitedBy: utf16.endIndex),
             let start = utf16Start.samePosition(in: self),
             let end = utf16End.samePosition(in: self)
             else { return nil }
-        return start ..< end
+        return start..<end
     }
     
     func range(ofClosest text: String, before position: String.Index) -> Range<String.Index>? {
-        guard var startOfRange = self.index(position, offsetBy: -text.characters.count, limitedBy: startIndex) else { return nil }
+        guard var startOfRange = self.index(position, offsetBy: -text.characters.count, limitedBy: startIndex)
+            else { return nil }
         var endOfRange = position
         
         while true {
             let range = startOfRange..<endOfRange
             let candidate = substring(with: range)
             if candidate == text { return range }
-            guard let newStart = self.index(startOfRange, offsetBy: -1, limitedBy: startIndex) else { return nil }
+            guard let newStart = self.index(startOfRange, offsetBy: -1, limitedBy: startIndex)
+                else { return nil }
             startOfRange = newStart
             endOfRange = index(before: endOfRange)
         }
     }
     
     func range(ofClosest text: String, after position: String.Index) -> Range<String.Index>? {
-        guard var endOfRange = self.index(position, offsetBy: text.characters.count, limitedBy: endIndex) else { return nil }
+        guard var endOfRange = self.index(position, offsetBy: text.characters.count, limitedBy: endIndex)
+            else { return nil }
         var startOfRange = position
         
         while true {
             let range = startOfRange..<endOfRange
             let candidate = substring(with: range)
             if candidate == text { return range }
-            guard let newEnd = self.index(endOfRange, offsetBy: 1, limitedBy: endIndex) else { return nil }
+            guard let newEnd = self.index(endOfRange, offsetBy: 1, limitedBy: endIndex)
+                else { return nil }
             endOfRange = newEnd
             startOfRange = index(after: startOfRange)
         }
@@ -243,14 +251,16 @@ private extension String {
         
         while position != line.upperBound {
             let character = self.characters[position]
-            if character == "\t" { level += 1 } else { break }
+            if character == "\t" { level += 1 }
+            else { break }
             position = index(after: position)
         }
         return level
     }
     
     func indentationLevelOfLast(_ phrase: String, before position: String.Index) -> Int? {
-        guard let switchRange = range(ofClosest: "switch", before: position) else { return nil }
+        guard let switchRange = range(ofClosest: "switch", before: position)
+            else { return nil }
         let switchLine = lineRange(for: switchRange)
         return indentationLevel(of: switchLine)
     }
