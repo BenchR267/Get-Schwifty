@@ -123,6 +123,14 @@ extension SourceViewController: UITextViewDelegate {
     
     static let throttle: TimeInterval = 0.05
     
+    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let (newText, newRange) = Completer.completedText(for: text, in: textView.text, range: range)
+        textView.text = newText
+        textView.selectedRange = newRange
+        textViewDidChange(textView)
+        return false
+    }
+    
     public func textViewDidChange(_ textView: UITextView) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         self.perform(#selector(updateText), with: textView.text, afterDelay: SourceViewController.throttle)
