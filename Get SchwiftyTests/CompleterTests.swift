@@ -117,6 +117,21 @@ class FormattingHelperTests: XCTestCase {
         XCTAssertEqual(newRange.length, expectedRange.length)
     }
     
+    func test_NormalCharacter_InEmptyText_InsertedNormally() {
+        let text = ""
+        let range = NSMakeRange(0, 0)
+        
+        let insertion = "a"
+        let (newText, newRange) = Completer.completedText(for: insertion, in: text, range: range)
+        
+        let expectedText = "a"
+        let expectedRange = NSMakeRange(1, 0) // End
+        
+        XCTAssertEqual(newText, expectedText)
+        XCTAssertEqual(newRange.location, expectedRange.location)
+        XCTAssertEqual(newRange.length, expectedRange.length)
+    }
+    
     func test_Emoji_InsertedNormally() {
         let text = "test"
         let range = NSMakeRange(3, 0) // "t"
@@ -231,6 +246,21 @@ class FormattingHelperTests: XCTestCase {
         
         let expectedText = "👱🏾🚀tesabct"
         let expectedRange = NSMakeRange(12, 0) // Last "t"
+        
+        XCTAssertEqual(newText, expectedText)
+        XCTAssertEqual(newRange.location, expectedRange.location)
+        XCTAssertEqual(newRange.length, expectedRange.length)
+    }
+    
+    func test_NormalText_InEmptyText_InsertedNormally() {
+        let text = ""
+        let range = NSMakeRange(0, 0)
+        
+        let insertion = "abc"
+        let (newText, newRange) = Completer.completedText(for: insertion, in: text, range: range)
+        
+        let expectedText = "abc"
+        let expectedRange = NSMakeRange(3, 0) // End
         
         XCTAssertEqual(newText, expectedText)
         XCTAssertEqual(newRange.location, expectedRange.location)
@@ -509,6 +539,19 @@ class FormattingHelperTests: XCTestCase {
         
         let expectedText = "test ab"
         let expectedRange = NSMakeRange(7, 0)   // End
+        XCTAssertEqual(newText, expectedText)
+        XCTAssertEqual(newRange.location, expectedRange.location)
+        XCTAssertEqual(newRange.length, expectedRange.length)
+    }
+    
+    func test_Backspace_InEmptyText_DoesNothing() {
+        let text = ""
+        let range = NSMakeRange(0, 0)
+        let insertion = ""
+        let (newText, newRange) = Completer.completedText(for: insertion, in: text, range: range)
+        
+        let expectedText = ""
+        let expectedRange = NSMakeRange(0, 0)
         XCTAssertEqual(newText, expectedText)
         XCTAssertEqual(newRange.location, expectedRange.location)
         XCTAssertEqual(newRange.length, expectedRange.length)
