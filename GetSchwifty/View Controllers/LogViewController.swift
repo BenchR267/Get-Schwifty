@@ -52,18 +52,18 @@ public class LogViewController: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.textView?.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
+        self.textView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
-    func back() {
+    @objc func back() {
         self.delegate?.logViewControllerDidPressBack()
     }
     
-    func clear() {
+    @objc func clear() {
         self.textView?.text = ""
     }
     
-    func stop() {
+    @objc func stop() {
         self.delegate?.logViewControllerDidPressStop()
     }
     

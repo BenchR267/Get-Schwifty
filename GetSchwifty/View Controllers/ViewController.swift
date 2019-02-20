@@ -37,6 +37,13 @@ public class SourceViewController: UIViewController {
         self.textView = UITextView(frame: self.view.bounds)
         self.textView.autocapitalizationType = .none
         self.textView.autocorrectionType = .no
+        self.textView.spellCheckingType = .no
+        if #available(iOS 11.0, *) {
+            self.textView.smartQuotesType = .no
+            self.textView.smartDashesType = .no
+            self.textView.smartInsertDeleteType = .no
+        }
+        
         self.textView.alwaysBounceVertical = true
         self.textView.keyboardDismissMode = .interactive
         self.textView.keyboardAppearance = .dark
@@ -50,12 +57,14 @@ public class SourceViewController: UIViewController {
         self.view.addSubview(self.textView)
         self.updateText(text: self.textView.text)
         
-        self.observer = NotificationCenter.default.addObserver(forName: .UIKeyboardWillChangeFrame, object: nil, queue: .main) { [weak self] n in
+        self.observer = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillChangeFrameNotification, object: nil, queue: .main) { [weak self] n in
             guard let `self` = self else { return }
-            guard let endFrame = n.userInfo?[UIKeyboardFrameEndUserInfoKey] as? CGRect else {
+            guard let endFrame = n.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
                 return
             }
-            self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: self.view.bounds.size.height - endFrame.origin.y, right: 0)
+            let intersection = self.view.frame.intersection(endFrame)
+            
+            self.textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.view.bounds.size.height - intersection.origin.y, right: 0)
         }
         let run = UIBarButtonItem(image: #imageLiteral(resourceName: "Play"), style: .plain, target: self, action: #selector(evaluateHandler))
         let info = UIBarButtonItem(image: #imageLiteral(resourceName: "Info"), style: .plain, target: self, action: #selector(showInfo))
@@ -65,20 +74,20 @@ public class SourceViewController: UIViewController {
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        self.textView.contentInset = UIEdgeInsets(top: self.headerHeight, left: 0, bottom: 0, right: 0)
+        self.textView.contentInset = UIEdgeInsets.zero
     }
     
-    func showInfo() {
+    @objc func showInfo() {
         let info = InfoViewController().wrapInNavigationController()
         self.present(info, animated: true)
     }
     
-    func evaluateHandler() {
+    @objc func evaluateHandler() {
         self.evaluate()
     }
     
     var currentEvaluator: JSEvaluator?
-    func stop() {
+    @objc func stop() {
         self.currentEvaluator?.stop()
         self.currentEvaluator = nil
     }
@@ -123,20 +132,21 @@ extension SourceViewController: UITextViewDelegate {
     
     static let throttle: TimeInterval = 0.05
     
-    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let (newText, newRange) = Completer.completedText(for: text, in: textView.text, range: range)
-        textView.text = newText
-        textView.selectedRange = newRange
-        textViewDidChange(textView)
-        return false
-    }
+//    Currently broken due to changes in Completer because of Swift 4. When fixed, this needs to be commented in. Also: don't set the .text property of the textView. Instead call updateText with the new text to let it set the attributedText instead.
+//    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//        let (newText, newRange) = Completer.completedText(for: text, in: textView.text, range: range)
+//        textView.text = newText
+//        textView.selectedRange = newRange
+//        textViewDidChange(textView)
+//        return false
+//    }
     
     public func textViewDidChange(_ textView: UITextView) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         self.perform(#selector(updateText), with: textView.text, afterDelay: SourceViewController.throttle)
     }
     
-    func updateText(text: String) {
+    @objc func updateText(text: String) {
         let lexer = Lexer(input: text)
         let tokens = lexer.start()
         let range = textView.selectedRange

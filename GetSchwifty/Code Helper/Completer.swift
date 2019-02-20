@@ -214,7 +214,7 @@ private extension String {
     }
     
     func range(ofClosest text: String, before position: String.Index) -> Range<String.Index>? {
-        guard var startOfRange = self.index(position, offsetBy: -text.characters.count, limitedBy: startIndex)
+        guard var startOfRange = self.index(position, offsetBy: -text.count, limitedBy: startIndex)
             else { return nil }
         var endOfRange = position
         
@@ -230,7 +230,7 @@ private extension String {
     }
     
     func range(ofClosest text: String, after position: String.Index) -> Range<String.Index>? {
-        guard var endOfRange = self.index(position, offsetBy: text.characters.count, limitedBy: endIndex)
+        guard var endOfRange = self.index(position, offsetBy: text.count, limitedBy: endIndex)
             else { return nil }
         var startOfRange = position
         
@@ -250,7 +250,7 @@ private extension String {
         var position = line.lowerBound
         
         while position != line.upperBound {
-            let character = self.characters[position]
+            let character = self[position]
             if character == "\t" { level += 1 }
             else { break }
             position = index(after: position)
@@ -276,7 +276,7 @@ private extension String {
     func settingIndentationLevel(of line: Range<String.Index>, to level: Int) -> String {
         var newText = self.removingIndentation(of: line)
         let tabs = String.tabs(for: level)
-        newText.insert(contentsOf: tabs.characters, at: line.lowerBound)
+        newText.insert(contentsOf: tabs, at: line.lowerBound)
         return newText
     }
     
@@ -284,8 +284,8 @@ private extension String {
         var position = position
         
         while position < endIndex {
-            if !ignoring.contains(characters[position]) {
-                return characters[position]
+            if !ignoring.contains(self[position]) {
+                return self[position]
             }
             position = index(after: position)
         }
@@ -297,8 +297,8 @@ private extension String {
         
         while position > startIndex {
             position = index(before: position)
-            if !ignoring.contains(characters[position]) {
-                return characters[position]
+            if !ignoring.contains(self[position]) {
+                return self[position]
             }
         }
         return nil

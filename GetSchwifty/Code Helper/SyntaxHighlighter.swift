@@ -23,13 +23,13 @@ public func attributedString(tokens: [Token]) -> NSAttributedString {
         case .literal(.Bool(_)):    color = keyword
         default:                    color = standard
         }
-        var attributes: [String: NSObject] = [
-            NSFontAttributeName: font,
-            NSForegroundColorAttributeName: color
+        var attributes: [NSAttributedString.Key : Any] = [
+            .font: font,
+            .foregroundColor: color
         ]
         if t.type == .illegal {
-            attributes[NSStrikethroughStyleAttributeName] = 1 as NSNumber
-            attributes[NSStrikethroughColorAttributeName] = UIColor.red
+            attributes[.strikethroughStyle] = 1 as NSNumber
+            attributes[.strikethroughColor] = UIColor.red
         }
         attr.append(NSAttributedString(string: t.raw, attributes: attributes))
     }
@@ -44,7 +44,7 @@ public extension UIColor {
 }
 
 private let bodySize = UIFont.preferredFont(forTextStyle: .body).pointSize
-let font = UIFont(name: "Menlo-Regular", size: bodySize) ?? UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+let font = UIFont(name: "Menlo-Regular", size: bodySize) ?? UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
 
 private let standard = UIColor(r: 225, g: 226, b: 231, a: 1)
 private let keyword = UIColor(r: 225, g: 44, b: 160, a: 1)

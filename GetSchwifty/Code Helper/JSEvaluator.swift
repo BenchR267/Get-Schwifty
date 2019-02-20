@@ -46,13 +46,13 @@ public class JSEvaluator {
                 self?.outStream(args)
             }
         }
-        context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
+        context.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)?)
         
         let alert: @convention(block) () -> Void = { [weak self] in
             if self?.stopped ?? true {
                 return
             }
-            let args = JSContext.currentArguments().map { "\($0)" }
+            let args = JSContext.currentArguments()!.map { "\($0)" }
             let title: String
             let message: String
             switch args.count {
@@ -69,7 +69,7 @@ public class JSEvaluator {
             self?.alerts.append((title: title, message: message))
             self?.workAlerts()
         }
-        context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)!)
+        context.setObject(unsafeBitCast(alert, to: AnyObject.self), forKeyedSubscript: "alert" as (NSCopying & NSObjectProtocol)?)
         
         let sleepHandler: @convention(block) () -> Void = { [weak self] in
             if self?.stopped ?? true {
@@ -81,7 +81,7 @@ public class JSEvaluator {
                 Thread.sleep(forTimeInterval: 1)
             }
         }
-        context.setObject(unsafeBitCast(sleepHandler, to: AnyObject.self), forKeyedSubscript: "sleep" as (NSCopying & NSObjectProtocol)!)
+        context.setObject(unsafeBitCast(sleepHandler, to: AnyObject.self), forKeyedSubscript: "sleep" as (NSCopying & NSObjectProtocol)?)
     }
     
     private func workAlerts() {
@@ -111,7 +111,7 @@ public class JSEvaluator {
                 }
             }
             onMain {
-                let bottom = Array(repeating: "=", count: time.characters.count + 24).joined()
+                let bottom = Array(repeating: "=", count: time.count + 24).joined()
                 self.outStream(bottom)
                 done()
             }

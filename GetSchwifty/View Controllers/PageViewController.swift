@@ -48,7 +48,7 @@ public class PageViewController: UIPageViewController {
 extension PageViewController: UIPageViewControllerDataSource {
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = self.controllers.index(of: viewController) else {
+        guard let index = self.controllers.firstIndex(of: viewController) else {
             return nil
         }
         let newIndex = index + 1
@@ -56,7 +56,7 @@ extension PageViewController: UIPageViewControllerDataSource {
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = self.controllers.index(of: viewController) else {
+        guard let index = self.controllers.firstIndex(of: viewController) else {
             return nil
         }
         
@@ -68,7 +68,7 @@ extension PageViewController: UIPageViewControllerDataSource {
 
 extension PageViewController {
     
-    fileprivate func setIndex(_ index: Int, direction: UIPageViewControllerNavigationDirection, completion: @escaping (Bool) -> Void = {_ in}) {
+    fileprivate func setIndex(_ index: Int, direction: UIPageViewController.NavigationDirection, completion: @escaping (Bool) -> Void = {_ in}) {
         guard let controller = self.controllers[safe: index] else {
             return
         }
@@ -108,10 +108,6 @@ extension UIViewController {
             return nav
         }
         return UINavigationController(rootViewController: self)
-    }
-    
-    public var headerHeight: CGFloat {
-        return (self.navigationController?.navigationBar.bounds.size.height ?? 0) + UIApplication.shared.statusBarFrame.size.height
     }
     
     public var topParent: UIViewController {

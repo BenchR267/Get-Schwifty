@@ -48,7 +48,7 @@ class InfoViewController: UIViewController {
         textView.text = try? String(contentsOfFile: path)
     }
     
-    func close() {
+    @objc func close() {
         self.dismiss(animated: true, completion: nil)
     }
     
