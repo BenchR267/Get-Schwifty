@@ -220,13 +220,14 @@
 					30FBF2281ECC3DB2005E8D22 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 9SPL76B3GR;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1310;
 						ProvisioningStyle = Automatic;
 						TestTargetID = B519F6931E8BEDB000DC9871;
 					};
 					B519F6931E8BEDB000DC9871 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = 3E4PGPNR47;
+						LastSwiftMigration = 1310;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -236,6 +237,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -333,7 +335,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "de.lennartwisbar.Get-SchwiftyTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Get Schwifty.app/Get Schwifty";
 			};
 			name = Debug;
@@ -348,7 +350,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.lennartwisbar.Get-SchwiftyTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Get Schwifty.app/Get Schwifty";
 			};
 			name = Release;
@@ -458,7 +460,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -472,7 +474,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.benchr.playground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
