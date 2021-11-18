@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol LogViewControllerDelegate: class {
+public protocol LogViewControllerDelegate: AnyObject {
     func logViewControllerDidPressBack()
     func logViewControllerDidPressStop()
 }

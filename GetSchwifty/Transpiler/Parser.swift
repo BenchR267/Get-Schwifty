@@ -69,19 +69,19 @@ public class Parser {
             }
         }
         
-        public var hashValue: Int {
+        public func hash(into hasher: inout Hasher) {
             switch self {
-            case .unexpectedError: return 1
-            case .unexpectedEOF: return 2
-            case .unexpectedType(_, _): return 3
-            case .unexpectedString(_, _): return 4
-            case .couldNotInferType(_, _): return 5
-            case .unexpectedExpression(_, _): return 6
-            case .unknownIdentifier(_): return 7
-            case .wrongType(_, _): return 8
-            case .mutatingNonMutatingVariable(_): return 9
-            case .multiple(_): return 10
-            case .unimplemented: return 11
+            case .unexpectedError: hasher.combine(1)
+            case .unexpectedEOF: hasher.combine(2)
+            case .unexpectedType(_, _): hasher.combine(3)
+            case .unexpectedString(_, _): hasher.combine(4)
+            case .couldNotInferType(_, _): hasher.combine(5)
+            case .unexpectedExpression(_, _): hasher.combine(6)
+            case .unknownIdentifier(_): hasher.combine(7)
+            case .wrongType(_, _): hasher.combine(8)
+            case .mutatingNonMutatingVariable(_): hasher.combine(9)
+            case .multiple(_): hasher.combine(10)
+            case .unimplemented: hasher.combine(11)
             }
         }
     }

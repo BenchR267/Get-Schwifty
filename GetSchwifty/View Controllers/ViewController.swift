@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol SourceViewControllerDelegate: class {
+public protocol SourceViewControllerDelegate: AnyObject {
     func sourceViewControllerWillEvaluate(start: @escaping () -> Void)
     func sourceViewControllerDidEvaluate()
 }
